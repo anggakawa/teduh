@@ -61,13 +61,9 @@
   function init(el, o) {
     opts = o;
     var mobile = U.isMobile();
-    map = L.map(el, { zoomControl: false, attributionControl: false, tap: true, zoomSnap: 0.5 }).setView(C.center, C.zoom);
-    tiles = L.tileLayer(C.tiles.url, { maxZoom: C.tiles.maxZoom, className: C.tiles.className }).addTo(map);
-    var tileOk = false, tileErr = 0;
-    tiles.on('tileload', function () { tileOk = true; if (opts.onTiles) opts.onTiles(true); });
-    tiles.on('tileerror', function () { tileErr++; if (!tileOk && tileErr >= 4 && opts.onTiles) opts.onTiles(false); });
-    L.control.attribution({ position: mobile ? 'bottomleft' : 'bottomright', prefix: mobile ? false : '<a href="https://leafletjs.com">Leaflet</a>' })
-      .addAttribution(C.tiles.attribution).addTo(map);
+    map = L.map(el, { zoomControl: false, attributionControl: false, tap: true, zoomSnap: 0.5, maxZoom: C.tiles.maxZoom }).setView(C.center, C.zoom);
+    attrib = L.control.attribution({ position: mobile ? 'bottomleft' : 'bottomright', prefix: mobile ? false : '<a href="https://leafletjs.com">Leaflet</a>' }).addTo(map);
+    startBase();
     cluster = L.markerClusterGroup({
       showCoverageOnHover: false, zoomToBoundsOnClick: false, spiderfyOnMaxZoom: false,
       // SPEC §5: radius 40; from zoom 16 only identical coordinates still group (= same building).
@@ -187,7 +183,58 @@
     map.setView([lat, lng], Math.max(map.getZoom(), 13));
   }
 
-  function retryTiles() { if (tiles) tiles.redraw(); }
+  // ---- Base map: OpenFreeMap vector (MapLibre GL) first, OSM raster as the fallback (config.js `tiles`). ----
+  var attrib = null, baseAttr = null, baseGen = 0;
+  function setBase(layer, kind, attr) {
+    if (tiles) { try { map.removeLayer(tiles); } catch (e) { /* already gone */ } }
+    if (baseAttr) attrib.removeAttribution(baseAttr);
+    tiles = layer; baseAttr = attr; map.getContainer().setAttribute('data-base', kind);
+    attrib.addAttribution(attr); layer.addTo(map);
+  }
+  function webgl() {
+    try { var c = document.createElement('canvas'); return !!(c.getContext('webgl2') || c.getContext('webgl')); } catch (e) { return false; }
+  }
+  function loadOnce(src, css) {
+    var sel = css ? 'link[href="' + src + '"]' : 'script[src="' + src + '"]', el = document.querySelector(sel);
+    if (el && el._p) return el._p;
+    el = document.createElement(css ? 'link' : 'script');
+    var p = new Promise(function (res, rej) { el.onload = res; el.onerror = rej; });
+    if (css) { el.rel = 'stylesheet'; el.href = src; } else { el.src = src; el.async = false; }
+    el._p = p; document.head.appendChild(el); return p;
+  }
+  function useRaster(gen) {
+    if (gen !== baseGen) return;
+    var T = C.tiles, ok = false, err = 0;
+    var layer = L.tileLayer(T.url, { maxZoom: T.maxZoom, className: T.className, referrerPolicy: T.referrerPolicy });
+    layer.on('tileload', function () { ok = true; if (opts.onTiles) opts.onTiles(true); });
+    layer.on('tileerror', function () { err++; if (!ok && err >= 4 && opts.onTiles) opts.onTiles(false); });
+    setBase(layer, 'raster', T.attribution);
+  }
+  function useVector(gen) {
+    var V = C.tiles.vector;
+    loadOnce(V.css, true).catch(function () {});
+    V.scripts.reduce(function (p, src) { return p.then(function () { return loadOnce(src); }); }, Promise.resolve()).then(function () {
+      if (gen !== baseGen) return;
+      if (!window.maplibregl || !L.maplibreGL) return useRaster(gen);
+      var ok = false, err = 0, layer;
+      try { layer = L.maplibreGL({ style: V.style, attributionControl: false, interactive: false }); setBase(layer, 'vector', V.attribution); }
+      catch (e) { return useRaster(gen); }
+      var gl = layer.getMaplibreMap();
+      function fail() { if (!ok && gen === baseGen) useRaster(gen); }
+      gl.on('data', function (e) {
+        if (!ok && e.dataType === 'source' && e.tile && gen === baseGen) { ok = true; if (opts.onTiles) opts.onTiles(true); }
+      });
+      // Style/sprite/source failure (nothing can render) falls back at once; stray tile errors only after 3.
+      gl.on('error', function () { err++; if (err >= 3 || !gl.isStyleLoaded()) fail(); });
+      setTimeout(fail, V.timeoutMs);
+    }, function () { useRaster(gen); });
+  }
+  function startBase() {
+    var gen = ++baseGen;
+    if (C.tiles.vector && webgl() && window.Promise) useVector(gen); else useRaster(gen);
+  }
+  function retryTiles() { if (map) startBase(); }
+  function baseInfo() { return { kind: map && map.getContainer().getAttribute('data-base'), attribution: baseAttr }; }
   function invalidate() { if (map) map.invalidateSize(); }
   function pinnedCount() { return Object.keys(markers).length; }
   function pinnedIds() { return Object.keys(markers); }
@@ -201,5 +248,5 @@
 
   P.map = { init: init, setPlaces: setPlaces, show: show, fit: fit, select: select, deselect: deselect, hover: hover, invalidate: invalidate,
             pinnedCount: pinnedCount, pinnedIds: pinnedIds, markerInfo: markerInfo, shownCount: shownCount, showYou: showYou,
-            getMap: getMap, markerUrl: markerUrl, retryTiles: retryTiles };
+            getMap: getMap, markerUrl: markerUrl, retryTiles: retryTiles, baseInfo: baseInfo };
 })(window.Peta);

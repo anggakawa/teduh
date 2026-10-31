@@ -2,7 +2,7 @@
 
 > Catatan repo: dokumen ini berasal dari folder v2. Di repo ini situs ada di `site/`, data di `data/`, dan skrip di `scripts/` (`python3 scripts/build-data.py`, `SITE_DIR=site node scripts/check.mjs`). Lihat README.md di akar repo.
 
-A calm local map of services that other maps lack: mental health, child development/ABK, legal aid and protection, and psychological testing. The design follows `../design/design.md` (Artist spec). It is static HTML with no build tooling. Leaflet 1.9.4 and Leaflet.markercluster 1.5.3 are vendored in `vendor/`, and Plus Jakarta Sans (OFL) is self-hosted in `assets/fonts/`, so the page works over file:// apart from the map tiles.
+A calm local map of services that other maps lack: mental health, child development/ABK, legal aid and protection, and psychological testing. The design follows `../design/design.md` (Artist spec). It is static HTML with no build tooling. Leaflet 1.9.4, Leaflet.markercluster 1.5.3, MapLibre GL JS 5.24.0 and @maplibre/maplibre-gl-leaflet 0.1.4 are vendored in `vendor/` (MapLibre is loaded lazily by `js/map.js`), and Plus Jakarta Sans (OFL) is self-hosted in `assets/fonts/`, so the page works over file:// apart from the map tiles.
 
 ## Run
 
@@ -91,7 +91,7 @@ vendor/            ← leaflet 1.9.4, leaflet.markercluster 1.5.3 (only MarkerCl
 
 ## Swapping the visual style
 
-Edit or replace `css/tokens.css` only. `app.css` reads every colour, font, radius, shadow and size from these variables. Category colours are `--cat-<slug>`, `--cat-<slug>-deep` and `--cat-<slug>-tint`. The pins are image files, so a palette change also needs new `assets/markers/*.svg` (from `design/src`). Category names and icons are in `js/config.js` (`groups`, `icons`). The tile look is the `--tiles-filter` token.
+Edit or replace `css/tokens.css` only. `app.css` reads every colour, font, radius, shadow and size from these variables. Category colours are `--cat-<slug>`, `--cat-<slug>-deep` and `--cat-<slug>-tint`. The pins are image files, so a palette change also needs new `assets/markers/*.svg` (from `design/src`). Category names and icons are in `js/config.js` (`groups`, `icons`). The base map is OpenFreeMap "Positron" vector tiles (free, no key, attribution required: https://openfreemap.org/). If WebGL or OpenFreeMap is unavailable, `js/map.js` falls back to OSM standard raster tiles, desaturated by the `--tiles-filter` token. The page's referrer policy must stay `strict-origin-when-cross-origin`: OSM blocks tile requests without a Referer (https://operations.osmfoundation.org/policies/tiles/). `scripts/check.mjs` and `scripts/screens.mjs` answer every tile request from a local stub (`scripts/tile-stub.mjs`), so CI never hits a public tile server; `LIVE_TILES=1 node scripts/check.mjs <url>` runs a one-off live check (one desktop and one mobile load).
 
 ## Using a CDN instead of vendor/ (SRI computed from the vendored files)
 

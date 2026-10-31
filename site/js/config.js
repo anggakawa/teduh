@@ -6,12 +6,24 @@ Peta.config = {
   center: [-3.456, 114.828],
   zoom: 13,
   fitPadding: 48,
-  // design.md §5: OSM standard tiles, desaturated via CSS (.teduh-tiles). If a CARTO/Stadia key is
-  // available, set `tiles.url` to the Positron/Voyager URL and drop the filter class.
+  // Base map. Primary: OpenFreeMap "Positron" vector tiles (light, muted; free, no key, no limits:
+  // https://openfreemap.org/), drawn by MapLibre GL inside Leaflet. vendor/maplibre is loaded lazily.
+  // Fallback (no WebGL, MapLibre fails to load, or OpenFreeMap errors): OSM standard raster tiles,
+  // desaturated via CSS (.teduh-tiles). OSM's tile policy needs a Referer: keep the referrer policy at strict-origin-when-cross-origin.
+  // https://operations.osmfoundation.org/policies/tiles/
   tiles: {
+    referrerPolicy: 'strict-origin-when-cross-origin',
+    vector: {
+      style: 'https://tiles.openfreemap.org/styles/positron',
+      host: 'tiles.openfreemap.org',
+      attribution: '<a href="https://openfreemap.org" target="_blank" rel="noopener">OpenFreeMap</a> &copy; <a href="https://www.openmaptiles.org/" target="_blank" rel="noopener">OpenMapTiles</a> Data from <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>',
+      scripts: ['vendor/maplibre/maplibre-gl.js', 'vendor/maplibre/leaflet-maplibre-gl.js'],
+      css: 'vendor/maplibre/maplibre-gl.css',
+      timeoutMs: 8000
+    },
     url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
     className: 'teduh-tiles',
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors',
     maxZoom: 19
   },
   dataUrls: { places: 'data/places.json', hotlines: 'data/hotlines.json', fallbackScript: 'data/data.js' },

@@ -5,6 +5,7 @@ import { createRequire } from 'module';
 import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import path from 'path';
+import { stubTiles, isTileUrl, TILE_HOSTS, LIVE } from './tile-stub.mjs';
 const here = path.dirname(fileURLToPath(import.meta.url));
 const root = process.env.SITE_DIR ? path.resolve(process.env.SITE_DIR) : path.resolve(here, '../site');
 const require = createRequire((process.env.PW_DIR || '/tmp/pw') + '/');
@@ -20,7 +21,7 @@ const appCss = readFileSync(path.join(root, 'css/app.css'), 'utf8');
 
 const fails = [];
 const ok = (cond, msg) => { console.log((cond ? 'PASS ' : 'FAIL ') + msg); if (!cond) fails.push(msg); };
-const isTile = u => /tile\.openstreetmap|basemaps\.cartocdn|stadiamaps/.test(u);
+const isTile = isTileUrl;
 const wait = (p, ms = 350) => p.waitForTimeout(ms);
 
 // ---- static: tokens + no stale hardcoded values (SPEC §1, §10 "Tokens") ----
@@ -31,6 +32,42 @@ const hexes = (appCss.match(/#[0-9a-f]{3,8}\b/gi) || []).filter(h => h.toUpperCa
 ok(hexes.length === 0, `app.css has no raw colours besides the search <mark> (${hexes.join(', ') || 'none'})`);
 
 const browser = await chromium.launch({ executablePath: process.env.CHROME || '/usr/bin/google-chrome', args: ['--no-sandbox'] });
+const STYLE_URL = 'https://tiles.openfreemap.org/styles/positron', OSM_URL = /^https:\/\/tile\.openstreetmap\.org\/\d+\/\d+\/\d+\.png$/;
+const ATTR_VEC = 'OpenFreeMap © OpenMapTiles Data from OpenStreetMap', ATTR_OSM = '© OpenStreetMap contributors';
+const siteSrc = ['index.html', 'js/map.js', 'js/config.js', 'js/app.js'].map(f => readFileSync(path.join(root, f), 'utf8')).join('\n');
+ok(!/no-referrer/i.test(siteSrc) && /<meta name="referrer" content="strict-origin-when-cross-origin">/.test(siteSrc), 'referrer policy: strict-origin-when-cross-origin, "no-referrer" appears nowhere (OSM tile policy needs a Referer)');
+
+// ================= live tile verification (LIVE_TILES=1 only; one desktop + one mobile load, nothing else) =================
+if (LIVE) {
+  for (const [vp, mob] of [[{ width: 1440, height: 900 }, false], [{ width: 390, height: 844 }, true]]) {
+    const ctx = await browser.newContext({ viewport: vp, isMobile: mob, hasTouch: mob });
+    const p = await ctx.newPage(), res = [];
+    p.on('response', r => { if (isTile(r.url())) res.push({ u: r.url(), s: r.status(), ref: r.request().headers()['referer'] || null }); });
+    await p.goto(base + 'index.html'); await p.waitForSelector('body[data-ready="1"]'); await wait(p, 5000);
+    const info = await p.evaluate(() => ({ base: Peta.map.baseInfo(), attr: document.querySelector('.leaflet-control-attribution').textContent, err: document.getElementById('tileError').hidden }));
+    const tilesN = res.filter(r => /\.(pbf|png)$/.test(r.u)).length, notOk = res.filter(r => r.s !== 200);
+    ok(info.base.kind === 'vector' && res.some(r => r.u === STYLE_URL), `live ${vp.width}: base map is OpenFreeMap Positron (${info.base.kind})`);
+    ok(tilesN > 0 && notOk.length === 0, `live ${vp.width}: ${tilesN} tiles, every tile-host response 200, none 403 (${notOk.map(r => r.s + ' ' + r.u).join(' | ') || 'ok'})`);
+    ok(res.every(r => r.ref), `live ${vp.width}: every tile request carries a Referer (${[...new Set(res.map(r => r.ref))].join(', ')})`);
+    ok(info.attr.includes(ATTR_VEC) && info.err, `live ${vp.width}: attribution "${ATTR_VEC}", no tile error banner`);
+    await ctx.close();
+  }
+  await browser.close();
+  console.log(fails.length ? `\n${fails.length} FAILED` : '\nALL CHECKS PASSED');
+  process.exit(fails.length ? 1 : 0);
+}
+
+// Every other context is kept off the public tile servers (scripts/tile-stub.mjs). tileLog = what was intercepted,
+// tileSeen = every tile-host request the browser made; equal lengths prove nothing reached a real tile server.
+const tileLog = [], tileSeen = [];
+const newContext0 = browser.newContext.bind(browser);
+browser.newContext = async o => {
+  const c = await newContext0(o);
+  c.on('request', r => { if (isTile(r.url())) tileSeen.push(r.url()); });
+  await stubTiles(c, tileLog);
+  return c;
+};
+const abortTiles = (p, re = TILE_HOSTS) => p.route(re, r => { tileLog.push({ url: r.request().url(), referer: r.request().headers()['referer'] || null, how: 'abort' }); return r.abort(); });
 
 async function open(url, viewport, mobile) {
   const ctx = await browser.newContext({ viewport, deviceScaleFactor: 1, isMobile: !!mobile, hasTouch: !!mobile, timezoneId: 'Asia/Makassar' });
@@ -97,11 +134,31 @@ const TC = 'traitcare-biro-psikologi-banjarbaru', SG = 'biro-sagraha-psikologi-b
 {
   const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
   const p = await ctx.newPage();
-  await p.route(/tile\.openstreetmap|basemaps|stadiamaps/, r => r.abort());
+  await abortTiles(p);
   await p.goto(base + 'index.html' + NOW);
   await p.waitForSelector('body[data-ready="1"]');
   await wait(p, 3000);
   ok(await p.locator('#tileError').isVisible() && await p.locator('.card').count() === data.length, 'tile error: "Peta belum bisa dimuat" notice with retry; the list still works');
+  await p.unroute(TILE_HOSTS); await p.click('#tileRetry'); await wait(p, 2500);
+  ok(await p.locator('#tileError').isHidden() && await p.evaluate(() => Peta.map.baseInfo().kind) === 'vector', 'tile error: "Coba lagi" reloads the base map and hides the notice once tiles load');
+  await ctx.close();
+}
+
+// ================= base map fallback: OpenFreeMap unreachable -> OSM raster with a Referer =================
+{
+  const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+  const p = await ctx.newPage();
+  await abortTiles(p, /openfreemap\.org/);
+  const from = tileLog.length;
+  await p.goto(base + 'index.html' + NOW);
+  await p.waitForSelector('body[data-ready="1"]');
+  await wait(p, 2500);
+  const info = await p.evaluate(() => ({ base: Peta.map.baseInfo(), attr: document.querySelector('.leaflet-control-attribution').textContent, err: document.getElementById('tileError').hidden, filt: getComputedStyle(document.querySelector('.leaflet-tile-pane .teduh-tiles') || document.body).filter }));
+  const osm = tileLog.slice(from).filter(t => t.how === 'stub');
+  ok(info.base.kind === 'raster' && osm.length > 0 && osm.every(t => OSM_URL.test(t.url)), `fallback: OpenFreeMap down -> OSM raster tiles at https://tile.openstreetmap.org/{z}/{x}/{y}.png (${osm.length})`);
+  ok(osm.every(t => t.referer === base.replace(/^(\w+:\/\/[^/]+).*$/, '$1/')), `fallback: every OSM tile request sends the site origin as Referer (${[...new Set(osm.map(t => t.referer))].join(', ')})`);
+  ok(info.attr.includes(ATTR_OSM) && !info.attr.includes('OpenFreeMap') && info.err, `fallback: attribution switches to "${ATTR_OSM}", no error banner`);
+  ok(/saturate/.test(info.filt), `fallback: OSM raster is desaturated via .teduh-tiles (${info.filt})`);
   await ctx.close();
 }
 
@@ -117,6 +174,12 @@ const st = await page.evaluate(() => ({
   fontOk: document.fonts.check('600 17px "Plus Jakarta Sans"'),
 }));
 ok(st.via === 'fetch', `data loaded via fetch (${st.via})`);
+const bm = await page.evaluate(() => ({ base: Peta.map.baseInfo(), attr: document.querySelector('.leaflet-control-attribution').textContent, err: document.getElementById('tileError').hidden, canvas: !!document.querySelector('.leaflet-gl-layer canvas'), meta: document.querySelector('meta[name=referrer]').content }));
+const vt = tileLog.filter(t => t.how === 'stub' && /openfreemap/.test(t.url));
+ok(bm.base.kind === 'vector' && bm.canvas && vt.some(t => t.url === STYLE_URL), `base map: OpenFreeMap Positron (${STYLE_URL}) drawn by MapLibre in Leaflet`);
+ok(vt.some(t => /\/planet\/.+\.pbf$/.test(t.url)) && vt.every(t => new URL(t.url).host === 'tiles.openfreemap.org'), `base map: vector tiles requested from tiles.openfreemap.org only (${vt.length} requests)`);
+ok(bm.meta === 'strict-origin-when-cross-origin' && vt.every(t => t.referer === base.replace(/^(\w+:\/\/[^/]+).*$/, '$1/')), `base map: tile requests send the site origin as Referer (${[...new Set(vt.map(t => t.referer))].join(', ')})`);
+ok(bm.attr.includes(ATTR_VEC) && bm.err, `base map: attribution "${ATTR_VEC}" visible, no tile error banner`);
 ok(/Plus Jakarta Sans/.test(st.font) && st.fontOk, 'Plus Jakarta Sans loaded (self-hosted)');
 ok(st.ids.length === shouldPin.length, `pins ${st.ids.length} == places with real lat/lng ${shouldPin.length}`);
 ok(approxOnly.every(p => !st.ids.includes(p.id)), `no pin for the ${approxOnly.length} places without real lat/lng (approx_coords never pinned)`);
@@ -145,7 +208,7 @@ ok(dt.legendText === 'Keterangan' && !dt.legendOpen && dt.legend.left === 380 + 
 ok(dt.zoom, 'desktop: zoom control bottom-right');
 ok(Math.round(dt.panel) === 380, 'desktop: 380px panel');
 ok(dt.sh1 === `${data.length} layanan` && dt.sh2 === `${shouldPin.length} di peta · ${approxOnly.length} tanpa titik lokasi` && dt.sort === 'Buka dulu', `desktop header "${dt.sh1}" / "${dt.sh2}" / "${dt.sort}"`);
-ok(/Leaflet/.test(dt.attr) && /OpenStreetMap contributors/.test(dt.attr), 'desktop attribution "Leaflet · © OpenStreetMap contributors"');
+ok(/Leaflet/.test(dt.attr) && dt.attr.includes(ATTR_VEC), `desktop attribution "Leaflet | ${ATTR_VEC}"`);
 ok(dt.chips[0] === 'Terverifikasi saja' && dt.chips[1] === 'Buka hari ini' && dt.chips.length === 6, `chips: toggles first, then 4 categories (${dt.chips.join(' | ')})`);
 await page.hover('#quickExit'); await wait(page, 250);
 ok(await page.locator('#qexitTip').evaluate(e => getComputedStyle(e).opacity === '1' && /Esc/.test(e.textContent)), 'desktop: Keluar cepat tooltip "Tekan Esc 3× untuk keluar"');
@@ -512,6 +575,7 @@ const fv = await F.page.evaluate(() => ({ via: window.__PETA_STATE__.via, pins: 
 ok(fv.via === 'file-fallback' && fv.pins === shouldPin.length && fv.font && fv.img, `file:// works via data.js fallback (${JSON.stringify(fv)})`);
 await F.ctx.close();
 
+ok(tileLog.length > 0 && tileSeen.length === tileLog.length, `no request reached a public tile server: ${tileSeen.length} tile-host requests, all ${tileLog.length} answered by the local stub`);
 await browser.close();
 console.log(fails.length ? `\n${fails.length} FAILED` : '\nALL CHECKS PASSED');
 process.exit(fails.length ? 1 : 0);
