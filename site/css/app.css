@@ -156,14 +156,16 @@ body[data-search="1"] .mapnote, body[data-mode="detail"] .mapnote { display: non
 /* ---------- sheet ---------- */
 .sheet { position: fixed; z-index: var(--z-sheet); left: 0; right: 0; bottom: 0; height: var(--sheet-peek); display: flex; flex-direction: column;
   background: var(--surface); border-radius: var(--radius-sheet) var(--radius-sheet) 0 0; box-shadow: var(--shadow-sheet);
-  transition: height var(--dur-sheet) var(--ease-sheet); touch-action: pan-y; }
+  transition: height var(--dur-sheet) var(--ease-sheet); touch-action: none; }
+/* the sheet owns vertical drags (sheet.js); only the content at full scrolls natively */
 .sheet.is-dragging { transition: none; }
 .grab { flex: none; height: 20px; display: grid; place-items: center; }
-#grabBtn { width: 80px; height: 20px; display: grid; place-items: center; }
+#grabBtn { width: 120px; height: 20px; display: grid; place-items: center; touch-action: none; }
 #grabBtn span, .modal .grab span { width: 40px; height: 5px; border-radius: 3px; background: var(--grab); display: block; }
 .view { flex: 1; min-height: 0; display: flex; flex-direction: column; }
 .sbody { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
 .sheet:not([data-state="full"]) .sbody { overflow-y: hidden; }
+.sheet[data-state="full"] .sbody { touch-action: pan-y; }
 
 .shead { flex: none; display: flex; align-items: center; gap: var(--space-3); padding: var(--space-1) var(--sheet-pad-x) var(--space-2); }
 .shead-text { flex: 1; min-width: 0; }
@@ -388,6 +390,7 @@ body[data-search="1"] .mapnote, body[data-mode="detail"] .mapnote { display: non
   .sheet { position: static; grid-column: 1; grid-row: 3; height: auto !important; min-height: 0; border-radius: 0; box-shadow: none;
     border-right: 1px solid var(--line); transform: none; width: auto; }
   .sheet .grab { display: none; }
+  .sheet, .sheet .sbody { touch-action: auto; }
   .sheet .sbody { overflow-y: auto !important; }
   .shead { padding-top: var(--space-3); }
   .dtop { display: flex; align-items: center; justify-content: space-between; height: 52px; padding: 0 var(--space-4) 0 var(--space-2); flex: none; border-bottom: 1px solid var(--divider); }

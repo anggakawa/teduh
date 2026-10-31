@@ -412,6 +412,83 @@ await mp.keyboard.press('Escape'); await mp.keyboard.press('Escape'); await mp.k
 await wait(mp, 800);
 ok(mp.url().startsWith('https://www.google.com/'), `Keluar cepat via Esc ×3 → ${mp.url()}`);
 await M.ctx.close();
+// ================= touch gestures on the sheet (real touch events via CDP, not mouse) =================
+// The live bug (31 Oct 2026): `touch-action: pan-y` on the sheet let the browser own every vertical swipe,
+// so it sent pointercancel on the first move and the sheet never followed the finger.
+{
+  const T = await open(base + 'index.html' + NOW, { width: 390, height: 844 }, true);
+  const tp = T.page;
+  const cdp = await T.ctx.newCDPSession(tp);
+  await tp.evaluate(() => { window.__pc = 0; addEventListener('pointercancel', () => window.__pc++, true); });
+  const S = () => tp.evaluate(() => { const s = document.getElementById('sheet'), b = s.querySelector('.view:not([hidden]) .sbody');
+    return { mode: document.body.dataset.mode, state: s.dataset.state, top: Math.round(s.getBoundingClientRect().top), h: Math.round(s.getBoundingClientRect().height), scroll: b ? Math.round(b.scrollTop) : -1 }; });
+  // slow swipe (< 0.5 px/ms, so it snaps to the nearest point, not a fling); returns the sheet top halfway through
+  async function swipe(y0, y1, x = 195, ms = 800, steps = 20) {
+    let mid = null;
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x, y: y0 }] });
+    for (let i = 1; i <= steps; i++) {
+      await tp.waitForTimeout(ms / steps);
+      await cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x, y: y0 + (y1 - y0) * i / steps }] });
+      if (i === steps / 2) mid = (await S()).top;
+    }
+    await tp.waitForTimeout(50);
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+    await wait(tp, 450);
+    return mid;
+  }
+  const ta = await tp.evaluate(() => ({ sheet: getComputedStyle(document.getElementById('sheet')).touchAction, grab: getComputedStyle(document.getElementById('grabBtn')).touchAction }));
+  ok(ta.sheet === 'none' && ta.grab === 'none', `touch: sheet and handle own vertical drags (touch-action ${JSON.stringify(ta)})`);
+  let s0 = await S(), mid;
+  mid = await swipe(s0.top + 8, s0.top - 176);
+  let s1 = await S();
+  ok(mid < s0.top - 60 && s1.state === 'half', `touch: dragging the handle up follows the finger (mid top ${mid} < ${s0.top}) and snaps peek → half (${s1.state})`);
+  s0 = s1; mid = await swipe(s0.top + 30, s0.top - 200);
+  s1 = await S();
+  ok(mid < s0.top - 60 && s1.state === 'full', `touch: dragging the list header up: half → full (${s1.state}, top ${s1.top})`);
+  const bodyY = s1.top + 360;
+  await swipe(bodyY, bodyY - 250);
+  s1 = await S();
+  ok(s1.state === 'full' && s1.scroll > 100, `touch: at full the list scrolls with a swipe up (scrollTop ${s1.scroll}, ${s1.state})`);
+  await swipe(bodyY - 100, bodyY + 50);
+  let s2 = await S();
+  ok(s2.state === 'full' && s2.scroll < s1.scroll, `touch: at full and scrolled, a swipe down scrolls the list back (${s1.scroll} → ${s2.scroll}), sheet stays full`);
+  await tp.evaluate(() => { document.getElementById('listScroll').scrollTop = 0; }); await wait(tp, 100);
+  await swipe(bodyY, bodyY + 220);
+  s2 = await S();
+  ok(s2.state !== 'full' && s2.top > s1.top + 100, `touch: at scrollTop 0, pulling the list down drags the sheet (full → ${s2.state})`);
+  mid = await swipe(s2.top + 8, s2.top + 200);
+  s2 = await S();
+  ok(s2.state === 'peek' && s2.mode === 'list', `touch: dragging the handle down snaps to peek (${s2.state})`);
+  await tp.tap('#grabBtn'); await wait(tp, 400); const g1 = (await S()).state;
+  await tp.tap('#grabBtn'); await wait(tp, 400); const g2 = (await S()).state;
+  await tp.tap('#grabBtn'); await wait(tp, 400); const g3 = (await S()).state;
+  ok([g1, g2, g3].join('|') === 'half|full|half', `touch: tapping the handle cycles peek → half → full → half (${[g1, g2, g3].join(' → ')})`);
+  // detail
+  await tp.tap(`.card[data-id="${SG}"]`); await wait(tp, 1200);
+  s0 = await S();
+  ok(s0.mode === 'detail' && s0.state === 'half', `touch: detail opens at half (${s0.mode}/${s0.state})`);
+  mid = await swipe(s0.top + 8, s0.top + 176);
+  s1 = await S();
+  ok(mid > s0.top + 60 && s1.mode === 'detail' && s1.state === 'peek', `touch: detail handle drag down follows the finger (mid ${mid}) and snaps half → peek (${s1.mode}/${s1.state})`);
+  mid = await swipe(s1.top + 30, s1.top - 400, 195, 1000, 20);
+  s1 = await S();
+  ok(s1.mode === 'detail' && s1.state === 'full', `touch: detail header drag up to full (${s1.state}, top ${s1.top})`);
+  const dy = s1.top + 300;
+  await swipe(dy, dy + 250);
+  s2 = await S();
+  ok(s2.mode === 'detail' && s2.state !== 'full', `touch: detail at full + scrollTop 0, pulling the content down drags the sheet (${s2.state})`);
+  if (s2.state === 'half') { await swipe(s2.top + 8, s2.top + 176); s2 = await S(); }
+  ok(s2.mode === 'detail' && s2.state === 'peek', `touch: detail reaches peek (${s2.state})`);
+  await swipe(s2.top + 8, s2.top + 160);
+  s2 = await S();
+  ok(s2.mode === 'list' && s2.state === 'peek', `touch: dragging down from peek in the detail closes it, back to the list at peek (${s2.mode}/${s2.state})`);
+  await tp.tap(`.card[data-id="${SG}"]`); await wait(tp, 1200);
+  await tp.tap('#mapBack'); await wait(tp, 500);
+  s2 = await S();
+  ok(s2.mode === 'list' && s2.state === 'peek', `touch: the map back button still closes the detail (${s2.mode}/${s2.state})`);
+  ok(T.errors.length === 0, 'touch: no JS errors' + (T.errors.length ? ': ' + T.errors.join(' | ') : ''));
+  await T.ctx.close();
+}
 // quick exit (one tap, history replaced)
 {
   const Q = await open(base + 'index.html' + NOW, { width: 390, height: 844 }, true);

@@ -353,7 +353,7 @@
       onHover: function (id) { if (!mobile()) P.ui.markListHover(id); },
       onTiles: function (ok) { $('tileError').hidden = ok; }
     });
-    P.sheet.init($('sheet'), function () { P.map.invalidate(); });
+    P.sheet.init($('sheet'), function () { P.map.invalidate(); }, { onDismiss: function () { closeDetail(); } });
     P.ui.renderLegend();
     renderExtra();
     rechips();
