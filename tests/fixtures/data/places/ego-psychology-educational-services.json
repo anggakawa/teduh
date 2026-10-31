@@ -1,0 +1,146 @@
+{
+  "name": "Ego Psychology & Educational Services",
+  "category": "kesehatan-mental/biro-psikologi",
+  "subcategories": [
+    "psikolog",
+    "tumbuh kembang anak",
+    "terapi anak"
+  ],
+  "tags": [
+    "biro psikologi",
+    "tumbuh kembang",
+    "terapi wicara",
+    "fisioterapi anak",
+    "terapi perilaku",
+    "pengembangan diri"
+  ],
+  "address": "Jl. Batas Kota",
+  "kelurahan": "Komet",
+  "kecamatan": "Banjarbaru Utara",
+  "city": "Banjarbaru",
+  "lat": -3.437958,
+  "lng": 114.853047,
+  "contacts": {
+    "phone": "unknown (removed 2026-10-31: no owner-published public source; see CONTRIBUTING.md)",
+    "instagram": "@egopsychology",
+    "website": "http://egopsychology.id/ (503 on 2026-10-31)",
+    "whatsapp": "unknown",
+    "email": "unknown",
+    "booking_link": "linktr.ee (per listing)"
+  },
+  "hours": {
+    "senin_sabtu": "08.00–18.00",
+    "minggu": "tutup"
+  },
+  "schedule": [],
+  "services": [
+    "konsultasi tumbuh kembang dengan psikolog",
+    "fisioterapi pediatri",
+    "terapi wicara",
+    "terapi perilaku",
+    "pengembangan diri",
+    "anak sampai dewasa"
+  ],
+  "price_range": "unknown",
+  "booking": [
+    "janji",
+    "online (linktree)"
+  ],
+  "local_notes": "Highest-reviewed in this batch: 5.0 from 70 Google reviews, latest Jan 2026. Child-focused, with classes and therapy sessions.",
+  "field_confidence": {
+    "exists": "confirmed (2+ sources)",
+    "address": "confirmed (2+ sources)",
+    "phone": "removed 2026-10-31: no owner-published public source",
+    "website": "confirmed (2+ sources) (site down today)",
+    "instagram": "single source (KitaLulus company profile)",
+    "hours": "single source",
+    "services": "single source"
+  },
+  "sources": [
+    {
+      "url": "https://exa.ai/library/place/ybmm2hmq3fc",
+      "note": "Google-Maps-derived, reviews to Jan 2026",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://directmap.asia/banjarbaru/5500",
+      "note": "directory",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://www.kitalulus.com/company/ego-psychology-educational-services-oq7y",
+      "note": "company profile, services + IG",
+      "checked": "2026-10-31"
+    }
+  ],
+  "validation_note": "Good. Address, phone, and website match across two directories, and reviews are recent (Jan 2026). The website was down when checked.",
+  "id": "ego-psychology-educational-services",
+  "status": "active",
+  "verified_at": "2026-10-31",
+  "archived_from": "inbox/2026-10-31-explorer-kesehatan-mental-batch1.json",
+  "also_in_categories": [
+    "tumbuh-kembang-anak"
+  ],
+  "short": "Ego Psychology & Educational Services",
+  "checked": "2026-10-31",
+  "address_display": "Jl. Batas Kota",
+  "kelurahan_display": "Komet",
+  "hours_normalized": [
+    {
+      "day": "senin",
+      "open": "08.00",
+      "close": "18.00"
+    },
+    {
+      "day": "selasa",
+      "open": "08.00",
+      "close": "18.00"
+    },
+    {
+      "day": "rabu",
+      "open": "08.00",
+      "close": "18.00"
+    },
+    {
+      "day": "kamis",
+      "open": "08.00",
+      "close": "18.00"
+    },
+    {
+      "day": "jumat",
+      "open": "08.00",
+      "close": "18.00"
+    },
+    {
+      "day": "sabtu",
+      "open": "08.00",
+      "close": "18.00"
+    },
+    {
+      "day": "minggu",
+      "open": null,
+      "close": null,
+      "closed": true
+    }
+  ],
+  "booking_display": [
+    "Janji temu",
+    "Online (linktree)"
+  ],
+  "search_terms": [
+    "psikolog",
+    "konseling",
+    "keterlambatan bicara",
+    "speech therapy",
+    "fisioterapi anak",
+    "tumbuh kembang anak"
+  ],
+  "city_display": "Banjarbaru",
+  "history": [
+    {
+      "batch": "privacy-audit",
+      "date": "2026-10-31",
+      "what_changed": "Phone consent policy: removed 1 phone/WhatsApp number(s) that had no owner-published public source in this record (Google-Maps mirrors, directories, third-party pages or personal contacts). Re-add only with a contact_sources link where the owner publishes the number."
+    }
+  ]
+}

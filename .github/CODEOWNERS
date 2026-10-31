@@ -1,0 +1,11 @@
+# Code owners review every change. Branch protection on main must enable
+# "Require a pull request" + "Require review from Code Owners".
+# Only the people listed for /data/places/ may mark a place verified (status "active");
+# scripts/guard_pr.py reads this file from the PR's BASE branch to enforce that.
+# List people by username (not @org/team): guard_pr.py does not resolve team membership.
+*                 @anggakawa
+/data/places/     @anggakawa
+/data/hotlines.json @anggakawa
+/schema/          @anggakawa
+/scripts/         @anggakawa
+/.github/         @anggakawa

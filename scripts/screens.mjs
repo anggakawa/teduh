@@ -1,0 +1,58 @@
+// Screenshots for review. Usage: node scripts/screens.mjs [baseUrl]  → screenshots/*.png (390×844 and 1440×900).
+// Uses the read-only ?now= override so the hours copy matches the mockups (Sabtu 31 Okt 2026, 13.56 WITA).
+import { createRequire } from 'module';
+import { fileURLToPath } from 'url';
+import path from 'path';
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');   // screenshots/ at the repo root
+const require = createRequire((process.env.PW_DIR || '/tmp/pw') + '/');
+const { chromium } = require('playwright-core');
+const base = (process.argv[2] || 'http://localhost:8765/').replace(/\/?$/, '/') + 'index.html?now=2026-10-31T13:56';
+const out = n => path.join(root, 'screenshots', n + '.png');
+const b = await chromium.launch({ executablePath: process.env.CHROME || '/usr/bin/google-chrome', args: ['--no-sandbox'] });
+const w = (p, ms = 600) => p.waitForTimeout(ms);
+async function page(width, height, mobile) {
+  const ctx = await b.newContext({ viewport: { width, height }, deviceScaleFactor: mobile ? 2 : 1, isMobile: mobile, hasTouch: mobile, timezoneId: 'Asia/Makassar' });
+  const p = await ctx.newPage();
+  await p.goto(base); await p.waitForSelector('body[data-ready="1"]'); await w(p, 2500);
+  return p;
+}
+const shots = [];
+const snap = async (p, n) => { await w(p, 1200); await p.screenshot({ path: out(n) }); shots.push(out(n)); };
+
+// ---- mobile 390×844 ----
+let m = await page(390, 844, true);
+await snap(m, 'm-01-main');
+await m.click('.card[data-id="traitcare-biro-psikologi-banjarbaru"]'); await w(m);
+await m.evaluate(() => Peta.sheet.set('full')); await m.click('.wk');
+await snap(m, 'm-02-detail-verified');
+await m.click('#mapBack'); await w(m);
+await m.click('.card[data-id="biro-sagraha-psikologi-banjarbaru"]');
+await snap(m, 'm-03-detail-unverified');
+await m.click('#mapBack'); await w(m);
+await m.click('#q'); await m.fill('#q', 'bahasa isyarat'); await m.press('#q', 'Enter');
+await snap(m, 'm-04-empty-search');
+await m.click('#qClear'); await m.keyboard.press('Escape'); await w(m);
+await m.click('.chip[data-t="ok"]'); await m.click('.chip[data-group="psikologi"]');
+await snap(m, 'm-05-empty-filter');
+await m.click('#clearFilters'); await w(m); await m.evaluate(() => Peta.sheet.set('peek'));
+await m.click('#emgRow'); await m.locator('#quickExit').hover().catch(() => {});
+await snap(m, 'm-06-darurat-keluar-cepat');
+await m.context().close();
+
+// ---- desktop 1440×900 ----
+let d = await page(1440, 900, false);
+await snap(d, 'd-01-main');
+await d.click('.card[data-id="rsd-idaman-kota-banjarbaru"]'); await w(d); await d.click('.wk');
+await snap(d, 'd-02-detail-verified');
+await d.click('#detailBack'); await w(d);
+await d.click('.card[data-id="biro-sagraha-psikologi-banjarbaru"]');
+await snap(d, 'd-03-detail-unverified');
+await d.click('#detailBack'); await w(d);
+await d.fill('#q', 'bahasa isyarat');
+await snap(d, 'd-04-empty-search');
+await d.click('#empty [data-act="clearq"]'); await w(d);
+await d.click('#emgRow'); await d.hover('#quickExit');
+await snap(d, 'd-05-darurat-keluar-cepat');
+await d.context().close();
+await b.close();
+console.log(shots.join('\n'));

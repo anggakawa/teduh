@@ -1,0 +1,129 @@
+{
+  "name": "Praktik Psikolog Klinis Risa Nur Amelia, S.Psi., M.Psi., Psikolog",
+  "category": "kesehatan-mental/psikolog",
+  "subcategories": [
+    "psikolog klinis praktik mandiri",
+    "konsultasi online"
+  ],
+  "tags": [
+    "psikolog klinis",
+    "praktik perseorangan",
+    "SIPP aktif",
+    "online",
+    "Halodoc"
+  ],
+  "address": "Jl. Pandu, Komp. Widya Citra Elok IV No. B1",
+  "kelurahan": "Guntung Paikat",
+  "kecamatan": "Banjarbaru Selatan",
+  "city": "Banjarbaru",
+  "contacts": {
+    "phone": "unknown (offline practice)",
+    "whatsapp": "unknown",
+    "instagram": "unknown",
+    "website": "https://www.halodoc.com/tanya-dokter/risa-nur-amelia-m-psi-psikolog (online profile)",
+    "email": "unknown",
+    "online_platforms": "Halodoc; KALM (code RIS-953, per LinkedIn); Berbagi Cerita (berbagicerita.id)"
+  },
+  "hours": "unknown (offline). Halodoc online availability: Jumat 12.00–14.00 (as shown 2026-10-31, changes)",
+  "schedule": [
+    {
+      "practitioner": "Risa Nur Amelia, S.Psi., M.Psi., Psikolog",
+      "note": "Also Kemensos RI clinical psychologist since Jun 2025 (LinkedIn), so private-practice hours are likely limited"
+    }
+  ],
+  "services": [
+    "konsultasi psikolog klinis",
+    "konsultasi online (chat) via Halodoc"
+  ],
+  "price_range": "Halodoc chat Rp59.000/sesi (online; offline price unknown)",
+  "booking": [
+    "online via Halodoc",
+    "online via KALM / Berbagi Cerita",
+    "offline: unknown"
+  ],
+  "local_notes": "NIAIPK 23014152; SIPPK valid to Jun 2028; STR 212482123-4716985 (Halodoc). Alumna UMM (S1 2019, M.Psi 2023). Former TraitCare clinical psychologist (Mar 2023–Jun 2025) and assistant (2019–2023). Her complex's plus code sits ~20 m from TraitCare's map pin on Jl. Pandu; the two may be the same building, but no source says so.",
+  "field_confidence": {
+    "exists": "confirmed (2+ sources) (IPK registry + Halodoc 'praktik di Banjarbaru' + Berbagi Cerita + LinkedIn)",
+    "address": "single source (IPK registry)",
+    "contacts": "unknown",
+    "practitioner": "confirmed (2+ sources)",
+    "lat_lng": "approximate (complex-level plus code)",
+    "online_price": "single source (Halodoc)",
+    "offline_contacts": "unknown"
+  },
+  "sources": [
+    {
+      "url": "https://data.ipkindonesia.or.id/psikolog-klinis/banjar-baru/risa-nur-amelia--MTE0NA==",
+      "note": "IPK registry",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://data.ipkindonesia.or.id/psikolog-klinis/banjar-baru/risa-nur-amelia--MTE0NA==",
+      "note": "IPK registry: address, SIPP",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://www.halodoc.com/tanya-dokter/risa-nur-amelia-m-psi-psikolog",
+      "note": "Halodoc: Rp59.000 chat, praktik di Banjarbaru, STR, Fri 12–14",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://berbagicerita.id/web/team-kami/",
+      "note": "Berbagi Cerita team page: Psikolog Klinis",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://linkedin.com/in/risa-nur-amelia-041892191",
+      "note": "LinkedIn: work history incl. TraitCare, Kemensos, KALM, Halodoc (search snippet)",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://doi.org/10.22219/procedia.v11i1.23990",
+      "note": "Procedia 2023 paper: affiliation Biro Psikologi Traitcare",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://directmap.asia/banjarbaru/8468",
+      "note": "directmap: Komplek Widya Citra Elok IV, plus code GRRM+P57, near TraitCare",
+      "checked": "2026-10-31"
+    }
+  ],
+  "validation_note": "Medium-high. Psychologist confirmed by 4+ sources; the offline practice address rests only on the IPK registry. Recommend listing her with online booking channels.",
+  "id": "praktik-psikolog-klinis-risa-nur-amelia-s-psi-m-psi-psikolog",
+  "lat": -3.458213,
+  "lng": 114.832922,
+  "status": "active",
+  "verified_at": "2026-10-31",
+  "archived_from": "inbox/2026-10-31-explorer-kesehatan-mental-batch1.json",
+  "latlng_method": "Complex-level only: decoded from plus code GRRM+P57 (directmap listing for 'Komplek Widya Citra Elok IV Banjarbaru', Jl. Pandu, Guntung Paikat). Not the exact house B1; ~14 m cell.",
+  "what_changed": "Second independent sources found (Halodoc, Berbagi Cerita, LinkedIn, Procedia). Added online booking channels + price, STR, work history, complex-level lat/lng. Offline phone still unknown.",
+  "history": [
+    {
+      "batch": "1b",
+      "date": "2026-10-31",
+      "what_changed": "Second independent sources found (Halodoc, Berbagi Cerita, LinkedIn, Procedia). Added online booking channels + price, STR, work history, complex-level lat/lng. Offline phone still unknown."
+    }
+  ],
+  "open_issues": null,
+  "short": "Psikolog Risa Nur Amelia",
+  "checked": "2026-10-31",
+  "address_display": "Jl. Pandu, Komp. Widya Citra Elok IV No. B1",
+  "kelurahan_display": "Guntung Paikat",
+  "hours_note_id": "Jam praktik tatap muka belum diketahui. Jadwal online di Halodoc berubah-ubah.",
+  "booking_display": [
+    "Online lewat Halodoc",
+    "Online lewat KALM / Berbagi Cerita",
+    "Praktik tatap muka: cara daftar belum diketahui"
+  ],
+  "services_display": [
+    "konsultasi psikolog klinis",
+    "konsultasi online (chat) lewat Halodoc"
+  ],
+  "search_terms": [
+    "psikolog",
+    "konseling",
+    "konsultasi psikologi",
+    "konsultasi online"
+  ],
+  "city_display": "Banjarbaru"
+}

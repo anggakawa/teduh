@@ -1,0 +1,169 @@
+{
+  "name": "Birru Care Banjarbaru – Terapi Wicara, Okupasi Terapi, Fisioterapi, Tumbuh Kembang Anak",
+  "category": "tumbuh-kembang-anak/klinik-terapi-anak",
+  "subcategories": [
+    "terapi wicara",
+    "terapi okupasi",
+    "fisioterapi anak",
+    "asesmen komunikasi & belajar"
+  ],
+  "tags": [
+    "speech delay",
+    "autis",
+    "ADHD",
+    "startup",
+    "terapi wicara"
+  ],
+  "address": "Jl. Karang Anyar 3 No. 14",
+  "kelurahan": "Loktabat Utara (OSM: Jl. Karang Anyar 3 lies in Loktabat Utara)",
+  "kecamatan": "Banjarbaru Utara",
+  "city": "Banjarbaru",
+  "lat": null,
+  "lng": null,
+  "coord_method": "none: no coordinate-bearing source found",
+  "contacts": {
+    "phone": "0853-4288-1997",
+    "whatsapp": "wa.me/6285342881997 (Banjarbaru button on birru.co)",
+    "website": "https://birru.co/",
+    "assessment": "https://assessment.birru.co/",
+    "instagram": "unknown (@birrucare / @birru.care hit login wall)"
+  },
+  "hours": {
+    "note": "unknown (directmap: 'Tidak diketahui')"
+  },
+  "schedule": [],
+  "therapists": "Official: therapists are speech-therapy (Terapi Wicara) graduates. Methods: Verbal Behavior, Play Therapy, Modelling, Drill, Sensori Integrasi, Stimulasi Multi-Modal. No names.",
+  "services": [
+    "terapi wicara",
+    "okupasi terapi",
+    "fisioterapi",
+    "tumbuh kembang anak",
+    "assessment kemampuan komunikasi & belajar (observasi, wawancara, tes, target belajar)",
+    "Birru Play media belajar bicara"
+  ],
+  "price_range": "unknown",
+  "price_per_session": {
+    "assessment": "Rp200.000 for a 1-hour offline assessment (official assessment.birru.co; page undated; checked 2026-10-31; a 'Total Nilai Rp599.000' bundle includes an e-book)",
+    "therapy_session": "unknown. A search summary claimed Rp180.000/session from an Instagram ad dated 31 Aug 2026, but I found no link and could not verify it, so it is NOT recorded as fact."
+  },
+  "bpjs": "unknown",
+  "waitlist": "unknown",
+  "booking": [
+    "form on assessment.birru.co, then admin confirms the schedule",
+    "WA 0853-4288-1997"
+  ],
+  "local_notes": "A Banjarbaru parent testimonial ('Bunda Umar') appears on the official page. Directmap shows a 5★ rating. Birru's Jayapura branch reviews call it 'Al-Birru / Rumah Terapi Albiru', so Birru Care is the renamed Al-Birru brand. The batch-2 'Rumah Terapi Al-Birru' pin in Sungai Sipai, Martapura (IG rumahterapialbirru_banjarbaru, reviews 2021–2022) is probably an earlier Al-Birru location, but no source ties it to the Karang Anyar address, so I did not use its coordinates.",
+  "field_confidence": {
+    "exists": "confirmed (2+ sources)",
+    "address": "single source (directmap)",
+    "phone": "confirmed (2+ sources) (directmap + birru.co WA link labelled Banjarbaru)",
+    "services": "confirmed (2+ sources)",
+    "hours": "unknown",
+    "price": "unknown",
+    "bpjs": "unknown (private; likely not)",
+    "therapists": "unknown",
+    "coords": "unresolved (street-level approximation only)",
+    "assessment_price": "single source (official)",
+    "session_price": "unknown",
+    "method_frequency": "single source (official)",
+    "brand_link_Al-Birru": "single source (Jayapura reviews on Exa)"
+  },
+  "sources": [
+    {
+      "url": "https://directmap.asia/banjarbaru/7345",
+      "note": "directory: address, phone, website",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://birru.co/",
+      "note": "official: Banjarbaru WA 6285342881997, services",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://assessment.birru.co/",
+      "note": "official assessment page",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://nominatim.openstreetmap.org/search?format=jsonv2&q=Jalan%20Karang%20Anyar%203,%20Banjarbaru",
+      "note": "OSM geocode of the street",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://exa.ai/library/place/8r2ksm3jmwj",
+      "note": "neighbour on same street, coordinates",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://directmap.asia/banjarbaru/23693",
+      "note": "directmap neighbour list naming Birru Care (5★)",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://assessment.birru.co/",
+      "note": "official: assessment Rp200.000, FAQ",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://exa.ai/library/place/qg358f65fqh",
+      "note": "Birru Care Jayapura reviews say 'Al-Birru'",
+      "checked": "2026-10-31"
+    }
+  ],
+  "validation_note": "Existence and phone are confirmed. There are no coordinates, and I did not invent any. The Librarian should geocode the address, or a field check should.",
+  "id": "birru-care-banjarbaru",
+  "verified_at": "2026-10-31",
+  "status": "active",
+  "open_issues": "exact coords unknown; approx street-level only (±500 m)",
+  "archived_from": "inbox/2026-10-31-explorer-tumbuhkembang-batch2.json",
+  "task": "(1) geocode + (4) price",
+  "approx_coords": {
+    "lat": -3.4274238,
+    "lng": 114.8098153,
+    "precision": "street-level only, about ±500 m along Jl. Karang Anyar 3, NOT the building",
+    "method": "OpenStreetMap Nominatim street result 'Jalan Karang Anyar 3, Loktabat Utara' (way 773674351). The street has segments from about 114.8048 to 114.8138. Supporting point: Rumah Betatapas Laundry, also on Jl. Karang Anyar 3, is at -3.427211, 114.810977 (Exa), and directmap lists it within 1 km of Birru Care."
+  },
+  "schedule_note": "Official FAQ: mild cases at least 2x/week, severe cases 4–5x/week. A Learning Report every 12 sessions. Parents can watch via CCTV or join the session.",
+  "what_changed": "Added a street-level approximate coordinate with its method; lat/lng stay null. Added the assessment price, session frequency and methods, and the Al-Birru brand link. The session price is still unknown.",
+  "history": [
+    {
+      "batch": "2b",
+      "date": "2026-10-31",
+      "what_changed": "Added a street-level approximate coordinate with its method; lat/lng stay null. Added the assessment price, session frequency and methods, and the Al-Birru brand link. The session price is still unknown."
+    }
+  ],
+  "short": "Birru Care Banjarbaru",
+  "checked": "2026-10-31",
+  "address_display": "Jl. Karang Anyar 3 No. 14",
+  "kelurahan_display": "Loktabat Utara",
+  "note_id": "Titik lokasi persis belum diketahui; baru perkiraan tingkat jalan.",
+  "booking_display": [
+    "Isi formulir di assessment.birru.co, lalu admin mengonfirmasi jadwal",
+    "WA 0853-4288-1997"
+  ],
+  "services_display": [
+    "terapi wicara",
+    "terapi okupasi",
+    "fisioterapi",
+    "tumbuh kembang anak",
+    "asesmen kemampuan komunikasi & belajar (observasi, wawancara, tes, target belajar)",
+    "Birru Play, media belajar bicara"
+  ],
+  "search_terms": [
+    "keterlambatan bicara",
+    "terlambat bicara",
+    "speech therapy",
+    "autisme",
+    "ADHD",
+    "anak berkebutuhan khusus"
+  ],
+  "city_display": "Banjarbaru",
+  "contact_sources": [
+    {
+      "number": "0853-4288-1997",
+      "url": "https://birru.co/",
+      "note": "checked 2026-10-31: number appears on this page (Banjarbaru WhatsApp button)",
+      "checked": "2026-10-31"
+    }
+  ]
+}

@@ -1,0 +1,198 @@
+{
+  "name": "TraitCare Biro Psikologi Banjarbaru",
+  "category": "kesehatan-mental/biro-psikologi",
+  "subcategories": [
+    "psikolog klinis anak & remaja",
+    "psikolog klinis dewasa",
+    "psikolog pendidikan",
+    "psikolog industri & organisasi"
+  ],
+  "tags": [
+    "biro psikologi",
+    "anak",
+    "dewasa",
+    "tes IQ",
+    "minat bakat",
+    "terapi anak",
+    "rekrutmen"
+  ],
+  "address": "Jl. Pandu",
+  "kelurahan": "Guntungmanggis (Google Maps) — possibly Guntung Paikat (adjacent Widya Citra Elok IV complex); not verified",
+  "kecamatan": "Landasan Ulin / Banjarbaru Selatan (see kelurahan)",
+  "city": "Banjarbaru",
+  "lat": -3.458129,
+  "lng": 114.833072,
+  "contacts": {
+    "phone": "unknown (removed 2026-10-31: no owner-published public source; see CONTRIBUTING.md)",
+    "instagram": "@traitcarepsikologi (CONFIRMED: profile title 'TraitCare Psikologi Banjarbaru', 26K followers, 897 posts on 2026-10-31)",
+    "website": "unknown (old business.site URL dead)",
+    "whatsapp": "unknown (removed 2026-10-31: no owner-published public source; see CONTRIBUTING.md)",
+    "email": "traitcare@gmail.com (2019 post; stale)"
+  },
+  "hours": {
+    "senin_sabtu": "09.00–17.00",
+    "minggu": "tutup"
+  },
+  "schedule": [
+    {
+      "practitioner": "Renita Krisdianti, M.Psi., Psikolog (Klinis, UMM 2015)",
+      "note": "LinkedIn lists TraitCare as current (Aug 2016–present)",
+      "as_of": "LinkedIn profile, checked 2026-10-31"
+    },
+    {
+      "practitioner": "Risa Nur Amelia, M.Psi., Psikolog",
+      "note": "LEFT Jun 2025 (now Kemensos RI) — do not list as current"
+    }
+  ],
+  "services": [
+    "konseling/psikoterapi individu (anak & dewasa)",
+    "asesmen tumbuh kembang anak",
+    "terapi anak (perilaku, wicara, bermain, okupasi)",
+    "tes kesiapan sekolah",
+    "tes penjurusan/minat bakat",
+    "tes inteligensi",
+    "rekrutmen/asesmen karyawan",
+    "seminar parenting"
+  ],
+  "price_range": "unknown",
+  "booking": [
+    "janji via WA (no owner-published number yet)",
+    "DM Instagram"
+  ],
+  "local_notes": "Active: Google reviews Jan & Feb 2026 praise the psychologists. Serves Banjarbaru–Martapura–Banjarmasin clients. Rated 4.9 (21 reviews).",
+  "field_confidence": {
+    "exists": "confirmed (2+ sources)",
+    "address": "confirmed (2+ sources)",
+    "phone": "removed 2026-10-31: no owner-published public source",
+    "hours": "confirmed (2+ sources)",
+    "services": "stale (>1 year) for the itemized list (2019); child-development and adult counselling confirmed by 2021–2026 reviews",
+    "practitioner": "stale (>1 year)",
+    "instagram": "confirmed (2+ sources) (IG profile meta + LinkedIn hashtags)",
+    "practitioner_renita": "single source (LinkedIn, current)"
+  },
+  "sources": [
+    {
+      "url": "https://exa.ai/library/place/8zlyn2xhnng",
+      "note": "Google-Maps-derived",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://solusisehatmental.com/listing/traitcare-biro-psikologi-banjarbaru/",
+      "note": "directory (site archives to 2024)",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://www.linkedin.com/posts/renita-krisdianti-a37952130_psikologbanjarbaru-psikologmartapura-psikologanak-activity-6600188845285826560-b9Jv",
+      "note": "LinkedIn post ~Nov 2019, services",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://exa.ai/library/place/8zlyn2xhnng",
+      "note": "Exa Places (Google-Maps-derived listing): reviews 2026-02-19, 2026-01-26",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://www.instagram.com/traitcarepsikologi/",
+      "note": "IG profile meta: 26K followers, 897 posts",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://linkedin.com/in/renita-krisdianti-a37952130",
+      "note": "LinkedIn: Psikolog TraitCare Aug 2016–present (search snippet)",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://linkedin.com/in/risa-nur-amelia-041892191",
+      "note": "LinkedIn: TraitCare clinical psychologist to Jun 2025",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://directmap.asia/banjarbaru/9194",
+      "note": "directory: phone, 4.9/21 reviews",
+      "checked": "2026-10-31"
+    }
+  ],
+  "validation_note": "Good for existence/contact/practitioner. Itemized services still stale.",
+  "id": "traitcare-biro-psikologi-banjarbaru",
+  "status": "active",
+  "verified_at": "2026-10-31",
+  "archived_from": "inbox/2026-10-31-explorer-kesehatan-mental-batch1.json",
+  "latlng_method": "Exa Places (Google-Maps-derived)",
+  "what_changed": "IG handle now confirmed; practitioner refreshed (Renita current; Risa left Jun 2025); active status confirmed by 2026 reviews; WA = phone. Itemized service list still only from 2019 (IG posts not readable without login).",
+  "history": [
+    {
+      "batch": "1b",
+      "date": "2026-10-31",
+      "what_changed": "IG handle now confirmed; practitioner refreshed (Renita current; Risa left Jun 2025); active status confirmed by 2026 reviews; WA = phone. Itemized service list still only from 2019 (IG posts not readable without login)."
+    },
+    {
+      "batch": "privacy-audit",
+      "date": "2026-10-31",
+      "what_changed": "Phone consent policy: removed 1 phone/WhatsApp number(s) that had no owner-published public source in this record (Google-Maps mirrors, directories, third-party pages or personal contacts). Re-add only with a contact_sources link where the owner publishes the number."
+    }
+  ],
+  "open_issues": "itemized services from 2019",
+  "also_in_categories": [
+    "tumbuh-kembang-anak"
+  ],
+  "short": "TraitCare Biro Psikologi Banjarbaru",
+  "checked": "2026-10-31",
+  "address_display": "Jl. Pandu",
+  "kelurahan_display": null,
+  "kecamatan_display": null,
+  "address_note_id": "Kelurahan berbeda antar sumber (Guntung Manggis / Guntung Paikat). Tanyakan saat menelepon.",
+  "note_id": "Rincian layanan berasal dari 2019; mungkin sudah berubah.",
+  "hours_normalized": [
+    {
+      "day": "senin",
+      "open": "09.00",
+      "close": "17.00"
+    },
+    {
+      "day": "selasa",
+      "open": "09.00",
+      "close": "17.00"
+    },
+    {
+      "day": "rabu",
+      "open": "09.00",
+      "close": "17.00"
+    },
+    {
+      "day": "kamis",
+      "open": "09.00",
+      "close": "17.00"
+    },
+    {
+      "day": "jumat",
+      "open": "09.00",
+      "close": "17.00"
+    },
+    {
+      "day": "sabtu",
+      "open": "09.00",
+      "close": "17.00"
+    },
+    {
+      "day": "minggu",
+      "open": null,
+      "close": null,
+      "closed": true
+    }
+  ],
+  "booking_display": [
+    "Janji temu lewat WA (nomor resmi belum tercatat)",
+    "DM Instagram"
+  ],
+  "search_terms": [
+    "psikolog",
+    "konseling",
+    "psikoterapi",
+    "tes inteligensi",
+    "tes kecerdasan",
+    "psikotes",
+    "tumbuh kembang anak",
+    "parenting"
+  ],
+  "city_display": "Banjarbaru"
+}

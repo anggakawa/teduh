@@ -1,0 +1,92 @@
+/* ==========================================================================
+   Teduh — tokens.css: drop-in replacement for v2/css/tokens.css.
+   Spec: design/ui/SPEC.md (wins over design/design.md where they differ).
+   Every v2 variable name is kept. NEW = added token, FIX = changed value.
+   ========================================================================== */
+:root {
+  /* ---- Palette (design.md §2) ---- */
+  --paper: #F7F4EE;
+  --surface: #FFFFFF;
+  --surface-hover: #FAF8F4;     /* NEW: desktop card hover */
+  --ink: #23302B;
+  --muted: #5E6B65;
+  --subtle: #7D8883;            /* NEW: icon-only hints, e.g. Darurat chevron (3.7:1) */
+  --line: #E3DED4;
+  --divider: #EEEAE2;
+  --primary: #2F6F62;
+  --primary-hover: #285F54;     /* NEW */
+  --primary-pressed: #255A4F;   /* NEW: white on it 7.9:1 */
+  --primary-tint: #EEF5F2;
+  --primary-tint-2: #E2EEE9;    /* NEW: pressed secondary / round button */
+  --neutral-chip: #EFECE6;      /* "Belum dicek" chip background */
+  --neutral-ink: #5E6B65;       /* NEW: "Belum dicek" chip text (muted, 4.7:1 on chip) */
+  --emg: #B4443A;               /* emergency phone glyph only */
+  --emg-tint: #F6E9E6;
+  --map-bg: #EDEAE3;            /* while tiles load */
+  --act-tint: #F2F7F5;          /* secondary action buttons */
+  --act-border: #CFE0DA;
+  --grab: #D5CFC3;
+  --chip-divider: #CFC8BA;
+  --unverified-ring: #8A948F;   /* FIX #B9B2A6 → #8A948F (3.1:1 non-text) */
+  --disabled-bg: #F1EEE8;       /* NEW */
+  --disabled-ink: #A4ACA8;      /* NEW */
+  --scrim: rgba(35, 48, 43, .32);   /* NEW: behind the emergency modal */
+  --skeleton: #EDE9E1;          /* NEW */
+  --skeleton-hi: #F6F3EE;       /* NEW: shimmer highlight */
+  --focus: #2F6F62;             /* NEW */
+  --focus-halo: #FFFFFF;        /* NEW */
+
+  --cat-kesehatan-mental: #3E8A7E;      --cat-kesehatan-mental-deep: #2E6E64;      --cat-kesehatan-mental-tint: #E6F0EC;
+  --cat-tumbuh-kembang-anak: #B07722;   --cat-tumbuh-kembang-anak-deep: #8A5A14;   --cat-tumbuh-kembang-anak-tint: #F5EBDA;
+  --cat-layanan-pendampingan: #4F5D9A;  --cat-layanan-pendampingan-deep: #414E86;  --cat-layanan-pendampingan-tint: #E8EAF3;
+  --cat-psikologi: #B5654A;             --cat-psikologi-deep: #94503A;             --cat-psikologi-tint: #F4E6E0;
+
+  /* ---- Shape & elevation ---- */
+  --radius-sheet: 24px;
+  --radius-card: 12px;
+  --radius-box: 14px;
+  --radius-tag: 6px;
+  --radius-pill: 999px;
+  --shadow-float: 0 4px 14px rgba(35, 48, 43, .14);
+  --shadow-chip: 0 2px 6px rgba(35, 48, 43, .10);
+  --shadow-fab: 0 3px 10px rgba(35, 48, 43, .18);
+  --shadow-sheet: 0 -6px 24px rgba(35, 48, 43, .16);
+  --shadow-modal: 0 -8px 32px rgba(35, 48, 43, .22);   /* NEW: emergency modal */
+  --pin-shadow: drop-shadow(0 1px 1.5px rgba(35, 48, 43, .35));
+  --focus-ring: 0 0 0 2px var(--focus-halo), 0 0 0 4px var(--focus);   /* NEW */
+
+  /* ---- Type (SPEC §2) — base 15px ---- */
+  --font: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --fs-title: 22px;  --fw-title: 600; --ls-title: -0.3px;  --lh-title: 28px;   /* NEW lh */
+  --fs-name: 17px;   --fw-name: 600;  --ls-name: -0.15px;  --lh-name: 22px;    /* NEW lh */
+  --fs-time-big: 17px;                                                         /* NEW: today's hours */
+  --fs-body: 15px;   --lh-body: 1.5;
+  --fs-info: 14px;   --lh-info: 20px;                                          /* NEW lh */
+  --fs-meta: 13px;   --fw-meta: 500;  --lh-meta: 18px;                         /* NEW lh */
+  --fs-tag: 12.5px;  --fw-tag: 600;                                            /* NEW: FIX 500 → 600 */
+  --fs-attr: 10px;
+
+  /* ---- Spacing & sizes (4px grid) ---- */
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-5: 24px;
+  --space-6: 32px; --space-7: 40px; --space-8: 48px;   /* NEW */
+  --gutter: 12px;               /* NEW: map-overlay side inset (top row, search, chips, FABs) */
+  --sheet-pad-x: 16px;          /* NEW: sheet/panel content side padding */
+  --touch: 44px;
+  --chip-h: 36px;               /* FIX 34 → 36 (+4 row padding = 44 hit) */
+  --search-h: 48px;
+  --topbtn-h: 40px;             /* NEW: brand pill, Keluar cepat, round back */
+  --card-tile: 40px;            /* NEW: card category tile */
+  --action-h: 60px;             /* NEW: Telepon / WhatsApp / Rute */
+  --emg-h: 56px;                /* NEW: Darurat row (+ safe area) */
+  --panel-w: 380px;
+  --sheet-peek: 288px;          /* FIX 250 → 288 (incl. 20px safe area) */
+  --sheet-half: 0.55;           /* fraction of viewport (read by js/sheet.js) */
+  --tiles-filter: saturate(.35) sepia(.08);
+
+  /* ---- Motion ---- NEW */
+  --ease-sheet: cubic-bezier(.2, .8, .2, 1);
+  --dur-sheet: 240ms;
+
+  /* ---- Layers ---- NEW (Leaflet panes stay < 700) */
+  --z-sheet: 900; --z-controls: 1000; --z-modal: 2000; --z-toast: 2100; --z-qexit: 3000;
+}

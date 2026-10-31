@@ -1,0 +1,138 @@
+{
+  "name": "Praktek Terapi Wicara Amalia Hernawati, A.Md. TW",
+  "category": "tumbuh-kembang-anak/praktik-terapi-wicara",
+  "subcategories": [
+    "terapi wicara"
+  ],
+  "tags": [
+    "terapis wicara",
+    "praktik mandiri"
+  ],
+  "address": "Jl. Garuda No. 61",
+  "kelurahan": "Loktabat Utara",
+  "kecamatan": "Banjarbaru Utara",
+  "city": "Banjarbaru",
+  "lat": -3.441505,
+  "lng": 114.839675,
+  "coord_method": "Exa Places (Google-Maps mirror)",
+  "contacts": {
+    "phone": "unknown (removed 2026-10-31: no owner-published public source; see CONTRIBUTING.md)"
+  },
+  "hours": {
+    "senin_sabtu": "09.00–17.00",
+    "minggu": "tutup"
+  },
+  "schedule": [],
+  "therapists": [
+    "Amalia Hernawati, A.Md. TW (from listing name)"
+  ],
+  "services": [
+    "terapi wicara"
+  ],
+  "price_range": "unknown",
+  "price_per_session": "unknown (no source)",
+  "bpjs": "unknown",
+  "waitlist": "unknown",
+  "booking": [],
+  "local_notes": "",
+  "field_confidence": {
+    "exists": "single source",
+    "address": "single source",
+    "coords": "single source",
+    "hours": "single source",
+    "phone": "removed 2026-10-31: no owner-published public source",
+    "therapist": "single source",
+    "price": "unknown"
+  },
+  "sources": [
+    {
+      "url": "https://exa.ai/library/place/dqrvf3dp28g",
+      "note": "Google-Maps-derived listing",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://exa.ai/library/place/dqrvf3dp28g",
+      "note": "only source",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://www.instagram.com/amaliahernawati/",
+      "note": "IG exists; link to the practice not established",
+      "checked": "2026-10-31"
+    }
+  ],
+  "validation_note": "Single source. Kept because it is a specific named practitioner with a full listing; the Librarian should flag it as low confidence. The search hits for 'Klinik Terapi Wicara Amalia' are in Tangerang and are unrelated.",
+  "id": "praktek-terapi-wicara-amalia-hernawati-a-md-tw",
+  "verified_at": "2026-10-31",
+  "status": "needs-check",
+  "archived_from": "inbox/2026-10-31-explorer-tumbuhkembang-batch2.json",
+  "task": "(3) second source + (4) price",
+  "searched": [
+    "web search for name + Banjarbaru / terapis wicara / Jl. Garuda No.61",
+    "X public search",
+    "IG @amaliahernawati: the account exists (317 followers, 4 posts) but nothing links it to the practice, so it is not counted as a source"
+  ],
+  "what_changed": "No new corroboration. Every 'Klinik Terapi Wicara Amalia' result is in Tangerang and unrelated. Keep it as low confidence, or have the Librarian hold it until a phone or field check.",
+  "history": [
+    {
+      "batch": "2b",
+      "date": "2026-10-31",
+      "what_changed": "No new corroboration. Every 'Klinik Terapi Wicara Amalia' result is in Tangerang and unrelated. Keep it as low confidence, or have the Librarian hold it until a phone or field check."
+    },
+    {
+      "batch": "privacy-audit",
+      "date": "2026-10-31",
+      "what_changed": "Phone consent policy: removed 1 phone/WhatsApp number(s) that had no owner-published public source in this record (Google-Maps mirrors, directories, third-party pages or personal contacts). Re-add only with a contact_sources link where the owner publishes the number."
+    }
+  ],
+  "open_issues": "single source",
+  "short": "Praktek Terapi Wicara Amalia Hernawati, A.Md. TW",
+  "checked": "2026-10-31",
+  "address_display": "Jl. Garuda No. 61",
+  "kelurahan_display": "Loktabat Utara",
+  "note_id": "Baru tercatat dari satu sumber; belum dipastikan lewat telepon.",
+  "hours_normalized": [
+    {
+      "day": "senin",
+      "open": "09.00",
+      "close": "17.00"
+    },
+    {
+      "day": "selasa",
+      "open": "09.00",
+      "close": "17.00"
+    },
+    {
+      "day": "rabu",
+      "open": "09.00",
+      "close": "17.00"
+    },
+    {
+      "day": "kamis",
+      "open": "09.00",
+      "close": "17.00"
+    },
+    {
+      "day": "jumat",
+      "open": "09.00",
+      "close": "17.00"
+    },
+    {
+      "day": "sabtu",
+      "open": "09.00",
+      "close": "17.00"
+    },
+    {
+      "day": "minggu",
+      "open": null,
+      "close": null,
+      "closed": true
+    }
+  ],
+  "search_terms": [
+    "keterlambatan bicara",
+    "terlambat bicara",
+    "speech therapy"
+  ],
+  "city_display": "Banjarbaru"
+}

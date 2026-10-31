@@ -1,0 +1,147 @@
+{
+  "name": "IBEST Physio Mom & Kids Martapura",
+  "category": "tumbuh-kembang-anak/klinik-tumbuh-kembang",
+  "subcategories": [
+    "fisioterapi anak",
+    "terapi wicara",
+    "terapi okupasi",
+    "screening tumbuh kembang",
+    "kelas sensori",
+    "psikologi klinis"
+  ],
+  "tags": [
+    "tumbuh kembang",
+    "sensori",
+    "paket terapi",
+    "rujukan-regional (di luar Banjarbaru)"
+  ],
+  "address": "Jl. A. Yani, Cindai Alus, Martapura 70613",
+  "kelurahan": "Cindai Alus",
+  "kecamatan": "Martapura",
+  "city": "Kab. Banjar (Martapura) – OUTSIDE Banjarbaru city, about 4 km from the border",
+  "lat": -3.421131,
+  "lng": 114.850247,
+  "coord_method": "Exa Places (Google-Maps mirror)",
+  "contacts": {
+    "phone_whatsapp": "+62 811-3303-019",
+    "email": "Ibestphysiomomkids@gmail.com; momkids.martapura@ibestphysio.com",
+    "website": "https://ibestphysio.com/martapura ; ibestmomkids.wordpress.com",
+    "instagram": "@ibestmomkids (confirmed exists: 'IBEST Physio Mom & Kids | Tumbuh Kembang', ~7,004 followers)"
+  },
+  "hours": {
+    "senin_sabtu": "09.00–17.00",
+    "minggu": "11.00–16.00"
+  },
+  "schedule": [],
+  "therapists": [
+    "case manager + therapists; names not published"
+  ],
+  "services": [
+    "screening tumbuh kembang",
+    "terapi wicara",
+    "fisioterapi anak",
+    "okupasi anak",
+    "kelas sensori",
+    "psikologi klinis"
+  ],
+  "price_range": "Rp224.000/sesi",
+  "price_per_session": "Pendaftaran Rp25.000; screening Rp400.000; terapi wicara/fisio anak/okupasi Rp224.000 per 1-hour session; paket 3x Rp567.500, 6x Rp1.175.000, 12x Rp2.200.000",
+  "bpjs": "unknown (private; not mentioned)",
+  "waitlist": "unknown",
+  "booking": [
+    "WA"
+  ],
+  "local_notes": "Rated 5.0 from 26 reviews; the latest review is from Jul 2023.",
+  "field_confidence": {
+    "exists": "confirmed (2+ sources)",
+    "address": "confirmed (2+ sources)",
+    "coords": "single source",
+    "hours": "single source",
+    "prices": "single source (official price page)",
+    "instagram": "confirmed (2+ sources)",
+    "reviews": "stale (>1 year)"
+  },
+  "sources": [
+    {
+      "url": "https://exa.ai/library/place/ls47v79y8w2",
+      "note": "Google-Maps-derived",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://ibestphysio.com/martapura",
+      "note": "official price list",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://www.instagram.com/ibestmomkids/",
+      "note": "IG meta via curl",
+      "checked": "2026-10-31"
+    }
+  ],
+  "validation_note": "Included for completeness because it is the only place with published per-session prices, but it is outside the city. The Librarian can exclude it by city.",
+  "id": "ibest-physio-mom-kids-martapura",
+  "verified_at": "2026-10-31",
+  "status": "active",
+  "archived_from": "inbox/2026-10-31-explorer-tumbuhkembang-batch2.json",
+  "short": "IBEST Physio Mom & Kids Martapura",
+  "checked": "2026-10-31",
+  "address_display": "Jl. A. Yani, Cindai Alus, Martapura 70613",
+  "kelurahan_display": "Cindai Alus",
+  "city_display": "Kabupaten Banjar",
+  "hours_normalized": [
+    {
+      "day": "senin",
+      "open": "09.00",
+      "close": "17.00"
+    },
+    {
+      "day": "selasa",
+      "open": "09.00",
+      "close": "17.00"
+    },
+    {
+      "day": "rabu",
+      "open": "09.00",
+      "close": "17.00"
+    },
+    {
+      "day": "kamis",
+      "open": "09.00",
+      "close": "17.00"
+    },
+    {
+      "day": "jumat",
+      "open": "09.00",
+      "close": "17.00"
+    },
+    {
+      "day": "sabtu",
+      "open": "09.00",
+      "close": "17.00"
+    },
+    {
+      "day": "minggu",
+      "open": "11.00",
+      "close": "16.00"
+    }
+  ],
+  "booking_display": [
+    "WhatsApp"
+  ],
+  "search_terms": [
+    "keterlambatan bicara",
+    "speech therapy",
+    "fisioterapi anak",
+    "terapi okupasi",
+    "tumbuh kembang anak",
+    "luar kota"
+  ],
+  "contact_sources": [
+    {
+      "number": "+62 811-3303-019",
+      "url": "https://ibestphysio.com/martapura",
+      "note": "checked 2026-10-31: number appears on this page",
+      "checked": "2026-10-31"
+    }
+  ]
+}

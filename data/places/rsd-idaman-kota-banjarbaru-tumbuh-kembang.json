@@ -1,0 +1,195 @@
+{
+  "name": "RSD Idaman Kota Banjarbaru – Klinik Tumbuh Kembang & Instalasi Rehabilitasi Medik",
+  "category": "tumbuh-kembang-anak/rumah-sakit/poli-tumbuh-kembang",
+  "subcategories": [
+    "klinik tumbuh kembang anak",
+    "rehabilitasi medik",
+    "fisioterapi",
+    "terapi wicara",
+    "terapi okupasi",
+    "psikologi anak"
+  ],
+  "tags": [
+    "RSUD",
+    "BPJS",
+    "tumbuh kembang",
+    "terapi wicara",
+    "okupasi",
+    "fisioterapi anak",
+    "tes IQ"
+  ],
+  "address": "Jl. Trikora No. 115",
+  "kelurahan": "Guntungmanggis",
+  "kecamatan": "Landasan Ulin",
+  "city": "Banjarbaru",
+  "lat": -3.461307,
+  "lng": 114.801006,
+  "coord_method": "Exa Places (Google-Maps mirror); same as batch 1b",
+  "contacts": {
+    "phone": "(0511) 6749696",
+    "whatsapp_info": "0813-4838-1433 (info layanan, per Teras7 Feb 2026)",
+    "website": "https://rsidaman.banjarbarukota.go.id/",
+    "online_registration": "https://pintu-rsidaman.banjarbarukota.go.id/ (SIPOPI/PINTU) and Mobile JKN"
+  },
+  "hours": {
+    "rehab_medik_registration": "Sen–Kam 07.30–11.30, Jum 07.30–09.30, Sab 07.30–10.30 WITA",
+    "rawat_jalan_umum": "Sen–Kam 07.45–12.00, Jum 07.45–10.00, Sab 07.45–11.00 WITA (search synthesis of official jadwal page)"
+  },
+  "schedule": [
+    {
+      "poli": "Klinik Anak",
+      "practitioner": "dr. Lenny Syntia Dewi, M.Kes, Sp.A(K)",
+      "time": "07.45–10.00 (Jumat 27 Feb 2026 example)"
+    },
+    {
+      "poli": "Klinik Anak",
+      "practitioner": "dr. Febiola Vania F., Sp.A",
+      "time": "14.00–16.00 (Jumat 27 Feb 2026 example)"
+    },
+    {
+      "poli": "Klinik Psikologi",
+      "practitioner": "Sabrina Mahfoed, M.Psi., Psikolog",
+      "time": "07.45–10.00 (same day)"
+    }
+  ],
+  "therapists": [
+    "Not published: fisioterapis/terapis wicara/okupasi names not found",
+    "Tumbuh kembang clinic doctor not named on any page found"
+  ],
+  "services": [
+    "Klinik Tumbuh Kembang (Lantai 2)",
+    "Klinik Rehabilitasi Medik (Lantai 3)",
+    "konsultasi dokter rehab medik",
+    "fisioterapi",
+    "tumbuh kembang anak",
+    "terapi wicara",
+    "terapi okupasi",
+    "psikologi anak: tes IQ, asesmen tumbuh kembang, konseling kesulitan belajar"
+  ],
+  "price_range": "unknown",
+  "price_per_session": "unknown",
+  "bpjs": "Yes: registration via Mobile JKN (official/Teras7); RSUD",
+  "waitlist": "unknown",
+  "booking": [
+    "Mobile JKN",
+    "PINTU/SIPOPI online antrian",
+    "walk-in within registration hours"
+  ],
+  "local_notes": "Public city hospital, the main BPJS route for child therapy in Banjarbaru. A parent review on birru.co mentions that free hospital therapy means waiting all day with many steps before therapy (general, not naming RSDI). The PINTU doctor-schedule table rendered empty when fetched.",
+  "field_confidence": {
+    "exists": "confirmed (2+ sources)",
+    "address": "confirmed (2+ sources)",
+    "coords": "confirmed (2+ sources)",
+    "services": "confirmed (2+ sources) (official rawat-jalan + rehabilitasi-medik pages)",
+    "rehab_hours": "single source (official jam-pelayanan page)",
+    "pediatricians": "single source (Teras7 reprint of RSDI daily schedule, Feb 2026)",
+    "psikolog": "confirmed (2+ sources)",
+    "bpjs": "confirmed (2+ sources)",
+    "price": "unknown (BPJS/tarif RSUD not published)",
+    "waitlist": "unknown"
+  },
+  "sources": [
+    {
+      "url": "https://rsidaman.banjarbarukota.go.id/rawat-jalan/",
+      "note": "official: Klinik Tumbuh Kembang Lt.2, Rehab Medik Lt.3",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://rsidaman.banjarbarukota.go.id/rehabilitasi-medik/",
+      "note": "official: rehab services list incl. tumbuh kembang, wicara, okupasi",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://rsidaman.banjarbarukota.go.id/jadwal-dokter/",
+      "note": "official schedule page",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://teras7.com/cek-sebelum-datang-jadwal-klinik-rawat-jalan-rsd-idaman-banjarbaru-jumat-27-februari-2026/",
+      "note": "news: daily poli schedule 27 Feb 2026, Mobile JKN",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://pintu-rsidaman.banjarbarukota.go.id/jadwal-dokter",
+      "note": "online registration portal (table empty at fetch)",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "beritabanjarbaru article 15 Jan 2025",
+      "note": "Sabrina Mahfoed child psych services (URL from earlier session not retained; see batch 1)",
+      "checked": "2026-10-31"
+    }
+  ],
+  "validation_note": "The child services come from official pages. Pediatrician names come from a single-day schedule (Feb 2026) and may rotate. No therapist names, prices or waitlist data are public.",
+  "facility_id": "rsd-idaman-kota-banjarbaru",
+  "id": "rsd-idaman-kota-banjarbaru-tumbuh-kembang",
+  "verified_at": "2026-10-31",
+  "status": "active",
+  "archived_from": "inbox/2026-10-31-explorer-tumbuhkembang-batch2.json",
+  "short": "RSD Idaman – Tumbuh Kembang & Rehab Medik",
+  "checked": "2026-10-31",
+  "address_display": "Jl. Trikora No. 115",
+  "kelurahan_display": "Guntung Manggis",
+  "hours_normalized": [
+    {
+      "day": "senin",
+      "open": "07.30",
+      "close": "11.30"
+    },
+    {
+      "day": "selasa",
+      "open": "07.30",
+      "close": "11.30"
+    },
+    {
+      "day": "rabu",
+      "open": "07.30",
+      "close": "11.30"
+    },
+    {
+      "day": "kamis",
+      "open": "07.30",
+      "close": "11.30"
+    },
+    {
+      "day": "jumat",
+      "open": "07.30",
+      "close": "09.30"
+    },
+    {
+      "day": "sabtu",
+      "open": "07.30",
+      "close": "10.30"
+    }
+  ],
+  "hours_note_id": "Jam pendaftaran rehab medik. Rawat jalan umum: Senin–Kamis 07.45–12.00, Jumat 07.45–10.00, Sabtu 07.45–11.00.",
+  "booking_display": [
+    "Mobile JKN",
+    "Antrean online PINTU/SIPOPI",
+    "Datang langsung pada jam pendaftaran"
+  ],
+  "search_terms": [
+    "keterlambatan bicara",
+    "terlambat bicara",
+    "speech therapy",
+    "fisioterapi anak",
+    "tes inteligensi",
+    "tumbuh kembang anak",
+    "rumah sakit"
+  ],
+  "city_display": "Banjarbaru",
+  "contact_sources": [
+    {
+      "number": "(0511) 6749696",
+      "url": "https://rsidaman.banjarbarukota.go.id/jadwal-dokter/",
+      "note": "checked 2026-10-31: number appears on this page (Wayback copy; live site unreachable)",
+      "checked": "2026-10-31"
+    },
+    {
+      "number": "0813-4838-1433",
+      "url": "https://rsidaman.banjarbarukota.go.id/jadwal-dokter/",
+      "note": "checked 2026-10-31: number appears on this page (Wayback copy; live site unreachable)",
+      "checked": "2026-10-31"
+    }
+  ]
+}

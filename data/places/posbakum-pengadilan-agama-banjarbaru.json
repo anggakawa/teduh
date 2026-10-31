@@ -1,0 +1,187 @@
+{
+  "name": "Posbakum Pengadilan Agama Banjarbaru (bantuan hukum gratis; run by LKBH Fakultas Syariah UIN Antasari from 2026)",
+  "category": "layanan-pendampingan/bantuan-hukum/posbakum",
+  "subcategories": [
+    "informasi hukum",
+    "konsultasi",
+    "advis",
+    "pembuatan gugatan/permohonan"
+  ],
+  "tags": [
+    "Posbakum",
+    "gratis",
+    "perceraian",
+    "isbat nikah",
+    "dispensasi kawin",
+    "SKTM",
+    "pengadilan agama"
+  ],
+  "scope": "local (Banjarbaru)",
+  "address": "Permanent: Jl. Trikora No.4, Kemuning, Banjarbaru Selatan 70714. TEMPORARY since 8 May 2026: ruko near RS Syifa Medika, Jl. R.O. Ulin, Loktabat Selatan, Banjarbaru Selatan.",
+  "kelurahan": "Kemuning (permanent) / Loktabat Selatan (temporary)",
+  "kecamatan": "Banjarbaru Selatan",
+  "city": "Banjarbaru",
+  "lat": -3.460014,
+  "lng": 114.830249,
+  "coord_method": "Exa Places (Google-Maps mirror) for the PERMANENT Jl. Trikora No.4 building. Temporary ruko not pinned; it is near RSU Syifa Medika (-3.458218, 114.816687, Exa, batch 2)",
+  "approx_coords": null,
+  "contacts": {
+    "phone": "unknown (removed 2026-10-31: no owner-published public source; see CONTRIBUTING.md)",
+    "official_contact_2026": "0812 5882 4727 (PA relocation notice)",
+    "email": "pa.banjarbaru@gmail.com",
+    "website": "https://pa-banjarbaru.go.id/"
+  },
+  "hours": {
+    "court_office": "Mon–Thu 08.00–16.30, Fri 08.00–17.00 WITA, Sat–Sun closed (Exa/Google; listing for the permanent building)",
+    "posbakum": "unknown (follows court hours presumably)"
+  },
+  "schedule": [],
+  "services": [
+    "informasi & advis hukum",
+    "konsultasi",
+    "pembuatan surat gugatan/permohonan",
+    "layanan Posbakum confirmed to continue at temporary office"
+  ],
+  "cost": "free",
+  "price_range": "unknown",
+  "eligibility": "people unable to pay: SKTM, or a social card (KKM/Jamkesmas/PKH/BLT), or a signed statement of inability to pay",
+  "booking": [
+    "walk-in at PA (Posbakum desk)",
+    "WA/phone 0812 5882 4727 for info"
+  ],
+  "complaint_method": [
+    "PA Banjarbaru official contacts"
+  ],
+  "local_notes": "MoU 31 Dec 2025 (No.1822/KPA.W15-A12/HK2.6/XII/2025) with LKBH Fak. Syariah UIN Antasari for 2026; monev Q4-2025 on 16 Dec 2025. A Google review (Feb 2024) complains about a new Posbakum staffer's tone. Check whether the PA is still at the temporary site before visiting.",
+  "field_confidence": {
+    "exists": "confirmed (2+ sources)",
+    "permanent_address": "confirmed (2+ sources) (official + Exa)",
+    "temporary_address": "single source (official notice 8 May 2026); whether it is still current in Oct 2026 is unknown",
+    "coords": "single source (permanent building only)",
+    "hours": "single source (Exa)",
+    "cost": "confirmed (2+ sources)",
+    "eligibility": "confirmed (2+ sources) (2 official pages)",
+    "operator_2026": "single source (official MoU news)",
+    "phone": "partly removed 2026-10-31: 1 number(s) without an owner-published public source"
+  },
+  "sources": [
+    {
+      "url": "https://pa-banjarbaru.go.id/pelayanan-tetap-prima-kantor-pengadilan-agama-banjarbaru-pindah-sementara-ke-lokasi-baru/",
+      "note": "official 8 May 2026: temporary relocation, Posbakum continues, 0812 5882 4727",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://exa.ai/library/place/8xlw52lgv3l",
+      "note": "Exa: coords, hours, phone, reviews",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://pa-banjarbaru.go.id/syarat-syarat-dan-mekanisme/",
+      "note": "official: requirements",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://pa-banjarbaru.go.id/tentang-layanan-posbakum/",
+      "note": "official: services",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://pa-banjarbaru.go.id/keberadaan-posbakum-di-pa-banjarbaru/",
+      "note": "official: 2026 operator LKBH UIN Antasari",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://pa-banjarbaru.go.id/pa-banjarbaru-laksanakan-monitoring-dan-evaluasi-layanan-posbakum-triwulan-iv-tahun-2025/",
+      "note": "official: monev Dec 2025",
+      "checked": "2026-10-31"
+    }
+  ],
+  "validation_note": "The service is well confirmed. The location is in flux: the given coordinates are for the permanent building, while the office has temporarily moved since May 2026.",
+  "id": "posbakum-pengadilan-agama-banjarbaru",
+  "verified_at": "2026-10-31",
+  "status": "needs-check",
+  "archived_from": "inbox/2026-10-31-explorer-pendampingan-batch3.json",
+  "short": "Posbakum Pengadilan Agama Banjarbaru",
+  "checked": "2026-10-31",
+  "open_issues": "Kantor pindah sementara sejak 8 Mei 2026 (ruko dekat RS Syifa Medika, Jl. R.O. Ulin); belum pasti masih di sana per Okt 2026. Pin = gedung permanen.",
+  "address_display": "Jl. Trikora No. 4, Kemuning, Banjarbaru Selatan 70714",
+  "kelurahan_display": "Kemuning",
+  "address_note_id": "Sejak 8 Mei 2026 kantor pindah sementara ke ruko dekat RS Syifa Medika, Jl. R.O. Ulin. Tanyakan lokasi terkini sebelum datang.",
+  "note_id": "Kantor pindah sementara sejak 8 Mei 2026 (ruko dekat RS Syifa Medika, Jl. R.O. Ulin); belum pasti masih di sana per Oktober 2026. Pin menunjuk gedung tetap.",
+  "hours_normalized": [
+    {
+      "day": "senin",
+      "open": "08.00",
+      "close": "16.30"
+    },
+    {
+      "day": "selasa",
+      "open": "08.00",
+      "close": "16.30"
+    },
+    {
+      "day": "rabu",
+      "open": "08.00",
+      "close": "16.30"
+    },
+    {
+      "day": "kamis",
+      "open": "08.00",
+      "close": "16.30"
+    },
+    {
+      "day": "jumat",
+      "open": "08.00",
+      "close": "17.00"
+    },
+    {
+      "day": "sabtu",
+      "open": null,
+      "close": null,
+      "closed": true
+    },
+    {
+      "day": "minggu",
+      "open": null,
+      "close": null,
+      "closed": true
+    }
+  ],
+  "hours_note_id": "Jam kantor Pengadilan Agama (gedung tetap). Jam Posbakum sendiri belum diketahui.",
+  "booking_display": [
+    "Datang langsung ke meja Posbakum di Pengadilan Agama",
+    "WA/telepon 0812 5882 4727 untuk informasi"
+  ],
+  "services_display": [
+    "informasi & advis hukum",
+    "konsultasi",
+    "pembuatan surat gugatan/permohonan",
+    "layanan Posbakum tetap berjalan di kantor sementara"
+  ],
+  "search_terms": [
+    "bantuan hukum",
+    "konsultasi hukum",
+    "hukum gratis",
+    "cerai",
+    "gugatan cerai",
+    "isbat nikah",
+    "dispensasi kawin"
+  ],
+  "city_display": "Banjarbaru",
+  "name_display": "Posbakum Pengadilan Agama Banjarbaru (bantuan hukum gratis; dikelola LKBH Fakultas Syariah UIN Antasari mulai 2026)",
+  "history": [
+    {
+      "batch": "privacy-audit",
+      "date": "2026-10-31",
+      "what_changed": "Phone consent policy: removed 1 phone/WhatsApp number(s) that had no owner-published public source in this record (Google-Maps mirrors, directories, third-party pages or personal contacts). Re-add only with a contact_sources link where the owner publishes the number."
+    }
+  ],
+  "contact_sources": [
+    {
+      "number": "0812 5882 4727",
+      "url": "https://pa-banjarbaru.go.id/pelayanan-tetap-prima-kantor-pengadilan-agama-banjarbaru-pindah-sementara-ke-lokasi-baru/",
+      "note": "official PA notice 8 May 2026 lists this number (per earlier fetch; site unreachable on 2026-10-31)",
+      "checked": "2026-10-31"
+    }
+  ]
+}

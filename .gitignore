@@ -1,0 +1,6 @@
+site/data/
+out/
+screenshots/
+node_modules/
+__pycache__/
+*.pyc

@@ -1,0 +1,162 @@
+{
+  "name": "RSU Syifa Medika Banjarbaru – Klinik Layanan Psikologi & Poli Jiwa",
+  "category": "kesehatan-mental/rumah-sakit",
+  "subcategories": [
+    "psikolog",
+    "psikiater"
+  ],
+  "tags": [
+    "rumah sakit swasta",
+    "BPJS",
+    "24 jam"
+  ],
+  "address": "Jl. R.O. Ulin No. 93",
+  "kelurahan": "Loktabat Selatan",
+  "kecamatan": "Banjarbaru Selatan",
+  "city": "Banjarbaru",
+  "contacts": {
+    "phone": "Operator 0511 5910 889; Ambulans 0811 504 2424",
+    "whatsapp": "Pendaftaran poliklinik 0821 5342 4447; Poli eksekutif 0821 5461 8061",
+    "email": "info.rsusyifamedika@gmail.com",
+    "website": "https://rsusyifamedika.co.id/",
+    "instagram": "unknown"
+  },
+  "hours": {
+    "rs_igd": "24 jam",
+    "poli": "per practitioner (batch 1)"
+  },
+  "schedule": [
+    {
+      "practitioner": "Ade Ayu Harisdiane Putri, M.Psi., Psikolog",
+      "role": "psikolog klinis",
+      "day": "Senin–Jumat sesuai janji (listing 1); Senin–Kamis & Sabtu 12.00–selesai (listing 2)",
+      "time": "see day"
+    },
+    {
+      "practitioner": "dr. Dianike Fitradewi, Sp.KJ",
+      "role": "psikiater",
+      "day": "Poli reguler (BPJS): Senin & Kamis 10.00–selesai; Eksekutif (Aurora): Selasa 16.00–17.00, Jumat & Sabtu 13.30–14.30",
+      "time": "see day"
+    },
+    {
+      "practitioner": "dr. Noorsifa, MSc, Sp.KJ",
+      "role": "psikiater",
+      "day": "Rabu 10.00–selesai, Jumat 14.00–selesai (listing 1); Rabu & Sabtu 10.00–selesai (listing 2)",
+      "time": "see day"
+    }
+  ],
+  "services": [
+    "konseling individual",
+    "psikoterapi",
+    "psikotes",
+    "konseling pasangan/keluarga",
+    "kecemasan ringan–sedang",
+    "masalah perkembangan",
+    "psikiatri rawat jalan (BPJS & eksekutif)"
+  ],
+  "price_range": "unknown (BPJS untuk poli reguler; poli eksekutif berbayar)",
+  "booking": [
+    "janji via WhatsApp pendaftaran",
+    "walk-in poli"
+  ],
+  "local_notes": "Google rating 4.5 (2,148 reviews).",
+  "field_confidence": {
+    "exists": "confirmed (2+ sources)",
+    "address": "confirmed (2+ sources)",
+    "contacts": "single source (official site)",
+    "schedule": "single source, official, but the page lists two inconsistent schedules",
+    "practitioner_psikolog": "confirmed (2+ sources)",
+    "services": "single source (official)",
+    "lat_lng": "single source (Exa/Google Maps)",
+    "operator_phone": "confirmed (2+ sources)"
+  },
+  "sources": [
+    {
+      "url": "https://rsusyifamedika.co.id/klinik-layanan-psikologi/",
+      "note": "official, services/contacts",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://rsusyifamedika.co.id/draft-dokter-kami/",
+      "note": "official, practitioner schedules",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://rsusyifamedika.co.id/dr-dianike-fitradewi-sp-kj/",
+      "note": "official, psychiatrist BPJS/exec schedule",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://data.ipkindonesia.or.id/psikolog-klinis/banjar-baru/ade-ayu-harisdiane-putri--NjQ4",
+      "note": "IPK registry lists RS Syifa Medika as Ade Ayu's practice site",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://exa.ai/library/place/h6mk68mdq01",
+      "note": "Exa Places (Google-Maps-derived listing): coords, 24h, phone",
+      "checked": "2026-10-31"
+    }
+  ],
+  "validation_note": "Good.",
+  "id": "rsu-syifa-medika-banjarbaru",
+  "lat": -3.458218,
+  "lng": 114.816687,
+  "status": "active",
+  "verified_at": "2026-10-31",
+  "archived_from": "inbox/2026-10-31-explorer-kesehatan-mental-batch1.json",
+  "latlng_method": "Exa Places (Google-Maps-derived)",
+  "what_changed": "Added lat/lng; operator phone confirmed by 2nd source.",
+  "history": [
+    {
+      "batch": "1b",
+      "date": "2026-10-31",
+      "what_changed": "Added lat/lng; operator phone confirmed by 2nd source."
+    }
+  ],
+  "short": "RSU Syifa Medika – Psikologi & Jiwa",
+  "checked": "2026-10-31",
+  "address_display": "Jl. R.O. Ulin No. 93",
+  "kelurahan_display": "Loktabat Selatan",
+  "hours_note_id": "Jadwal poli mengikuti jadwal tiap dokter/psikolog.",
+  "booking_display": [
+    "Janji temu lewat WhatsApp pendaftaran",
+    "Datang langsung ke poli"
+  ],
+  "search_terms": [
+    "psikolog",
+    "psikiater",
+    "dokter jiwa",
+    "kesehatan jiwa",
+    "konseling",
+    "psikoterapi",
+    "rumah sakit",
+    "IGD"
+  ],
+  "city_display": "Banjarbaru",
+  "contact_sources": [
+    {
+      "number": "0511 5910 889",
+      "url": "https://rsusyifamedika.co.id/",
+      "note": "checked 2026-10-31: number appears on this page",
+      "checked": "2026-10-31"
+    },
+    {
+      "number": "0811 504 2424",
+      "url": "https://rsusyifamedika.co.id/",
+      "note": "checked 2026-10-31: number appears on this page",
+      "checked": "2026-10-31"
+    },
+    {
+      "number": "0821 5342 4447",
+      "url": "https://rsusyifamedika.co.id/",
+      "note": "checked 2026-10-31: number appears on this page",
+      "checked": "2026-10-31"
+    },
+    {
+      "number": "0821 5461 8061",
+      "url": "https://rsusyifamedika.co.id/",
+      "note": "checked 2026-10-31: number appears on this page",
+      "checked": "2026-10-31"
+    }
+  ]
+}

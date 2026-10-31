@@ -1,0 +1,90 @@
+{
+  "name": "Puspaga Kota Banjarbaru (Pusat Pembelajaran Keluarga) – program PAISAN PATIN with Pengadilan Agama",
+  "category": "layanan-pendampingan/konseling-keluarga/puspaga",
+  "subcategories": [
+    "konseling keluarga",
+    "konseling dispensasi kawin",
+    "konseling pra/pasca perceraian"
+  ],
+  "tags": [
+    "Puspaga",
+    "psikolog",
+    "dispensasi kawin",
+    "perceraian",
+    "pemerintah"
+  ],
+  "scope": "local (Banjarbaru)",
+  "address": "unknown (likely under DP3APMP2KB Kota Banjarbaru; not stated)",
+  "kelurahan": "unknown",
+  "kecamatan": "unknown",
+  "city": "Banjarbaru",
+  "lat": null,
+  "lng": null,
+  "coord_method": "none",
+  "approx_coords": null,
+  "contacts": {},
+  "hours": {},
+  "schedule": [],
+  "services": [
+    "konseling bagi pemohon dispensasi kawin (PAISAN PATIN with PA Banjarbaru)",
+    "konseling pihak pra/pasca perceraian",
+    "delivered by psikolog & konselor Puspaga"
+  ],
+  "cost": "unknown",
+  "price_range": "unknown",
+  "eligibility": "families; dispensasi kawin applicants and divorcing parties referred by PA Banjarbaru",
+  "booking": [
+    "via referral from PA Banjarbaru; direct contact unknown"
+  ],
+  "complaint_method": [],
+  "local_notes": "The only Banjarbaru-specific evidence is the Sep 2021 PA cooperation. A 2019 MC Kalsel piece also says Banjarbaru city has its own Puspaga. No current address or contact found.",
+  "field_confidence": {
+    "exists": "confirmed (2+ sources) but stale (>1 year)",
+    "program": "stale (>1 year)",
+    "address": "unknown",
+    "contacts": "unknown",
+    "cost": "unknown"
+  },
+  "sources": [
+    {
+      "url": "https://pa-banjarbaru.go.id/",
+      "note": "PA Banjarbaru news 21 Sep 2021: PAISAN PATIN cooperation with Puspaga (found in earlier batch-3 search)",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://dpppakb.kalselprov.go.id/puspaga/527",
+      "note": "provincial Puspaga page (context)",
+      "checked": "2026-10-31"
+    }
+  ],
+  "validation_note": "Kept as a low-confidence entry. Before the Librarian publishes it, someone should check that the city Puspaga still runs. Don't merge it with the provincial Puspaga Wasaka.",
+  "id": "puspaga-kota-banjarbaru",
+  "verified_at": "2026-10-31",
+  "status": "needs-check",
+  "archived_from": "inbox/2026-10-31-explorer-pendampingan-batch3.json",
+  "short": "Puspaga Kota Banjarbaru",
+  "checked": "2026-10-31",
+  "open_issues": "Bukti aktif terakhir 2021; alamat dan kontak belum diketahui. Jangan digabung dengan Puspaga Provinsi.",
+  "address_display": null,
+  "kelurahan_display": null,
+  "kecamatan_display": null,
+  "address_note_id": "Alamat belum diketahui; kemungkinan di bawah DP3APMP2KB Kota Banjarbaru (belum pasti).",
+  "note_id": "Bukti aktif terakhir dari 2021; alamat dan kontak belum diketahui. Ini berbeda dengan Puspaga Provinsi.",
+  "booking_display": [
+    "Lewat rujukan dari Pengadilan Agama Banjarbaru; kontak langsung belum diketahui"
+  ],
+  "services_display": [
+    "konseling bagi pemohon dispensasi kawin (program PAISAN PATIN bersama PA Banjarbaru)",
+    "konseling pra/pascaperceraian",
+    "dilayani psikolog & konselor Puspaga"
+  ],
+  "search_terms": [
+    "konseling keluarga",
+    "psikolog",
+    "dispensasi kawin",
+    "perceraian",
+    "cerai"
+  ],
+  "city_display": "Banjarbaru",
+  "name_display": "Puspaga Kota Banjarbaru (Pusat Pembelajaran Keluarga) – program PAISAN PATIN bersama Pengadilan Agama"
+}

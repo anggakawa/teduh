@@ -1,0 +1,168 @@
+name: Tambah tempat baru
+description: Usulkan layanan yang belum ada di peta Teduh (Banjarbaru & sekitar).
+title: "[Tempat baru] "
+labels: ["usulan-data", "tempat-baru"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Terima kasih sudah membantu melengkapi peta Teduh.
+
+        **Privasi — mohon dibaca dulu**
+        - Isian ini **terbuka untuk umum** dan nama akun GitHub Anda terlihat. Kami **tidak** meminta nama, nomor HP, email, atau data pribadi Anda.
+        - Tulis hanya **info resmi/publik tempat layanan** (alamat, nomor kantor/admin, jam buka). Nomor telepon/WhatsApp hanya yang dicantumkan sendiri oleh lembaga/pemiliknya (atau pemiliknya setuju), dengan tautan sumbernya. Jangan tulis nomor pribadi staf atau perorangan.
+        - Jangan tulis cerita pribadi, diagnosis, atau pengalaman sebagai klien, baik milik Anda maupun orang lain.
+
+        Semua usulan masuk sebagai **"Belum dicek"** sampai tim memeriksa sumbernya. Kosongkan kolom yang tidak Anda ketahui; jangan menebak.
+  - type: input
+    id: nama
+    attributes:
+      label: Nama tempat
+      description: Nama resmi seperti di papan nama, situs, atau Google Maps.
+      placeholder: "mis. Biro Psikologi Contoh Banjarbaru"
+    validations:
+      required: true
+  - type: dropdown
+    id: kategori
+    attributes:
+      label: Kategori
+      options:
+        - Kesehatan mental — psikolog / biro psikologi
+        - Kesehatan mental — rumah sakit / poli jiwa
+        - Tumbuh kembang anak — terapi / klinik tumbuh kembang
+        - Tumbuh kembang anak — sekolah (SLB / inklusi)
+        - Pendampingan — bantuan hukum
+        - Pendampingan — perlindungan perempuan, anak & keluarga
+        - Biro tes psikologi / asesmen
+    validations:
+      required: true
+  - type: textarea
+    id: layanan
+    attributes:
+      label: Layanan
+      description: Satu layanan per baris.
+      placeholder: |
+        konseling dewasa
+        terapi wicara anak
+    validations:
+      required: true
+  - type: input
+    id: alamat
+    attributes:
+      label: Alamat
+      placeholder: "mis. Jl. Contoh No. 1, Komp. Contoh"
+    validations:
+      required: false
+  - type: input
+    id: kelurahan
+    attributes:
+      label: Kelurahan
+      placeholder: "mis. Loktabat Utara"
+    validations:
+      required: false
+  - type: dropdown
+    id: kecamatan
+    attributes:
+      label: Kecamatan
+      options:
+        - Banjarbaru Utara
+        - Banjarbaru Selatan
+        - Landasan Ulin
+        - Liang Anggang
+        - Cempaka
+        - Martapura (Kabupaten Banjar)
+        - Gambut (Kabupaten Banjar)
+        - Tidak tahu
+    validations:
+      required: false
+  - type: input
+    id: telepon
+    attributes:
+      label: Nomor telepon tempat
+      description: "Hanya nomor yang dicantumkan sendiri oleh lembaga/pemiliknya: situs resmi, papan nama, akun media sosial resmi, atau profil Google Bisnis yang dikelola pemiliknya. Jangan tulis nomor pribadi staf atau perorangan tanpa persetujuan pemiliknya. Pisahkan dengan koma jika lebih dari satu."
+      placeholder: "mis. 0511-123456"
+    validations:
+      required: false
+  - type: input
+    id: whatsapp
+    attributes:
+      label: Nomor WhatsApp tempat
+      description: Hanya nomor WhatsApp yang dicantumkan sendiri oleh lembaga/pemiliknya (situs resmi, papan nama, akun media sosial resmi, atau profil Google Bisnis yang dikelola pemiliknya). Jangan tulis nomor pribadi staf atau perorangan tanpa persetujuan pemiliknya.
+      placeholder: "mis. 0812-0000-0000"
+    validations:
+      required: false
+  - type: textarea
+    id: sumber_nomor
+    attributes:
+      label: Sumber nomor telepon/WhatsApp
+      description: Wajib jika Anda menulis nomor. Tautan (https://…) ke halaman tempat lembaga/pemiliknya sendiri mencantumkan nomor itu, mis. situs resmi, akun media sosial resmi, atau profil Google Bisnis milik tempat itu. Jika lebih dari satu nomor, tulis satu tautan per baris dengan urutan yang sama. Direktori, berita, atau unggahan orang lain tidak cukup.
+      placeholder: |
+        https://…
+    validations:
+      required: false
+  - type: textarea
+    id: jam
+    attributes:
+      label: Jam buka
+      description: Tulis seperti di sumber. Sebutkan jika berbeda per hari atau per poli.
+      placeholder: |
+        Senin–Jumat 08.00–16.00
+        Sabtu 08.00–12.00
+        Minggu tutup
+    validations:
+      required: false
+  - type: input
+    id: biaya
+    attributes:
+      label: Biaya
+      description: Mis. gratis, BPJS, atau tarif per sesi jika dicantumkan.
+    validations:
+      required: false
+  - type: textarea
+    id: cara_daftar
+    attributes:
+      label: Cara daftar
+      description: Mis. janji temu lewat WA, datang langsung, rujukan puskesmas.
+    validations:
+      required: false
+  - type: textarea
+    id: sumber
+    attributes:
+      label: Sumber / bukti
+      description: Wajib. Minimal satu tautan (https://…) ke situs resmi, akun resmi, Google Maps, berita, atau direktori. Boleh ditambah keterangan, mis. "dicek di papan nama, Okt 2026".
+      placeholder: |
+        https://…
+    validations:
+      required: true
+  - type: input
+    id: peta
+    attributes:
+      label: Tautan peta (opsional)
+      description: Tautan Google Maps/OpenStreetMap ke tempat itu. Titik hanya dipasang jika tautan memuat koordinat tepat (mis. tautan "Bagikan" dari pin, atau OpenStreetMap dengan penanda). Tautan pendek (maps.app.goo.gl) tidak dibuka otomatis.
+      placeholder: "https://www.openstreetmap.org/?mlat=-3.44&mlon=114.82"
+    validations:
+      required: false
+  - type: textarea
+    id: catatan
+    attributes:
+      label: Catatan untuk tim (opsional)
+      description: Info tambahan tentang tempat, bukan tentang Anda.
+    validations:
+      required: false
+  - type: checkboxes
+    id: persetujuan_nomor
+    attributes:
+      label: Konfirmasi nomor telepon/WhatsApp
+      description: Nomor hanya ditampilkan jika sudah publik dan dicantumkan oleh pemiliknya sendiri, atau pemiliknya setuju.
+      options:
+        - label: Nomor telepon/WhatsApp yang saya tulis (jika ada) dicantumkan sendiri oleh lembaga/pemiliknya di tempat publik, atau pemiliknya sudah setuju nomornya dicantumkan. Saya tidak menulis nomor pribadi staf atau perorangan tanpa persetujuan.
+          required: true
+  - type: checkboxes
+    id: persetujuan
+    attributes:
+      label: Konfirmasi
+      options:
+        - label: Info ini berasal dari sumber publik atau dari tempat itu sendiri, dan saya tidak menulis data pribadi siapa pun.
+          required: true
+        - label: Saya paham usulan ini tampil sebagai "Belum dicek" sampai tim memeriksanya.
+          required: true

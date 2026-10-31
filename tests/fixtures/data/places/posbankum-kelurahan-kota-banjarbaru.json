@@ -1,0 +1,103 @@
+{
+  "name": "Posbankum Kelurahan Kota Banjarbaru (20 Pos Bantuan Hukum at kelurahan offices)",
+  "category": "layanan-pendampingan/bantuan-hukum/posbankum-kelurahan",
+  "subcategories": [
+    "konsultasi hukum",
+    "mediasi",
+    "pendampingan awal",
+    "rujukan ke OBH/LBH"
+  ],
+  "tags": [
+    "Posbankum",
+    "paralegal",
+    "kelurahan",
+    "gratis",
+    "Kemenkum"
+  ],
+  "scope": "local (Banjarbaru)",
+  "address": "At each kelurahan office (20 in Banjarbaru). Example: Kantor Kelurahan Mentaos, Jl. Komet Raya Ujung RT.03/RW.04 No.40, Mentaos 70714.",
+  "kelurahan": "all 20 kelurahan",
+  "kecamatan": "all 5",
+  "city": "Banjarbaru",
+  "lat": null,
+  "lng": null,
+  "coord_method": "none (network entry; per-kelurahan pins not collected)",
+  "approx_coords": null,
+  "contacts": {},
+  "hours": {},
+  "schedule": [],
+  "services": [
+    "konsultasi hukum",
+    "mediasi (paralegal, hakim juru damai, lurah)",
+    "pendampingan penyelesaian masalah hukum",
+    "rujukan ke OBH/LBH for litigation (state-funded for the poor)"
+  ],
+  "cost": "free (per Menkum at launch; kelurahan services funded by APBD per Mentaos page)",
+  "price_range": "unknown",
+  "eligibility": "all residents; litigation referral is for the poor",
+  "booking": [
+    "walk-in to the kelurahan office"
+  ],
+  "complaint_method": [
+    "kelurahan office"
+  ],
+  "local_notes": "Kalsel-wide launch on 30 Jan 2026 in Banjarbaru (2,015 Posbankum, 20 of them in Kota Banjarbaru). The most common cases are land disputes, debts, inheritance, marriage, KDRT and child protection. Kelurahan Mentaos has a Posbankum page.",
+  "field_confidence": {
+    "exists": "confirmed (2+ sources) (Kalimantan Post + MC Kalsel/Kemenkum listings + Mentaos page)",
+    "count_20": "single source (Kalimantan Post)",
+    "per_location_hours": "unknown",
+    "cost": "confirmed (2+ sources)"
+  },
+  "sources": [
+    {
+      "url": "https://kalimantanpost.com/2026/01/ribuan-pos-bantuan-hukum-di-seluruh-desa-dan-kelurahan-se-kalsel-diresmikan/",
+      "note": "news 30 Jan 2026: launch, 20 in Banjarbaru, services",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://diskominfomc.kalselprov.go.id/2026/01/30/kementerian-hukum-ri-resmikan-2-015-pos-bantuan-hukum-di-seluruh-desa-dan-kelurahan-se-kalsel/",
+      "note": "MC Kalsel same launch (search listing)",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://kalsel.kemenkum.go.id/berita-utama/permudah-akses-keadilan-posbankum-akan-hadir-di-seluruh-kelurahan-kota-banjarbaru",
+      "note": "Kemenkum Kalsel: Posbankum in all Banjarbaru kelurahan (504 on fetch; title only)",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://kel-mentaos.banjarbarukota.go.id/organisasi/posbankum",
+      "note": "Kelurahan Mentaos Posbankum page + office address",
+      "checked": "2026-10-31"
+    }
+  ],
+  "validation_note": "A network-level entry. Per-kelurahan contacts and hours were not collected. The JDIH 'Kemuning' Posbankum detail was rejected as placeholder data (see dropped).",
+  "id": "posbankum-kelurahan-kota-banjarbaru",
+  "verified_at": "2026-10-31",
+  "status": "needs-check",
+  "archived_from": "inbox/2026-10-31-explorer-pendampingan-batch3.json",
+  "short": "Posbankum Kelurahan Kota Banjarbaru",
+  "checked": "2026-10-31",
+  "open_issues": "Jaringan 20 pos di kantor kelurahan; kontak dan jam per pos belum dikumpulkan.",
+  "address_display": "Di tiap kantor kelurahan (20 kelurahan di Banjarbaru). Contoh: Kantor Kelurahan Mentaos, Jl. Komet Raya Ujung No. 40, RT 03/RW 04, Mentaos 70714",
+  "kelurahan_display": null,
+  "kecamatan_display": null,
+  "note_id": "Jaringan 20 pos di kantor kelurahan; kontak dan jam tiap pos belum dikumpulkan.",
+  "booking_display": [
+    "Datang langsung ke kantor kelurahan"
+  ],
+  "services_display": [
+    "konsultasi hukum",
+    "mediasi (paralegal, hakim juru damai, lurah)",
+    "pendampingan penyelesaian masalah hukum",
+    "rujukan ke OBH/LBH untuk perkara di pengadilan (dibiayai negara bagi warga tidak mampu)"
+  ],
+  "search_terms": [
+    "bantuan hukum",
+    "konsultasi hukum",
+    "hukum gratis",
+    "mediasi",
+    "paralegal"
+  ],
+  "city_display": "Banjarbaru",
+  "name_display": "Posbankum Kelurahan Kota Banjarbaru (20 Pos Bantuan Hukum di kantor kelurahan)"
+}

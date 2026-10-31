@@ -1,0 +1,154 @@
+{
+  "name": "PAUD Inklusi Terpadu Teratai Putih & Terapi Anak Hebat",
+  "category": "tumbuh-kembang-anak/terapi-ABK/PAUD-inklusi",
+  "subcategories": [
+    "PAUD inklusi",
+    "terapi anak"
+  ],
+  "tags": [
+    "ADHD",
+    "ABK",
+    "PAUD"
+  ],
+  "address": "Jl. Bina Satria No. 83, RT 12/RW 01",
+  "kelurahan": "CONFLICT: Loktabat Utara, Banjarbaru Utara (UIN thesis profile) vs Guntung Payung, Landasan Ulin (Exa/Google). The Exa pin (-3.434681, 114.816239) sits beside Jl. Karang Anyar 1, which OSM places in Loktabat Utara, so Loktabat Utara is more likely.",
+  "kecamatan": "Landasan Ulin",
+  "city": "Banjarbaru",
+  "lat": -3.434681,
+  "lng": 114.816239,
+  "coord_method": "Exa Places (Google-Maps mirror)",
+  "contacts": {
+    "phone": "unknown (removed 2026-10-31: no owner-published public source; see CONTRIBUTING.md)",
+    "phone_google": "unknown (removed 2026-10-31: no owner-published public source; see CONTRIBUTING.md)",
+    "phone_school_profile": "unknown (removed 2026-10-31: no owner-published public source; see CONTRIBUTING.md)",
+    "email": "paud.terpaduterataiputih@gmail.com (UIN thesis)"
+  },
+  "hours": {
+    "senin_kamis": "08.00–12.00",
+    "jumat": "08.00–10.00"
+  },
+  "schedule": [],
+  "therapists": [
+    "2 therapists, per a Jul 2023 review (stale)"
+  ],
+  "services": [
+    "KB, TK, TPA/daycare (thesis)",
+    "inclusive class for ABK incl. ADHD",
+    "Terapi Anak Hebat Banjarbaru: fine motor, focus and social-emotional therapy (thesis)",
+    "ULM FKIP early-intervention training for teachers and parents (Jul 2025)"
+  ],
+  "price_range": "unknown",
+  "price_per_session": "unknown. WARNING: 'Terapi Anak Hebat Rp170.000/sesi' found online belongs to Klinik Niumiu in Cirebon, a different, unrelated provider. Do NOT attach it to this entry.",
+  "bpjs": "unknown",
+  "waitlist": "unknown",
+  "booking": [],
+  "local_notes": "Rated 3.5 from 4 reviews. A Jul 2023 review complains that many children are handled at once with only 2 therapists.",
+  "field_confidence": {
+    "exists": "confirmed (2+ sources)",
+    "address": "single source",
+    "coords": "single source",
+    "hours": "single source",
+    "therapist_count": "stale (>1 year)",
+    "price": "unknown",
+    "active_2025": "confirmed (2+ sources) (thesis ~2025 + ANTARA Jul 2025)",
+    "kelurahan": "conflicting sources",
+    "phone": "removed 2026-10-31: no owner-published public source",
+    "head": "single source"
+  },
+  "sources": [
+    {
+      "url": "https://exa.ai/library/place/63z2vw5bsqb",
+      "note": "Google-Maps-derived",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://idr.uin-antasari.ac.id/28764",
+      "note": "UIN thesis: ADHD children at PAUD Inklusi Terpadu Teratai Putih / Terapi Anak Hebat Banjarbaru",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://idr.uin-antasari.ac.id/28764/7/BAB%20IV-SKRIPSI%20FIRDATUN%20FAUZIAH.pdf",
+      "note": "UIN thesis BAB IV: school profile + Terapi Anak Hebat Banjarbaru",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://kalsel.antaranews.com/berita/477489/dosen-ulm-latih-guru-dan-orang-tua-di-banjarbaru-intervensi-abk",
+      "note": "ANTARA 31 Jul 2025: ULM ABK training at PAUD Teratai Putih",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://klinikniumiu.com/terapi-anak-hebat/",
+      "note": "name collision: Cirebon provider, NOT this place",
+      "checked": "2026-10-31"
+    }
+  ],
+  "validation_note": "Existence is confirmed. Capacity and quality notes are stale (2023).",
+  "id": "paud-inklusi-terpadu-teratai-putih-terapi-anak-hebat",
+  "verified_at": "2026-10-31",
+  "status": "active",
+  "archived_from": "inbox/2026-10-31-explorer-tumbuhkembang-batch2.json",
+  "task": "(3) second source",
+  "head": "Santri Indriani, Kepala PAUD Teratai Putih (ANTARA, 31 Jul 2025)",
+  "what_changed": "Added ANTARA 2025 as an independent source, the head of school, the school email and second phone, the kelurahan conflict, and a name-collision warning on price.",
+  "history": [
+    {
+      "batch": "2b",
+      "date": "2026-10-31",
+      "what_changed": "Added ANTARA 2025 as an independent source, the head of school, the school email and second phone, the kelurahan conflict, and a name-collision warning on price."
+    },
+    {
+      "batch": "privacy-audit",
+      "date": "2026-10-31",
+      "what_changed": "Phone consent policy: removed 2 phone/WhatsApp number(s) that had no owner-published public source in this record (Google-Maps mirrors, directories, third-party pages or personal contacts). Re-add only with a contact_sources link where the owner publishes the number."
+    }
+  ],
+  "open_issues": "kelurahan conflict between sources; phone numbers removed (no owner-published source); do NOT use the Rp170k price, which belongs to Klinik Niumiu Cirebon",
+  "short": "PAUD Inklusi Terpadu Teratai Putih & Terapi Anak Hebat",
+  "checked": "2026-10-31",
+  "address_display": "Jl. Bina Satria No. 83, RT 12/RW 01",
+  "kelurahan_display": null,
+  "kecamatan_display": null,
+  "address_note_id": "Kelurahan berbeda antar sumber (Loktabat Utara / Guntung Payung). Tanyakan saat menelepon.",
+  "note_id": "Kelurahan berbeda antar sumber. Nomor telepon resmi belum tercatat.",
+  "hours_normalized": [
+    {
+      "day": "senin",
+      "open": "08.00",
+      "close": "12.00"
+    },
+    {
+      "day": "selasa",
+      "open": "08.00",
+      "close": "12.00"
+    },
+    {
+      "day": "rabu",
+      "open": "08.00",
+      "close": "12.00"
+    },
+    {
+      "day": "kamis",
+      "open": "08.00",
+      "close": "12.00"
+    },
+    {
+      "day": "jumat",
+      "open": "08.00",
+      "close": "10.00"
+    }
+  ],
+  "services_display": [
+    "KB, TK, TPA/penitipan anak (menurut skripsi)",
+    "kelas inklusi untuk ABK, termasuk ADHD",
+    "Terapi Anak Hebat Banjarbaru: terapi motorik halus, fokus, dan sosial-emosional (menurut skripsi)",
+    "pelatihan intervensi dini FKIP ULM untuk guru dan orang tua (Jul 2025)"
+  ],
+  "search_terms": [
+    "anak berkebutuhan khusus",
+    "inklusi",
+    "sekolah inklusi",
+    "terapi anak",
+    "ADHD"
+  ],
+  "city_display": "Banjarbaru"
+}

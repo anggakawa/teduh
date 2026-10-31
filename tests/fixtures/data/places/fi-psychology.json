@@ -1,0 +1,173 @@
+{
+  "name": "Fi.Psychology",
+  "category": "psikologi/biro-tes-asesmen",
+  "subcategories": [
+    "praktik psikolog",
+    "psikolog pendidikan",
+    "psikolog industri & organisasi"
+  ],
+  "tags": [
+    "psikolog",
+    "tes IQ",
+    "psikotes",
+    "pendidikan",
+    "industri & organisasi",
+    "non-klinis"
+  ],
+  "address": "Jl. Puyau 1 No. 12, Komp. Ratu Elok",
+  "kelurahan": "Loktabat Selatan",
+  "kecamatan": "Banjarbaru Selatan",
+  "city": "Banjarbaru",
+  "contacts": {
+    "phone": "unknown (removed 2026-10-31: no owner-published public source; see CONTRIBUTING.md)",
+    "whatsapp": "unknown",
+    "instagram": "unknown",
+    "website": "unknown",
+    "email": "unknown"
+  },
+  "hours": {
+    "senin_sabtu": "08.00–19.00",
+    "minggu": "tutup"
+  },
+  "schedule": [
+    {
+      "practitioner": "UNKNOWN — not found in IPK Banjarbaru registry or HIMPSI 2024 biro list"
+    }
+  ],
+  "services": [
+    "tes IQ (per review Jan 2024)",
+    "psikologi pendidikan",
+    "psikologi industri & organisasi"
+  ],
+  "price_range": "unknown",
+  "booking": [
+    "janji (phone)"
+  ],
+  "local_notes": "solusisehatmental categorizes it as Psikolog Industri & Organisasi + Pendidikan (not clinical). Only review with content (Jan 2024) mentions IQ testing. Best treated as a testing/assessment bureau, not a clinical counselling practice.",
+  "field_confidence": {
+    "exists": "confirmed (2+ sources)",
+    "address": "confirmed (2+ sources)",
+    "phone": "removed 2026-10-31: no owner-published public source",
+    "hours": "confirmed (2+ sources) (solusisehatmental + Exa)",
+    "practitioner": "unknown",
+    "lat_lng": "confirmed (2+ sources) (Exa coords + plus code)",
+    "services": "single source"
+  },
+  "sources": [
+    {
+      "url": "https://solusisehatmental.com/listing/fi-psychology/",
+      "note": "directory",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://exa.ai/library/place/242ypl63hlx",
+      "note": "Google-Maps-derived (via search)",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://directmap.asia/banjarbaru/9569",
+      "note": "directory (via search)",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://exa.ai/library/place/242ypl63hlx",
+      "note": "Exa Places (Google-Maps-derived listing): coords, plus code, hours, phone [number removed], reviews 2020–2024",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://solusisehatmental.com/listing/fi-psychology/",
+      "note": "directory: address, [number removed], hours, I/O + Pendidikan categories",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://data.ipkindonesia.or.id/layanan-psikologi-klinis/banjar-baru/",
+      "note": "IPK Banjarbaru list: no Fi.Psychology, no matching psychologist",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://praditadirgantara.sch.id/wp-content/uploads/2024/01/LIST-BIRO-HIMPSI-INDONESIA.pdf",
+      "note": "HIMPSI biro list (2024): Kalsel section has no Fi.Psychology",
+      "checked": "2026-10-31"
+    }
+  ],
+  "validation_note": "Medium-low. Exists on maps, but no licensed psychologist identified and last review is Jan 2024. Do not tag as clinical.",
+  "id": "fi-psychology",
+  "lat": -3.45447,
+  "lng": 114.845878,
+  "status": "needs-check",
+  "verified_at": "2026-10-31",
+  "archived_from": "inbox/2026-10-31-explorer-kesehatan-mental-batch1.json",
+  "latlng_method": "Exa Places (Google-Maps-derived); matches plus code GRWW+696 (decoded -3.454463, 114.845891)",
+  "what_changed": "Added lat/lng, I/O + education categorization, IQ-test service, new phone conflict. Practitioner still unknown.",
+  "history": [
+    {
+      "batch": "1b",
+      "date": "2026-10-31",
+      "what_changed": "Added lat/lng, I/O + education categorization, IQ-test service, new phone conflict. Practitioner still unknown."
+    },
+    {
+      "batch": "privacy-audit",
+      "date": "2026-10-31",
+      "what_changed": "Phone consent policy: removed 2 phone/WhatsApp number(s) that had no owner-published public source in this record (Google-Maps mirrors, directories, third-party pages or personal contacts). Re-add only with a contact_sources link where the owner publishes the number."
+    }
+  ],
+  "open_issues": "practitioner unknown; phone numbers removed (no owner-published source); testing bureau, not clinical",
+  "short": "Fi.Psychology",
+  "checked": "2026-10-31",
+  "address_display": "Jl. Puyau 1 No. 12, Komp. Ratu Elok",
+  "kelurahan_display": "Loktabat Selatan",
+  "note_id": "Nama psikolognya belum diketahui dan nomor telepon resminya belum tercatat. Ini biro tes psikologi, bukan layanan psikolog klinis.",
+  "hours_normalized": [
+    {
+      "day": "senin",
+      "open": "08.00",
+      "close": "19.00"
+    },
+    {
+      "day": "selasa",
+      "open": "08.00",
+      "close": "19.00"
+    },
+    {
+      "day": "rabu",
+      "open": "08.00",
+      "close": "19.00"
+    },
+    {
+      "day": "kamis",
+      "open": "08.00",
+      "close": "19.00"
+    },
+    {
+      "day": "jumat",
+      "open": "08.00",
+      "close": "19.00"
+    },
+    {
+      "day": "sabtu",
+      "open": "08.00",
+      "close": "19.00"
+    },
+    {
+      "day": "minggu",
+      "open": null,
+      "close": null,
+      "closed": true
+    }
+  ],
+  "booking_display": [
+    "Lewat telepon (nomor resmi belum tercatat)"
+  ],
+  "services_display": [
+    "tes IQ (menurut ulasan Jan 2024)",
+    "psikologi pendidikan",
+    "psikologi industri & organisasi"
+  ],
+  "search_terms": [
+    "tes inteligensi",
+    "tes kecerdasan",
+    "psikotes",
+    "biro tes"
+  ],
+  "city_display": "Banjarbaru"
+}

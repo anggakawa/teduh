@@ -1,0 +1,205 @@
+{
+  "name": "RSJ Sambang Lihum (Rumah Sakit Jiwa Provinsi Kalsel)",
+  "category": "kesehatan-mental/rumah-sakit-jiwa",
+  "subcategories": [
+    "psikiater",
+    "psikolog",
+    "rehabilitasi napza"
+  ],
+  "tags": [
+    "RSJ",
+    "pemerintah provinsi",
+    "BPJS",
+    "IGD 24 jam"
+  ],
+  "address": "Jl. Gubernur Syarkawi KM 3,9",
+  "kelurahan": "unknown",
+  "kecamatan": "Gambut",
+  "city": "Kabupaten Banjar (outside Banjarbaru city limits)",
+  "contacts": {
+    "phone": "0811-4000-1408; (0511) 6730000 ext. 189 (Instalasi Psikologi)",
+    "email": "ysambang.lihum@kalselprov.go.id",
+    "website": "https://rsjsambanglihum.kalselprov.go.id/",
+    "instagram": "@rsjsambanglihum",
+    "whatsapp": "unknown",
+    "note": "other contacts unchanged"
+  },
+  "hours": {
+    "poli_senin_kamis": "08.00–13.00 WITA",
+    "poli_jumat": "08.00–11.00 WITA",
+    "poli_sabtu": "08.00–12.00 WITA",
+    "igd": "24 jam",
+    "daftar_ulang_MCU": "Senin–Sabtu 07.30–10.00"
+  },
+  "schedule": [
+    {
+      "practitioner": "Psikiater: dr. Sherly Limantara Sp.KJ, dr. Yanuar Satrio Sarosa Sp.KJ, dr. Noorsifa Sp.KJ, dr. Hj Mardiana Sp.KJ, dr. Safira Amira Tjandrasari SpKJ Subsp AR(K) (child/adolescent); Psikolog incl. Siti Saniah (IPK)",
+      "note": "day-by-day schedule on the hospital queue system (not captured)"
+    },
+    {
+      "practitioner": "Kepala Instalasi Psikologi: Rika Kisnarini, M.Psi"
+    }
+  ],
+  "services": [
+    "rawat jalan & rawat inap jiwa (175 TT)",
+    "kesehatan jiwa anak & remaja",
+    "rehabilitasi NAPZA",
+    "rehabilitasi psikososial",
+    "pemeriksaan psikologi (IQ, kepribadian MMPI-2/Rorschach, minat bakat)",
+    "konseling",
+    "CBT/play therapy",
+    "visum psikiatri",
+    "surat keterangan sehat jiwa"
+  ],
+  "price_range": "Surat Ket. Kesehatan Jiwa Rp350rb; Bebas NAPZA Rp250–350rb; Jasmani Rp300rb (MCU page); BPJS diterima",
+  "booking": [
+    "online (registrasi MCU)",
+    "daftar online di situs",
+    "walk-in poli",
+    "IGD 24 jam"
+  ],
+  "local_notes": "Google rating 4.0 (146 reviews). Reviews (Aug–Sep 2025) mention long queues at Poli Jiwa and strict registration cut-off; a 2022 review praises the WA hotline.",
+  "field_confidence": {
+    "exists": "confirmed (2+ sources)",
+    "address": "confirmed (2+ sources)",
+    "phone": "single source (official)",
+    "hours": "single source (official)",
+    "practitioners": "confirmed (2+ sources) (official + IPK for Siti Saniah)",
+    "prices": "single source (official MCU page)",
+    "lat_lng": "single source (Exa/Google Maps)",
+    "extra_phone": "single source"
+  },
+  "sources": [
+    {
+      "url": "https://rsjsambanglihum.kalselprov.go.id/fasilitas-2/",
+      "note": "official, rawat jalan jiwa",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://rsjsambanglihum.kalselprov.go.id/gawat-darurat/",
+      "note": "official, pemeriksaan psikologi",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://rsjsambanglihum.kalselprov.go.id/",
+      "note": "official, doctor list",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://mcu.sambanglihum.com/",
+      "note": "official MCU registration & prices",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://data.ipkindonesia.or.id/psikolog-klinis/banjar-baru/siti-saniah--MTI4Mw==",
+      "note": "IPK: Siti Saniah practices at RSJ",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://x.com/madahnelangsa/status/2105659367983087809",
+      "note": "X Oct 2026: public question about psikolog consult at Sambang Lihum",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://exa.ai/library/place/sjtqnrthj5h",
+      "note": "Exa Places (Google-Maps-derived listing): coords, phone, reviews to 2025-09-19",
+      "checked": "2026-10-31"
+    }
+  ],
+  "validation_note": "Good.",
+  "id": "rsj-sambang-lihum-rumah-sakit-jiwa-provinsi-kalsel",
+  "lat": -3.402263,
+  "lng": 114.706129,
+  "status": "active",
+  "verified_at": "2026-10-31",
+  "archived_from": "inbox/2026-10-31-explorer-kesehatan-mental-batch1.json",
+  "latlng_method": "Exa Places (Google-Maps-derived)",
+  "what_changed": "Added lat/lng, an extra phone (single source), and queue/registration local notes.",
+  "history": [
+    {
+      "batch": "1b",
+      "date": "2026-10-31",
+      "what_changed": "Added lat/lng, an extra phone (single source), and queue/registration local notes."
+    }
+  ],
+  "short": "RSJ Sambang Lihum",
+  "checked": "2026-10-31",
+  "address_display": "Jl. Gubernur Syarkawi Km 3,9",
+  "kelurahan_display": null,
+  "city_display": "Kabupaten Banjar",
+  "hours_normalized": [
+    {
+      "day": "senin",
+      "open": "08.00",
+      "close": "13.00"
+    },
+    {
+      "day": "selasa",
+      "open": "08.00",
+      "close": "13.00"
+    },
+    {
+      "day": "rabu",
+      "open": "08.00",
+      "close": "13.00"
+    },
+    {
+      "day": "kamis",
+      "open": "08.00",
+      "close": "13.00"
+    },
+    {
+      "day": "jumat",
+      "open": "08.00",
+      "close": "11.00"
+    },
+    {
+      "day": "sabtu",
+      "open": "08.00",
+      "close": "12.00"
+    }
+  ],
+  "booking_display": [
+    "Registrasi MCU online",
+    "Daftar online di situs",
+    "Datang langsung ke poli",
+    "IGD 24 jam"
+  ],
+  "services_display": [
+    "rawat jalan & rawat inap jiwa (175 tempat tidur)",
+    "kesehatan jiwa anak & remaja",
+    "rehabilitasi NAPZA",
+    "rehabilitasi psikososial",
+    "pemeriksaan psikologi (IQ, kepribadian MMPI-2/Rorschach, minat bakat)",
+    "konseling",
+    "CBT/terapi bermain",
+    "visum psikiatri",
+    "surat keterangan sehat jiwa"
+  ],
+  "search_terms": [
+    "psikiater",
+    "dokter jiwa",
+    "kesehatan jiwa",
+    "rumah sakit jiwa",
+    "psikolog",
+    "narkoba",
+    "rehabilitasi narkoba",
+    "tes inteligensi",
+    "IGD",
+    "luar kota"
+  ],
+  "contact_sources": [
+    {
+      "number": "0811-4000-1408",
+      "url": "https://rsjsambanglihum.kalselprov.go.id/gawat-darurat/",
+      "note": "checked 2026-10-31: number appears on this page",
+      "checked": "2026-10-31"
+    },
+    {
+      "number": "(0511) 6730000",
+      "url": "https://rsjsambanglihum.kalselprov.go.id/gawat-darurat/",
+      "note": "checked 2026-10-31: number appears on this page",
+      "checked": "2026-10-31"
+    }
+  ]
+}

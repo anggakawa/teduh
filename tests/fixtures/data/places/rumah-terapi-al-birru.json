@@ -1,0 +1,96 @@
+{
+  "name": "Rumah Terapi Al-Birru (listing 'Terapi wicara'), Sungai Sipai",
+  "category": "tumbuh-kembang-anak/terapi-wicara",
+  "subcategories": [
+    "terapi wicara"
+  ],
+  "tags": [
+    "terapi wicara",
+    "rujukan-regional (di luar Banjarbaru)"
+  ],
+  "address": "Sungai Sipai, Martapura",
+  "kelurahan": "Sungai Sipai",
+  "kecamatan": "Martapura",
+  "city": "Kab. Banjar (Martapura) – OUTSIDE Banjarbaru city",
+  "lat": -3.41037,
+  "lng": 114.85014,
+  "coord_method": "Exa Places (Google-Maps mirror)",
+  "contacts": {
+    "phone": "unknown (removed 2026-10-31: no owner-published public source; see CONTRIBUTING.md)",
+    "instagram": "instagram.com/rumahterapialbirru_banjarbaru (linked from listing; login wall, unverified)"
+  },
+  "hours": {
+    "rabu_sabtu": "15.00–21.00"
+  },
+  "schedule": [],
+  "therapists": [],
+  "services": [
+    "terapi wicara"
+  ],
+  "price_range": "unknown",
+  "price_per_session": "unknown",
+  "bpjs": "unknown",
+  "waitlist": "unknown",
+  "booking": [],
+  "local_notes": "The IG handle says 'banjarbaru', but the pin is in Martapura. It is unclear whether this is linked to Birru Care: the phones differ and no source links them, so I treat it as separate.",
+  "field_confidence": {
+    "exists": "single source",
+    "coords": "single source",
+    "hours": "single source",
+    "phone": "removed 2026-10-31: no owner-published public source",
+    "instagram": "unconfirmed"
+  },
+  "sources": [
+    {
+      "url": "https://exa.ai/library/place/dv8kjnm7y24",
+      "note": "Google-Maps-derived",
+      "checked": "2026-10-31"
+    }
+  ],
+  "validation_note": "Single source and outside the city. Low confidence.",
+  "id": "rumah-terapi-al-birru",
+  "verified_at": "2026-10-31",
+  "status": "active",
+  "archived_from": "inbox/2026-10-31-explorer-tumbuhkembang-batch2.json",
+  "short": "Rumah Terapi Al-Birru",
+  "checked": "2026-10-31",
+  "address_display": "Sungai Sipai, Martapura",
+  "kelurahan_display": "Sungai Sipai",
+  "city_display": "Kabupaten Banjar",
+  "hours_normalized": [
+    {
+      "day": "rabu",
+      "open": "15.00",
+      "close": "21.00"
+    },
+    {
+      "day": "kamis",
+      "open": "15.00",
+      "close": "21.00"
+    },
+    {
+      "day": "jumat",
+      "open": "15.00",
+      "close": "21.00"
+    },
+    {
+      "day": "sabtu",
+      "open": "15.00",
+      "close": "21.00"
+    }
+  ],
+  "search_terms": [
+    "keterlambatan bicara",
+    "terlambat bicara",
+    "speech therapy",
+    "luar kota"
+  ],
+  "name_display": "Rumah Terapi Al-Birru (terapi wicara), Sungai Sipai",
+  "history": [
+    {
+      "batch": "privacy-audit",
+      "date": "2026-10-31",
+      "what_changed": "Phone consent policy: removed 1 phone/WhatsApp number(s) that had no owner-published public source in this record (Google-Maps mirrors, directories, third-party pages or personal contacts). Re-add only with a contact_sources link where the owner publishes the number."
+    }
+  ]
+}

@@ -1,0 +1,155 @@
+{
+  "name": "Praktik Mandiri Psikolog Klinis Siti Saniah (Siti Saniah, S.Psi., M.Psi., Psikolog)",
+  "category": "kesehatan-mental/psikolog",
+  "subcategories": [
+    "psikolog klinis praktik mandiri"
+  ],
+  "tags": [
+    "psikolog klinis",
+    "praktik perseorangan",
+    "SIPP aktif",
+    "praktik malam"
+  ],
+  "address": "Komp. Benawa Raya, Jl. Arafah No. 32",
+  "kelurahan": "Guntung Manggis",
+  "kecamatan": "Landasan Ulin",
+  "city": "Banjarbaru",
+  "contacts": {
+    "phone": "unknown (removed 2026-10-31: no owner-published public source; see CONTRIBUTING.md)",
+    "whatsapp": "unknown",
+    "instagram": "unknown",
+    "website": "unknown",
+    "email": "unknown"
+  },
+  "hours": {
+    "senin_jumat": "19.00–20.00",
+    "sabtu_minggu": "tutup"
+  },
+  "schedule": [
+    {
+      "practitioner": "Siti Saniah, S.Psi., M.Psi., Psikolog",
+      "day": "Senin–Jumat",
+      "time": "19.00–20.00",
+      "note": "daytime at RSJ Sambang Lihum"
+    }
+  ],
+  "services": [
+    "konseling psikolog klinis",
+    "tes psikologi (paket konseling + tes untuk hasil tertulis)"
+  ],
+  "price_range": "unknown",
+  "booking": [
+    "janji (phone)"
+  ],
+  "local_notes": "Evening-only practice. A Sep 2025 review warns that counselling alone gives no written result; ask for the counselling + test package if you need a report. Rated 4.8 (17 reviews), reviews to Sep 2025.",
+  "field_confidence": {
+    "exists": "confirmed (2+ sources)",
+    "address": "confirmed (2+ sources)",
+    "phone": "removed 2026-10-31: no owner-published public source",
+    "hours": "single source (Google Maps via Exa)",
+    "practitioner": "confirmed (2+ sources)",
+    "lat_lng": "single source (Exa/Google Maps)"
+  },
+  "sources": [
+    {
+      "url": "https://data.ipkindonesia.or.id/psikolog-klinis/banjar-baru/siti-saniah--MTI4Mw==",
+      "note": "IPK registry",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://directmap.asia/banjarbaru/9568",
+      "note": "directory, phone/address",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://exa.ai/library/place/fjlt1hmr6xk",
+      "note": "Google-Maps-derived listing (via search)",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://exa.ai/library/place/fjlt1hmr6xk",
+      "note": "Exa Places (Google-Maps-derived listing): coords, hours Mon–Fri 19–20, reviews to 2025-09-16",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://directmap.asia/banjarbaru/9568",
+      "note": "directory: phone/address",
+      "checked": "2026-10-31"
+    }
+  ],
+  "validation_note": "Good.",
+  "id": "praktik-mandiri-psikolog-klinis-siti-saniah-siti-saniah-s-ps",
+  "lat": -3.465483,
+  "lng": 114.784695,
+  "status": "active",
+  "verified_at": "2026-10-31",
+  "archived_from": "inbox/2026-10-31-explorer-kesehatan-mental-batch1.json",
+  "latlng_method": "Exa Places (Google-Maps-derived)",
+  "what_changed": "Added lat/lng, hours (Mon–Fri 19.00–20.00), test-package local note.",
+  "history": [
+    {
+      "batch": "1b",
+      "date": "2026-10-31",
+      "what_changed": "Added lat/lng, hours (Mon–Fri 19.00–20.00), test-package local note."
+    },
+    {
+      "batch": "privacy-audit",
+      "date": "2026-10-31",
+      "what_changed": "Phone consent policy: removed 1 phone/WhatsApp number(s) that had no owner-published public source in this record (Google-Maps mirrors, directories, third-party pages or personal contacts). Re-add only with a contact_sources link where the owner publishes the number."
+    }
+  ],
+  "short": "Praktik Mandiri Psikolog Klinis Siti Saniah",
+  "checked": "2026-10-31",
+  "address_display": "Komp. Benawa Raya, Jl. Arafah No. 32",
+  "kelurahan_display": "Guntung Manggis",
+  "hours_normalized": [
+    {
+      "day": "senin",
+      "open": "19.00",
+      "close": "20.00"
+    },
+    {
+      "day": "selasa",
+      "open": "19.00",
+      "close": "20.00"
+    },
+    {
+      "day": "rabu",
+      "open": "19.00",
+      "close": "20.00"
+    },
+    {
+      "day": "kamis",
+      "open": "19.00",
+      "close": "20.00"
+    },
+    {
+      "day": "jumat",
+      "open": "19.00",
+      "close": "20.00"
+    },
+    {
+      "day": "sabtu",
+      "open": null,
+      "close": null,
+      "closed": true
+    },
+    {
+      "day": "minggu",
+      "open": null,
+      "close": null,
+      "closed": true
+    }
+  ],
+  "booking_display": [
+    "Lewat telepon (nomor resmi belum tercatat)"
+  ],
+  "search_terms": [
+    "psikolog",
+    "konseling",
+    "konsultasi psikologi",
+    "psikotes",
+    "praktik malam"
+  ],
+  "city_display": "Banjarbaru"
+}

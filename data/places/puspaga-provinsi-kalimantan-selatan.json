@@ -1,0 +1,123 @@
+{
+  "name": "Puspaga Provinsi Kalimantan Selatan ('Puspaga Wasaka') – DP3AKB Provinsi Kalsel",
+  "category": "layanan-pendampingan/konseling-keluarga/puspaga",
+  "subcategories": [
+    "konseling pengasuhan",
+    "konseling anak individu/kelompok",
+    "konseling keluarga",
+    "konseling calon pengantin",
+    "psikoedukasi",
+    "rujukan"
+  ],
+  "tags": [
+    "Puspaga",
+    "DP3AKB Kalsel",
+    "catin",
+    "pengasuhan",
+    "psikolog",
+    "pemerintah"
+  ],
+  "scope": "provincial (located in Banjarbaru)",
+  "address": "Jl. Dharma Praja, Kawasan Perkantoran Pemerintah Provinsi Kalimantan Selatan, Banjarbaru 70732",
+  "kelurahan": "Sungai Tiung (OSM, street)",
+  "kecamatan": "Cempaka per OSM area / 'Banjarbaru Selatan' per official page (conflicting sources)",
+  "city": "Banjarbaru",
+  "lat": null,
+  "lng": null,
+  "coord_method": "none for the building",
+  "approx_coords": {
+    "lat": -3.4869702,
+    "lng": 114.8264272,
+    "method": "OSM Nominatim street-level geocode (street centroid, NOT building) for Jalan Dharma Praja (Pemprov office complex)"
+  },
+  "contacts": {
+    "phone": "(0511) 674 9310",
+    "instagram": "@dp3akb.kalsel",
+    "email": "listed on official page (Cloudflare-obfuscated, not readable)"
+  },
+  "hours": {
+    "note": "unknown (office hours presumed)"
+  },
+  "schedule": [],
+  "services": [
+    "konsultasi",
+    "konseling individu/kelompok anak",
+    "konseling keluarga",
+    "konseling calon pengantin",
+    "rujukan masalah keluarga",
+    "psikoedukasi"
+  ],
+  "cost": "free per MC Kalsel 2019 description of the service (stale (>1 year)); not restated on the current page",
+  "price_range": "unknown",
+  "eligibility": "families, children, catin in Kalsel",
+  "booking": [
+    "telepon",
+    "datang langsung (walk-in), per MC Kalsel 2019"
+  ],
+  "complaint_method": [
+    "telepon (0511) 674 9310",
+    "IG @dp3akb.kalsel"
+  ],
+  "local_notes": "Psychologist counsellors (e.g. Prima Yudha Fransiska, 2019). This is the provincial service in the Banjarbaru government complex, separate from the city Puspaga.",
+  "field_confidence": {
+    "exists": "confirmed (2+ sources)",
+    "address": "confirmed (2+ sources) (2 official pages)",
+    "phone": "confirmed (2+ sources)",
+    "services": "single source (official Puspaga page)",
+    "coords": "approx only",
+    "kecamatan": "conflicting sources",
+    "cost": "stale (>1 year)",
+    "hours": "unknown"
+  },
+  "sources": [
+    {
+      "url": "https://dpppakb.kalselprov.go.id/puspaga/527",
+      "note": "official Puspaga page: services, address, phone",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://dpppakb.kalselprov.go.id/kontak/592",
+      "note": "official contact page: address, IG, phone",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "MC Kalsel 2019 article (found in earlier batch-3 search; URL not retained)",
+      "note": "walk-in + telephone, psikolog counsellors",
+      "checked": "2026-10-31"
+    }
+  ],
+  "validation_note": "The institution and its contacts are confirmed. Building coordinates are only approximate (street).",
+  "id": "puspaga-provinsi-kalimantan-selatan",
+  "verified_at": "2026-10-31",
+  "status": "active",
+  "open_issues": " approx_coords = OSM street midpoint, NOT a building pin; do not display as pin.",
+  "archived_from": "inbox/2026-10-31-explorer-pendampingan-batch3.json",
+  "short": "Puspaga Provinsi Kalimantan Selatan",
+  "checked": "2026-10-31",
+  "address_display": "Jl. Dharma Praja, Kawasan Perkantoran Pemerintah Provinsi Kalimantan Selatan, Banjarbaru 70732",
+  "kelurahan_display": "Sungai Tiung",
+  "kecamatan_display": null,
+  "address_note_id": "Kecamatan berbeda antar sumber (Cempaka / Banjarbaru Selatan). Titik lokasi gedung belum pasti.",
+  "note_id": "Titik lokasi gedung belum pasti; baru perkiraan tingkat jalan.",
+  "booking_display": [
+    "Telepon",
+    "Datang langsung (info MC Kalsel 2019)"
+  ],
+  "search_terms": [
+    "konseling keluarga",
+    "konseling anak",
+    "pengasuhan",
+    "parenting",
+    "calon pengantin",
+    "psikolog"
+  ],
+  "city_display": "Banjarbaru",
+  "contact_sources": [
+    {
+      "number": "(0511) 674 9310",
+      "url": "https://dpppakb.kalselprov.go.id/puspaga/527",
+      "note": "checked 2026-10-31: number appears on this page",
+      "checked": "2026-10-31"
+    }
+  ]
+}

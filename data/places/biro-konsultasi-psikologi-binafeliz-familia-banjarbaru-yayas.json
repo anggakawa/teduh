@@ -1,0 +1,136 @@
+{
+  "name": "Biro Konsultasi Psikologi BinaFeliz Familia Banjarbaru (Yayasan Dua Srikandi)",
+  "category": "kesehatan-mental/biro-psikologi",
+  "subcategories": [
+    "konsultasi keluarga",
+    "anak berkebutuhan khusus"
+  ],
+  "tags": [
+    "biro psikologi",
+    "yayasan",
+    "ABK",
+    "tes IQ",
+    "kesiapan sekolah",
+    "terapi anak"
+  ],
+  "address": "Jl. Gn. Permai Selatan I (Plus code GRPX+8MG)",
+  "kelurahan": "Kemuning",
+  "kecamatan": "Banjarbaru Selatan",
+  "city": "Banjarbaru",
+  "lat": -3.464186,
+  "lng": 114.849212,
+  "contacts": {
+    "phone": "unknown",
+    "whatsapp": "unknown",
+    "instagram": "unknown",
+    "website": "unknown",
+    "email": "unknown"
+  },
+  "hours": {
+    "senin_rabu": "10.30–16.00",
+    "kamis_minggu": "tutup"
+  },
+  "schedule": [],
+  "services": [
+    "konsultasi keluarga (anak sampai lansia)",
+    "tes IQ",
+    "tes kesiapan masuk sekolah",
+    "tes bakat minat",
+    "asesmen & intervensi psikologi",
+    "bimbingan belajar ABK"
+  ],
+  "price_range": "unknown",
+  "booking": [
+    "unknown"
+  ],
+  "local_notes": "Run by Yayasan Dua Srikandi (registered 2014). A parent review (Jun 2025) mentions 3 years of therapy for a child. Open only Mon–Wed.",
+  "field_confidence": {
+    "exists": "confirmed (2+ sources)",
+    "address": "confirmed (2+ sources)",
+    "hours": "confirmed (2+ sources)",
+    "services": "single source (owner-style review Nov 2025)",
+    "contacts": "unknown"
+  },
+  "sources": [
+    {
+      "url": "https://exa.ai/library/place/b472cqy9rph",
+      "note": "Google-Maps-derived, reviews to Nov 2025",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://idalamat.com/alamat/672732/biro-konsultasi-psikologi-binafeliz-familia-banjarbaru-banjar-baru-kalimantan-selatan",
+      "note": "directory",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://iditrix.com/dua-srikandi/690127/",
+      "note": "yayasan registry (via search)",
+      "checked": "2026-10-31"
+    }
+  ],
+  "validation_note": "Exists, and address and hours agree across sources. No contact number found.",
+  "id": "biro-konsultasi-psikologi-binafeliz-familia-banjarbaru-yayas",
+  "status": "active",
+  "verified_at": "2026-10-31",
+  "archived_from": "inbox/2026-10-31-explorer-kesehatan-mental-batch1.json",
+  "also_in_categories": [
+    "tumbuh-kembang-anak"
+  ],
+  "short": "Biro Konsultasi Psikologi BinaFeliz Familia Banjarbaru",
+  "checked": "2026-10-31",
+  "address_display": "Jl. Gn. Permai Selatan I",
+  "kelurahan_display": "Kemuning",
+  "hours_normalized": [
+    {
+      "day": "senin",
+      "open": "10.30",
+      "close": "16.00"
+    },
+    {
+      "day": "selasa",
+      "open": "10.30",
+      "close": "16.00"
+    },
+    {
+      "day": "rabu",
+      "open": "10.30",
+      "close": "16.00"
+    },
+    {
+      "day": "kamis",
+      "open": null,
+      "close": null,
+      "closed": true
+    },
+    {
+      "day": "jumat",
+      "open": null,
+      "close": null,
+      "closed": true
+    },
+    {
+      "day": "sabtu",
+      "open": null,
+      "close": null,
+      "closed": true
+    },
+    {
+      "day": "minggu",
+      "open": null,
+      "close": null,
+      "closed": true
+    }
+  ],
+  "booking_display": [],
+  "search_terms": [
+    "psikolog",
+    "konseling",
+    "konseling keluarga",
+    "anak berkebutuhan khusus",
+    "tes inteligensi",
+    "tes kecerdasan",
+    "psikotes",
+    "minat bakat"
+  ],
+  "city_display": "Banjarbaru"
+}

@@ -1,0 +1,213 @@
+{
+  "name": "RSD Idaman Kota Banjarbaru – Poliklinik Psikologi & Klinik Jiwa (Psikiatri)",
+  "category": "kesehatan-mental/rumah-sakit",
+  "subcategories": [
+    "psikolog",
+    "psikiater"
+  ],
+  "tags": [
+    "rumah sakit daerah",
+    "pemerintah",
+    "BPJS",
+    "psikolog klinis",
+    "psikiater"
+  ],
+  "address": "Jl. Trikora No. 115 (RT 039 RW 001)",
+  "kelurahan": "Guntung Manggis",
+  "kecamatan": "Landasan Ulin",
+  "city": "Banjarbaru",
+  "contacts": {
+    "phone": "(0511) 674 9696",
+    "email": "rsidaman@banjarbarukota.go.id; support@rsidaman.banjarbarukota.go.id (Google Maps)",
+    "website": "https://rsidaman.banjarbarukota.go.id/",
+    "whatsapp": "unknown",
+    "instagram": "unknown",
+    "facebook": "https://facebook.com/116660552269151"
+  },
+  "hours": {
+    "rawat_jalan_umum": "Senin–Kamis 07.45–12.00, Jumat 07.45–10.00, Sabtu 07.45–11.00 WITA",
+    "minggu": "tutup (poli)",
+    "rs_igd": "24 jam"
+  },
+  "schedule": [
+    {
+      "poli": "Klinik Jiwa",
+      "practitioner": "dr. Sinta Dyah Amrih Lestari, Sp.KJ",
+      "day": "Jumat (jadwal 27 Feb 2026)",
+      "time": "07.45–10.00"
+    },
+    {
+      "poli": "Klinik Psikologi",
+      "practitioner": "Sabrina Mahfoed, M.Psi., Psikolog (tertulis 'Sabring M.' di Teras7)",
+      "day": "Jumat (jadwal 27 Feb 2026)",
+      "time": "07.45–10.00"
+    },
+    {
+      "poli": "Klinik Eksekutif",
+      "practitioner": "Tim dokter termasuk Psikiatri/Jiwa",
+      "day": "Jumat (27 Feb 2026)",
+      "time": "07.45–10.00"
+    }
+  ],
+  "services": [
+    "tes IQ",
+    "asesmen tumbuh kembang anak",
+    "konseling kesulitan belajar",
+    "tes bakat & minat",
+    "konsultasi kecemasan",
+    "gangguan tidur",
+    "konseling perkawinan",
+    "pelayanan psikiatri rawat jalan",
+    "klinik konseling"
+  ],
+  "price_range": "unknown (BPJS diterima via Mobile JKN)",
+  "booking": [
+    "online (Mobile JKN)",
+    "walk-in pada jam poli"
+  ],
+  "local_notes": "Google rating 4.2 (1,273 reviews). Nov 2025 review lists new Psychiatric, Psychology and Counseling clinics.",
+  "field_confidence": {
+    "exists": "confirmed (2+ sources)",
+    "address": "confirmed (2+ sources)",
+    "phone": "confirmed (2+ sources) (official + Google Maps)",
+    "hours": "single source",
+    "schedule": "single source (Feb 2026, per hari, bisa berubah)",
+    "practitioner_psikolog": "confirmed (2+ sources)",
+    "practitioner_psikiater": "confirmed (2+ sources)",
+    "services": "confirmed (2+ sources)",
+    "lat_lng": "confirmed (2+ sources)"
+  },
+  "sources": [
+    {
+      "url": "https://rsidaman.banjarbarukota.go.id/jadwal-dokter/",
+      "note": "official; address/phone/hours (search snippet, page 500 on direct fetch)",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://teras7.com/cek-sebelum-datang-jadwal-klinik-rawat-jalan-rsd-idaman-banjarbaru-jumat-27-februari-2026/",
+      "note": "jadwal 27 Feb 2026",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://data.ipkindonesia.or.id/psikolog-klinis/banjar-baru/sabrina-mahfoed--MTIxNg==",
+      "note": "IPK registry: Sabrina Mahfoed practices at RSD Idaman, Jl. Trikora 115, SIPP valid to 5.2029",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://www.riliskalimantan.com/2024/12/poliklinik-psikologi-rsd-idaman.html",
+      "note": "Dec 2024, services",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://poroskalimantan.com/poliklinik-psikologi-rsd-idaman-layani-klien-anak-hingga-dewasa/",
+      "note": "Aug 2023, services, since 2018",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://poroskalimantan.com/rsd-idaman-membuka-kembali-pelayanan-poliklinik-jiwa/",
+      "note": "Mar 2022, poli jiwa reopened",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://x.com/lpbanjarbaru/status/2105584089827082347",
+      "note": "X post 1 Oct 2026, Lapas–RSD Idaman mental health partnership",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "http://www.ditjenpas.go.id/lapas-banjarbaru-gandeng-rsd-idaman-perkuat-layanan-kesehatan-jiwa-warga-binaan",
+      "note": "Oct 2026, psikiater dr. Sinta Dyah Amrih Lestari, Sp.KJ",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://exa.ai/library/place/mzpk13vvzc3",
+      "note": "Exa Places (Google-Maps-derived listing): coords, phone, email, FB",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://ditmutunakes.kemkes.go.id/index.php/detail-institusi/rumah-sakit-daerah-idaman-kota-banjarbaru/4d5445324f413d3d",
+      "note": "Kemkes listing coords (search snippet; direct fetch 503)",
+      "checked": "2026-10-31"
+    }
+  ],
+  "validation_note": "Good.",
+  "id": "rsd-idaman-kota-banjarbaru",
+  "lat": -3.461307,
+  "lng": 114.801006,
+  "status": "active",
+  "verified_at": "2026-10-31",
+  "archived_from": "inbox/2026-10-31-explorer-kesehatan-mental-batch1.json",
+  "latlng_method": "Exa Places (Google-Maps-derived). Kemkes ditmutunakes listing (search snippet) gives -3.461266, 114.801215 (~25 m apart) — 2 sources agree",
+  "what_changed": "Added lat/lng (2 sources), confirmed main phone, added support email + Facebook. Other fields unchanged.",
+  "history": [
+    {
+      "batch": "1b",
+      "date": "2026-10-31",
+      "what_changed": "Added lat/lng (2 sources), confirmed main phone, added support email + Facebook. Other fields unchanged."
+    }
+  ],
+  "short": "RSD Idaman – Psikologi & Jiwa",
+  "checked": "2026-10-31",
+  "address_display": "Jl. Trikora No. 115, RT 039 RW 001",
+  "kelurahan_display": "Guntung Manggis",
+  "hours_normalized": [
+    {
+      "day": "senin",
+      "open": "07.45",
+      "close": "12.00"
+    },
+    {
+      "day": "selasa",
+      "open": "07.45",
+      "close": "12.00"
+    },
+    {
+      "day": "rabu",
+      "open": "07.45",
+      "close": "12.00"
+    },
+    {
+      "day": "kamis",
+      "open": "07.45",
+      "close": "12.00"
+    },
+    {
+      "day": "jumat",
+      "open": "07.45",
+      "close": "10.00"
+    },
+    {
+      "day": "sabtu",
+      "open": "07.45",
+      "close": "11.00"
+    },
+    {
+      "day": "minggu",
+      "open": null,
+      "close": null,
+      "closed": true
+    }
+  ],
+  "booking_display": [
+    "Online (Mobile JKN)",
+    "Datang langsung pada jam poli"
+  ],
+  "search_terms": [
+    "psikolog",
+    "psikiater",
+    "dokter jiwa",
+    "kesehatan jiwa",
+    "konseling",
+    "tes inteligensi",
+    "rumah sakit",
+    "IGD"
+  ],
+  "city_display": "Banjarbaru",
+  "contact_sources": [
+    {
+      "number": "(0511) 674 9696",
+      "url": "https://rsidaman.banjarbarukota.go.id/jadwal-dokter/",
+      "note": "checked 2026-10-31: number appears on this page (Wayback copy; live site unreachable)",
+      "checked": "2026-10-31"
+    }
+  ]
+}

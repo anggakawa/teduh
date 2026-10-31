@@ -1,0 +1,152 @@
+{
+  "name": "Talenta Aditama – Kantor Cabang Banjarbaru / Unit Layanan Special Needs Therapy",
+  "category": "tumbuh-kembang-anak/terapi-ABK",
+  "subcategories": [
+    "terapi kebutuhan khusus",
+    "biro psikologi"
+  ],
+  "tags": [
+    "ABK",
+    "special needs"
+  ],
+  "address": "Jl. Dahlina Raya I, Komp. Benawa Indah Lestari Blok A No. 71 (Kel. Sei Besar / Loktabat Selatan), Banjarbaru Selatan",
+  "kelurahan": "Loktabat Selatan (Sei Besar area)",
+  "kecamatan": "Banjarbaru Selatan",
+  "city": "Banjarbaru",
+  "lat": -3.451794,
+  "lng": 114.839562,
+  "coord_method": "Exa Places (Google-Maps mirror)",
+  "contacts": {
+    "parent_biro_phone": "unknown (removed 2026-10-31: no owner-published public source; see CONTRIBUTING.md)",
+    "email": "talentaaditama@yahoo.com",
+    "branch_phone": "0882-1215-5298 (LinkedIn 2019)",
+    "whatsapp": "0851-0146-6850 (LinkedIn 2019 branch post; same WA also listed for the Banjarmasin HQ on the biro's LinkedIn profile)",
+    "hq_mobile": "unknown (removed 2026-10-31: no owner-published public source; see CONTRIBUTING.md)",
+    "instagram": "@talenta_aditama (exists: 1,419 followers, 126 posts; post dates not visible)"
+  },
+  "hours": {
+    "listing": "Tue & Wed 17.00–19.00 (Exa). The earlier 'Tue–Thu' figure came only from a search summary, so I dropped it."
+  },
+  "schedule": [],
+  "therapists": [
+    "Rooswita Santia Dewi (biro psikolog per HIMPSI 2024; ULM lecturer). Not confirmed to practise at this unit."
+  ],
+  "services": [
+    "special needs therapy (details unpublished)"
+  ],
+  "price_range": "unknown",
+  "price_per_session": "unknown",
+  "bpjs": "unknown",
+  "waitlist": "unknown",
+  "booking": [],
+  "local_notes": "The parent biro Talenta Aditama is at Jl. Antasan Raden No. 22, Banjarmasin. Only one Google review (May 2023).",
+  "field_confidence": {
+    "exists": "single source for the Banjarbaru unit; parent biro confirmed (2+ sources)",
+    "hours": "single source",
+    "coords": "single source",
+    "practitioner": "single source (link inferred by name)",
+    "reviews": "stale (>1 year)",
+    "exists_unit": "confirmed (2+ sources) (Exa + LinkedIn 2019 branch post)",
+    "address": "confirmed (2+ sources)",
+    "branch_phone": "stale (>1 year)",
+    "active_2025_2026": "unresolved (biro active; unit stale (>1 year))",
+    "phone": "partly removed 2026-10-31: 1 number(s) without an owner-published public source"
+  },
+  "sources": [
+    {
+      "url": "https://exa.ai/library/place/5kz47gl5rb8",
+      "note": "Google-Maps-derived unit listing",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "/workspace/explorer/himpsi.pdf",
+      "note": "HIMPSI 2024 biro list: Talenta Aditama, Banjarmasin",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://www.linkedin.com/posts/biro-psikologi-talenta-aditama-banjarmasin-51305776_kantor-cabang-talenta-aditama-banjar-baru-activity-6510011998066053120-N_Bb",
+      "note": "LinkedIn branch post, 2019-03-09 (UTC)",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://linkedin.com/in/biro-psikologi-talenta-aditama-banjarmasin-51305776",
+      "note": "biro profile, HQ contacts",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://linkedin.com/in/putri-aisya-sarah-785b9922b",
+      "note": "current therapy assistant (Banjarmasin)",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://www.instagram.com/talenta_aditama/",
+      "note": "IG meta",
+      "checked": "2026-10-31"
+    }
+  ],
+  "validation_note": "Low confidence that the unit is still active: thin activity, the only review is from 2023, and the hours are short. Call before listing as active.",
+  "id": "talenta-aditama",
+  "verified_at": "2026-10-31",
+  "status": "needs-check",
+  "archived_from": "inbox/2026-10-31-explorer-tumbuhkembang-batch2.json",
+  "task": "(3) second source + activity",
+  "activity_evidence": [
+    "Biro-level: a LinkedIn profile shows Putri Aisya Sarah as 'Therapy Assistant – Biro Psikologi Talenta Aditama (Current)', Mar 2023–present, treating children with special needs, but based in Banjarmasin, not the Banjarbaru unit",
+    "The Banjarbaru unit's last dated evidence is a Google review from 2023-05-13 ('Konsultasi psikologi perkembangan anak/remaja'). Its branch post is from Mar 2019."
+  ],
+  "what_changed": "Added a second source for the address, plus the complex name, branch phone/WA and IG. Resolved the hours conflict in favour of Exa. Activity evidence is now explicit: the biro is active, but nothing dated after May 2023 is specific to the Banjarbaru unit. Call before listing it as active.",
+  "history": [
+    {
+      "batch": "2b",
+      "date": "2026-10-31",
+      "what_changed": "Added a second source for the address, plus the complex name, branch phone/WA and IG. Resolved the hours conflict in favour of Exa. Activity evidence is now explicit: the biro is active, but nothing dated after May 2023 is specific to the Banjarbaru unit. Call before listing it as active."
+    },
+    {
+      "batch": "privacy-audit",
+      "date": "2026-10-31",
+      "what_changed": "Phone consent policy: removed 1 phone/WhatsApp number(s) that had no owner-published public source in this record (Google-Maps mirrors, directories, third-party pages or personal contacts). Re-add only with a contact_sources link where the owner publishes the number."
+    }
+  ],
+  "open_issues": "Banjarbaru unit activity unconfirmed since May 2023",
+  "short": "Talenta Aditama",
+  "checked": "2026-10-31",
+  "address_display": "Jl. Dahlina Raya I, Komp. Benawa Indah Lestari Blok A No. 71",
+  "kelurahan_display": "Loktabat Selatan",
+  "note_id": "Belum ada bukti unit Banjarbaru masih aktif sejak Mei 2023. Sebagian nomor yang tercatat milik kantor pusat di Banjarmasin.",
+  "hours_normalized": [
+    {
+      "day": "selasa",
+      "open": "17.00",
+      "close": "19.00"
+    },
+    {
+      "day": "rabu",
+      "open": "17.00",
+      "close": "19.00"
+    }
+  ],
+  "services_display": [
+    "terapi anak berkebutuhan khusus (rinciannya belum dipublikasikan)"
+  ],
+  "search_terms": [
+    "anak berkebutuhan khusus",
+    "terapi anak",
+    "biro psikologi"
+  ],
+  "city_display": "Banjarbaru",
+  "name_display": "Talenta Aditama – Kantor Cabang Banjarbaru (layanan terapi kebutuhan khusus)",
+  "contact_sources": [
+    {
+      "number": "0882-1215-5298",
+      "url": "https://www.linkedin.com/posts/biro-psikologi-talenta-aditama-banjarmasin-51305776_kantor-cabang-talenta-aditama-banjar-baru-activity-6510011998066053120-N_Bb",
+      "note": "checked 2026-10-31: number appears on this page (the biro's own LinkedIn post, 2019)",
+      "checked": "2026-10-31"
+    },
+    {
+      "number": "0851-0146-6850",
+      "url": "https://www.linkedin.com/posts/biro-psikologi-talenta-aditama-banjarmasin-51305776_kantor-cabang-talenta-aditama-banjar-baru-activity-6510011998066053120-N_Bb",
+      "note": "checked 2026-10-31: number appears on this page (the biro's own LinkedIn post, 2019)",
+      "checked": "2026-10-31"
+    }
+  ]
+}

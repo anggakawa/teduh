@@ -1,0 +1,153 @@
+name: Koreksi info tempat
+description: Laporkan info yang salah, berubah, tempat pindah, atau tutup.
+title: "[Koreksi] "
+labels: ["usulan-data", "koreksi"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Terima kasih sudah membantu menjaga peta Teduh tetap benar.
+
+        **Privasi — mohon dibaca dulu**
+        - Isian ini **terbuka untuk umum** dan nama akun GitHub Anda terlihat. Kami **tidak** meminta nama, nomor HP, email, atau data pribadi Anda.
+        - Tulis hanya **info resmi/publik tempat layanan**. Nomor telepon/WhatsApp hanya yang dicantumkan sendiri oleh lembaga/pemiliknya (atau pemiliknya setuju), dengan tautan sumbernya. Jangan tulis nomor pribadi staf atau perorangan, cerita pribadi, diagnosis, atau pengalaman sebagai klien.
+
+        Isi **hanya kolom yang perlu diubah**; kolom kosong tidak mengubah apa pun. Tempat yang dikoreksi tampil sebagai **"Belum dicek"** sampai tim memeriksa sumbernya.
+  - type: input
+    id: tempat
+    attributes:
+      label: Tempat yang dikoreksi
+      description: "Nama tempat seperti di peta, atau kode tempat dari alamat halaman (bagian setelah tanda #)."
+      placeholder: "mis. TraitCare Biro Psikologi Banjarbaru"
+    validations:
+      required: true
+  - type: dropdown
+    id: jenis
+    attributes:
+      label: Jenis koreksi
+      options:
+        - Info salah atau sudah berubah
+        - Tempat pindah alamat
+        - Tempat sudah tutup permanen
+    validations:
+      required: true
+  - type: input
+    id: nama
+    attributes:
+      label: Nama tempat yang benar
+    validations:
+      required: false
+  - type: textarea
+    id: layanan
+    attributes:
+      label: Layanan
+      description: Daftar lengkap yang benar, satu per baris.
+    validations:
+      required: false
+  - type: input
+    id: alamat
+    attributes:
+      label: Alamat
+    validations:
+      required: false
+  - type: input
+    id: kelurahan
+    attributes:
+      label: Kelurahan
+    validations:
+      required: false
+  - type: dropdown
+    id: kecamatan
+    attributes:
+      label: Kecamatan
+      options:
+        - Banjarbaru Utara
+        - Banjarbaru Selatan
+        - Landasan Ulin
+        - Liang Anggang
+        - Cempaka
+        - Martapura (Kabupaten Banjar)
+        - Gambut (Kabupaten Banjar)
+        - Tidak tahu
+    validations:
+      required: false
+  - type: input
+    id: telepon
+    attributes:
+      label: Nomor telepon tempat
+      description: "Hanya nomor yang dicantumkan sendiri oleh lembaga/pemiliknya: situs resmi, papan nama, akun media sosial resmi, atau profil Google Bisnis yang dikelola pemiliknya. Jangan tulis nomor pribadi staf atau perorangan tanpa persetujuan pemiliknya. Pisahkan dengan koma jika lebih dari satu."
+    validations:
+      required: false
+  - type: input
+    id: whatsapp
+    attributes:
+      label: Nomor WhatsApp tempat
+      description: Hanya nomor WhatsApp yang dicantumkan sendiri oleh lembaga/pemiliknya (situs resmi, papan nama, akun media sosial resmi, atau profil Google Bisnis yang dikelola pemiliknya). Jangan tulis nomor pribadi staf atau perorangan tanpa persetujuan pemiliknya.
+    validations:
+      required: false
+  - type: textarea
+    id: sumber_nomor
+    attributes:
+      label: Sumber nomor telepon/WhatsApp
+      description: Wajib jika Anda menulis nomor. Tautan (https://…) ke halaman tempat lembaga/pemiliknya sendiri mencantumkan nomor itu, mis. situs resmi, akun media sosial resmi, atau profil Google Bisnis milik tempat itu. Jika lebih dari satu nomor, tulis satu tautan per baris dengan urutan yang sama. Direktori, berita, atau unggahan orang lain tidak cukup.
+      placeholder: |
+        https://…
+    validations:
+      required: false
+  - type: textarea
+    id: jam
+    attributes:
+      label: Jam buka
+      description: Tulis seperti di sumber.
+    validations:
+      required: false
+  - type: input
+    id: biaya
+    attributes:
+      label: Biaya
+    validations:
+      required: false
+  - type: textarea
+    id: cara_daftar
+    attributes:
+      label: Cara daftar
+    validations:
+      required: false
+  - type: textarea
+    id: sumber
+    attributes:
+      label: Sumber / bukti
+      description: Wajib. Minimal satu tautan (https://…) yang menunjukkan info baru ini. Boleh ditambah keterangan.
+    validations:
+      required: true
+  - type: input
+    id: peta
+    attributes:
+      label: Tautan peta (opsional)
+      description: Hanya jika lokasi di peta salah. Titik hanya dipasang jika tautan memuat koordinat tepat; tautan pendek (maps.app.goo.gl) tidak dibuka otomatis.
+    validations:
+      required: false
+  - type: textarea
+    id: catatan
+    attributes:
+      label: Catatan untuk tim (opsional)
+      description: Info tambahan tentang tempat, bukan tentang Anda.
+    validations:
+      required: false
+  - type: checkboxes
+    id: persetujuan_nomor
+    attributes:
+      label: Konfirmasi nomor telepon/WhatsApp
+      description: Nomor hanya ditampilkan jika sudah publik dan dicantumkan oleh pemiliknya sendiri, atau pemiliknya setuju.
+      options:
+        - label: Nomor telepon/WhatsApp yang saya tulis (jika ada) dicantumkan sendiri oleh lembaga/pemiliknya di tempat publik, atau pemiliknya sudah setuju nomornya dicantumkan. Saya tidak menulis nomor pribadi staf atau perorangan tanpa persetujuan.
+          required: true
+  - type: checkboxes
+    id: persetujuan
+    attributes:
+      label: Konfirmasi
+      options:
+        - label: Info ini berasal dari sumber publik atau dari tempat itu sendiri, dan saya tidak menulis data pribadi siapa pun.
+          required: true
+        - label: Saya paham tempat ini tampil sebagai "Belum dicek" sampai tim memeriksa koreksi ini.
+          required: true

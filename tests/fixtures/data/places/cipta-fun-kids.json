@@ -1,0 +1,145 @@
+{
+  "name": "Cipta Fun Kids (Terapis Anak Berkebutuhan Khusus Bersertifikat)",
+  "category": "tumbuh-kembang-anak/terapi-ABK",
+  "subcategories": [
+    "terapi ABK"
+  ],
+  "tags": [
+    "ABK",
+    "terapi anak"
+  ],
+  "address": "Komp. Keruwing Indah Blok K No. 07, RT 08/RW 06",
+  "kelurahan": "Guntungmanggis",
+  "kecamatan": "Landasan Ulin",
+  "city": "Banjarbaru",
+  "lat": -3.459408,
+  "lng": 114.803943,
+  "coord_method": "Exa Places (Google-Maps mirror)",
+  "contacts": {
+    "phone": "unknown (removed 2026-10-31: no owner-published public source; see CONTRIBUTING.md)",
+    "instagram": "@ciptafunkids (exists; ~4,955 followers; bio 'Terapis Anak Berkebutuhan Khusus Bersertifikat'; location not shown in meta)"
+  },
+  "hours": {
+    "senin_sabtu": "09.00–17.00"
+  },
+  "schedule": [],
+  "therapists": [],
+  "services": [
+    "terapi anak berkebutuhan khusus (type not specified)"
+  ],
+  "price_range": "unknown",
+  "price_per_session": "unknown (no source)",
+  "bpjs": "unknown",
+  "waitlist": "unknown",
+  "booking": [],
+  "local_notes": "Rated 5.0 from 4 Google reviews; an Apr 2025 review mentions 'anak terapi di sini'.",
+  "field_confidence": {
+    "exists": "confirmed (2+ sources) (Google-derived mirrors + IG by name)",
+    "address": "single source (Google)",
+    "coords": "single source",
+    "hours": "single source",
+    "phone": "removed 2026-10-31: no owner-published public source",
+    "services": "single source",
+    "price": "unknown",
+    "last_activity": "review 2025-04-24"
+  },
+  "sources": [
+    {
+      "url": "https://exa.ai/library/place/cyth0dd3y6c",
+      "note": "Google-Maps-derived",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://www.instagram.com/ciptafunkids/",
+      "note": "IG profile meta via curl",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://www.poidata.io/report/psychotherapist/indonesia/south-kalimantan",
+      "note": "POI dataset Aug 2026",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://directmap.asia/banjarbaru/15832",
+      "note": "directory neighbour mention",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://www.instagram.com/ciptafunkids/",
+      "note": "IG meta",
+      "checked": "2026-10-31"
+    }
+  ],
+  "validation_note": "The IG account is linked to the place by name only. No therapist names, prices or BPJS information.",
+  "id": "cipta-fun-kids",
+  "verified_at": "2026-10-31",
+  "status": "needs-check",
+  "archived_from": "inbox/2026-10-31-explorer-tumbuhkembang-batch2.json",
+  "task": "(3) second source + (4) price",
+  "evidence": [
+    "Exa (Google Maps) listing with address, hours and phone; reviews dated 2022-10-27 and 2025-04-24",
+    "poidata.io 2026 report lists 'Cipta Fun Kids, Banjarbaru City, ★5.0, 4 reviews', with a masked phone matching the pattern of [number removed]",
+    "directmap lists 'Psikoterapis — Cipta Fun Kids ★5' near Hilyakids Store",
+    "IG @ciptafunkids exists (about 4,955 followers)"
+  ],
+  "independence_note": "Exa, poidata and directmap all derive from Google Maps, so they are not fully independent. IG is independent but tied to the place by name only.",
+  "what_changed": "Added the poidata and directmap mentions and the 2025 review as the last activity. There is still no price, therapist name or non-Google confirmation of the address.",
+  "history": [
+    {
+      "batch": "2b",
+      "date": "2026-10-31",
+      "what_changed": "Added the poidata and directmap mentions and the 2025 review as the last activity. There is still no price, therapist name or non-Google confirmation of the address."
+    },
+    {
+      "batch": "privacy-audit",
+      "date": "2026-10-31",
+      "what_changed": "Phone consent policy: removed 1 phone/WhatsApp number(s) that had no owner-published public source in this record (Google-Maps mirrors, directories, third-party pages or personal contacts). Re-add only with a contact_sources link where the owner publishes the number."
+    }
+  ],
+  "open_issues": "sources are Google-derived copies, not independent",
+  "short": "Cipta Fun Kids",
+  "checked": "2026-10-31",
+  "address_display": "Komp. Keruwing Indah Blok K No. 07, RT 08/RW 06",
+  "kelurahan_display": "Guntung Manggis",
+  "note_id": "Semua sumber adalah salinan data Google, bukan sumber terpisah. Belum dipastikan lewat telepon.",
+  "hours_normalized": [
+    {
+      "day": "senin",
+      "open": "09.00",
+      "close": "17.00"
+    },
+    {
+      "day": "selasa",
+      "open": "09.00",
+      "close": "17.00"
+    },
+    {
+      "day": "rabu",
+      "open": "09.00",
+      "close": "17.00"
+    },
+    {
+      "day": "kamis",
+      "open": "09.00",
+      "close": "17.00"
+    },
+    {
+      "day": "jumat",
+      "open": "09.00",
+      "close": "17.00"
+    },
+    {
+      "day": "sabtu",
+      "open": "09.00",
+      "close": "17.00"
+    }
+  ],
+  "services_display": [
+    "terapi anak berkebutuhan khusus (jenis terapi tidak disebutkan)"
+  ],
+  "search_terms": [
+    "anak berkebutuhan khusus",
+    "terapi anak"
+  ],
+  "city_display": "Banjarbaru"
+}

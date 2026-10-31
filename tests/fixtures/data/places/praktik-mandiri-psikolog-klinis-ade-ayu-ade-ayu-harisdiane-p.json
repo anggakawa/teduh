@@ -1,0 +1,136 @@
+{
+  "name": "Praktik Mandiri Psikolog Klinis Ade Ayu (Ade Ayu Harisdiane Putri, M.Psi., Psikolog)",
+  "category": "kesehatan-mental/psikolog",
+  "subcategories": [
+    "psikolog klinis praktik mandiri"
+  ],
+  "tags": [
+    "psikolog klinis",
+    "praktik perseorangan",
+    "SIPP aktif"
+  ],
+  "address": "Jl. Bougenville No. 9, Komp. Pondok Bunga, Karanganyar II",
+  "kelurahan": "Loktabat Utara",
+  "kecamatan": "Banjarbaru Utara",
+  "city": "Banjarbaru",
+  "lat": -3.430072,
+  "lng": 114.815046,
+  "contacts": {
+    "phone": "unknown (removed 2026-10-31: no owner-published public source; see CONTRIBUTING.md)",
+    "instagram": "@psikolog.ayu (unconfirmed: web-search synthesis only)",
+    "whatsapp": "unknown",
+    "website": "unknown",
+    "email": "unknown"
+  },
+  "hours": {
+    "senin_sabtu": "08.00–17.00",
+    "minggu": "tutup"
+  },
+  "schedule": [
+    {
+      "practitioner": "Ade Ayu Harisdiane Putri, M.Psi., Psikolog",
+      "note": "also practices at RSU Syifa Medika"
+    }
+  ],
+  "services": [
+    "konsultasi psikolog klinis"
+  ],
+  "price_range": "unknown",
+  "booking": [
+    "janji (phone)"
+  ],
+  "local_notes": "Licensed clinical psychologist (NIAIPK 20012515; SIPPK valid to Aug 2031). Rated 5.0 from 10 Google reviews (via Exa).",
+  "field_confidence": {
+    "exists": "confirmed (2+ sources)",
+    "address": "confirmed (2+ sources)",
+    "phone": "removed 2026-10-31: no owner-published public source",
+    "hours": "single source",
+    "practitioner": "confirmed (2+ sources)",
+    "lat_lng": "single source (Exa/Google Maps)"
+  },
+  "sources": [
+    {
+      "url": "https://data.ipkindonesia.or.id/psikolog-klinis/banjar-baru/ade-ayu-harisdiane-putri--NjQ4",
+      "note": "IPK registry",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://exa.ai/library/place/qbtcm04kx0g",
+      "note": "Google-Maps-derived listing, phone/hours/coords",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://www.okadoc.com/id-id/praktisi/spesialis-kesehatan-jiwa-psikiater-psikolog-gangguan-emosional/kota-banjarbaru/ade-ayu-harisdiane-putri",
+      "note": "Okadoc practitioner listing (not opened)",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://rsusyifamedika.co.id/draft-dokter-kami/",
+      "note": "official RS page lists her",
+      "checked": "2026-10-31"
+    }
+  ],
+  "validation_note": "Strong on existence, address, and credentials (IPK registry plus a map listing). The phone and hours come from one map listing.",
+  "id": "praktik-mandiri-psikolog-klinis-ade-ayu-ade-ayu-harisdiane-p",
+  "status": "active",
+  "verified_at": "2026-10-31",
+  "archived_from": "inbox/2026-10-31-explorer-kesehatan-mental-batch1.json",
+  "short": "Praktik Mandiri Psikolog Klinis Ade Ayu",
+  "checked": "2026-10-31",
+  "address_display": "Jl. Bougenville No. 9, Komp. Pondok Bunga, Karanganyar II",
+  "kelurahan_display": "Loktabat Utara",
+  "hours_normalized": [
+    {
+      "day": "senin",
+      "open": "08.00",
+      "close": "17.00"
+    },
+    {
+      "day": "selasa",
+      "open": "08.00",
+      "close": "17.00"
+    },
+    {
+      "day": "rabu",
+      "open": "08.00",
+      "close": "17.00"
+    },
+    {
+      "day": "kamis",
+      "open": "08.00",
+      "close": "17.00"
+    },
+    {
+      "day": "jumat",
+      "open": "08.00",
+      "close": "17.00"
+    },
+    {
+      "day": "sabtu",
+      "open": "08.00",
+      "close": "17.00"
+    },
+    {
+      "day": "minggu",
+      "open": null,
+      "close": null,
+      "closed": true
+    }
+  ],
+  "booking_display": [
+    "Lewat telepon (nomor resmi belum tercatat)"
+  ],
+  "search_terms": [
+    "psikolog",
+    "konseling",
+    "konsultasi psikologi"
+  ],
+  "city_display": "Banjarbaru",
+  "history": [
+    {
+      "batch": "privacy-audit",
+      "date": "2026-10-31",
+      "what_changed": "Phone consent policy: removed 1 phone/WhatsApp number(s) that had no owner-published public source in this record (Google-Maps mirrors, directories, third-party pages or personal contacts). Re-add only with a contact_sources link where the owner publishes the number."
+    }
+  ]
+}

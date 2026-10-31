@@ -1,0 +1,183 @@
+{
+  "name": "BNN Kota Banjarbaru – Klinik Pratama BNN (IPWL, rehabilitasi narkoba rawat jalan)",
+  "category": "layanan-pendampingan/rehabilitasi-napza/ipwl",
+  "subcategories": [
+    "asesmen",
+    "rehabilitasi rawat jalan",
+    "rujukan rawat inap",
+    "pascarehabilitasi",
+    "konsultasi keluarga"
+  ],
+  "tags": [
+    "BNN",
+    "IPWL",
+    "rehab gratis",
+    "narkoba",
+    "voluntary",
+    "pemerintah"
+  ],
+  "scope": "local (Banjarbaru)",
+  "address": "Komplek Citra Megah Raya No.33A, Jl. A. Yani (Km 33), Loktabat Utara area; Google lists 'HR4C+R6X, Jl. A. Yani, Guntung Payung, Landasan Ulin'",
+  "kelurahan": "conflicting sources: Loktabat Utara (complex) vs Guntung Payung (Google)",
+  "kecamatan": "Banjarbaru Utara / Landasan Ulin (conflicting sources)",
+  "city": "Banjarbaru",
+  "lat": -3.442875,
+  "lng": 114.82062,
+  "coord_method": "Exa Places (Google-Maps mirror). Consistent with the BNN-listed Komplek Citra Megah Raya (Exa pin for that complex -3.443528, 114.817662, about 300 m away)",
+  "approx_coords": null,
+  "contacts": {
+    "phone": "unknown (removed 2026-10-31: no owner-published public source; see CONTRIBUTING.md)",
+    "old_landline": "unknown (removed 2026-10-31: no owner-published public source; see CONTRIBUTING.md)",
+    "website": "http://banjarbarukota.bnn.go.id/ (no content returned to curl)",
+    "x": "@BNNBanjarbaru (active, posts 30 Oct 2026)"
+  },
+  "hours": {
+    "office": "Mon–Thu 08.00–16.00, Fri 08.00–16.30 WITA, Sat–Sun closed (Exa/Google)",
+    "clinic": "unknown"
+  },
+  "schedule": [],
+  "services": [
+    "asesmen awal",
+    "rawat jalan for mild cases: weekly sessions for about 3 months",
+    "rujukan rawat inap for moderate/heavy cases (RSJ Sambang Lihum, which is paid, or partner yayasan)",
+    "pascarehabilitasi about 4 months",
+    "Agen Pemulihan & Ketahanan Keluarga Anti Narkoba (kelurahan programmes, Oct 2026)"
+  ],
+  "cost": "rehabilitation free (bring KTP). SKHPN urine-test certificate Rp290.000 PNBP (2021, stale (>1 year)), which is not rehab",
+  "price_range": "unknown",
+  "eligibility": "voluntary users, or families on their behalf; KTP required",
+  "booking": [
+    "walk-in to the office/clinic",
+    "phone"
+  ],
+  "complaint_method": [
+    "phone",
+    "X @BNNBanjarbaru"
+  ],
+  "local_notes": "86 clients in 2023 and 65 in Jan–Oct 2024. The office has moved over time: Panglima Batur Barat 8A (≈2015), Jl. Trikora (2021 article), now the A. Yani/Citra Megah Raya pin with 2025 reviews. Recent reviews mention cashless payment (for SKHPN). Rehab is described as not an 'aib'.",
+  "field_confidence": {
+    "exists": "confirmed (2+ sources)",
+    "address": "confirmed (2+ sources) for the A. Yani/Citra Megah Raya area (BNN boss list + Google pin); kelurahan conflicting sources",
+    "coords": "single source (Google pin via Exa), area-consistent with BNN address",
+    "phone": "removed 2026-10-31: no owner-published public source",
+    "hours": "confirmed (2+ sources) (Exa + directmap 'unknown'; Exa only, effectively single)",
+    "rehab_free": "confirmed (2+ sources) (Kanal Kalimantan 2024 + BNN national policy listing)",
+    "active_2026": "confirmed (2+ sources) (X posts Oct 2026 + 2025 reviews)"
+  },
+  "sources": [
+    {
+      "url": "https://exa.ai/library/place/jb2stj0dnkp",
+      "note": "Exa: coords, hours, phone, 2025 reviews",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://directmap.asia/banjarbaru/15969",
+      "note": "directory: same plus code and phone",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://boss.bnn.go.id/Layanan_rehabilitasi/pascarehabilitasi",
+      "note": "BNN: Komplek Citra Megah Raya No.33A",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://www.kanalkalimantan.com/bnn-banjarbaru-tren-pasien-rehabilitasi-meningkat/",
+      "note": "news 2024: free with KTP, outpatient model, client numbers",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://iklan-demo.kanalkalimantan.com/bnn-banjarbaru-buka-gerai-di-mal-pelayanan-publik-ini-layanan-yang-diberikan/",
+      "note": "news Feb 2021: MPP gerai, SKHPN Rp290k, office then at Jl. Trikora (stale (>1 year))",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://vymaps.com/ID/Kantor-BNN-Banjar-Baru-3698604/",
+      "note": "old address Panglima Batur Barat 8A (stale (>1 year))",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://x.com/BNNBanjarbaru/status/2116079973027230085",
+      "note": "X 30 Oct 2026: active programmes",
+      "checked": "2026-10-31"
+    }
+  ],
+  "validation_note": "Current location is taken from the Google pin, which agrees with BNN's own listed complex. Older addresses are superseded. The clinic's own hours are not published.",
+  "id": "bnn-kota-banjarbaru",
+  "verified_at": "2026-10-31",
+  "status": "active",
+  "archived_from": "inbox/2026-10-31-explorer-pendampingan-batch3.json",
+  "short": "BNN Kota Banjarbaru",
+  "checked": "2026-10-31",
+  "address_display": "Komplek Citra Megah Raya No. 33A, Jl. A. Yani Km 33",
+  "kelurahan_display": null,
+  "kecamatan_display": null,
+  "address_note_id": "Kelurahan berbeda antar sumber (Loktabat Utara / Guntung Payung). Tanyakan saat menelepon.",
+  "hours_normalized": [
+    {
+      "day": "senin",
+      "open": "08.00",
+      "close": "16.00"
+    },
+    {
+      "day": "selasa",
+      "open": "08.00",
+      "close": "16.00"
+    },
+    {
+      "day": "rabu",
+      "open": "08.00",
+      "close": "16.00"
+    },
+    {
+      "day": "kamis",
+      "open": "08.00",
+      "close": "16.00"
+    },
+    {
+      "day": "jumat",
+      "open": "08.00",
+      "close": "16.30"
+    },
+    {
+      "day": "sabtu",
+      "open": null,
+      "close": null,
+      "closed": true
+    },
+    {
+      "day": "minggu",
+      "open": null,
+      "close": null,
+      "closed": true
+    }
+  ],
+  "hours_note_id": "Jam kantor BNN. Jam layanan klinik belum dipublikasikan.",
+  "booking_display": [
+    "Datang langsung ke kantor/klinik",
+    "Telepon (nomor resmi belum tercatat)"
+  ],
+  "services_display": [
+    "asesmen awal",
+    "rawat jalan untuk kasus ringan: sesi mingguan sekitar 3 bulan",
+    "rujukan rawat inap untuk kasus sedang/berat (RSJ Sambang Lihum, berbayar, atau yayasan mitra)",
+    "pascarehabilitasi sekitar 4 bulan",
+    "Agen Pemulihan & Ketahanan Keluarga Anti Narkoba (program kelurahan, Okt 2026)"
+  ],
+  "search_terms": [
+    "narkoba",
+    "NAPZA",
+    "rehabilitasi narkoba",
+    "kecanduan",
+    "adiksi",
+    "rehab gratis",
+    "sukarela"
+  ],
+  "city_display": "Banjarbaru",
+  "history": [
+    {
+      "batch": "privacy-audit",
+      "date": "2026-10-31",
+      "what_changed": "Phone consent policy: removed 2 phone/WhatsApp number(s) that had no owner-published public source in this record (Google-Maps mirrors, directories, third-party pages or personal contacts). Re-add only with a contact_sources link where the owner publishes the number."
+    }
+  ]
+}

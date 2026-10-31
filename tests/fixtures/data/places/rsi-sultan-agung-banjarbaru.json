@@ -1,0 +1,126 @@
+{
+  "name": "RSI Sultan Agung Banjarbaru – Poli Kesehatan Jiwa / Psikologi",
+  "category": "kesehatan-mental/rumah-sakit",
+  "subcategories": [
+    "psikiater"
+  ],
+  "tags": [
+    "rumah sakit swasta",
+    "RS syariah",
+    "tipe C",
+    "BPJS",
+    "psikiater",
+    "24 jam"
+  ],
+  "address": "Jl. Achmad Yani Km 17,5 RT 015 RW 003, Komp. Kota Citra Graha (KCG)",
+  "kelurahan": "Landasan Ulin Barat",
+  "kecamatan": "Liang Anggang",
+  "city": "Banjarbaru",
+  "contacts": {
+    "phone": "unknown (removed 2026-10-31: no owner-published public source; see CONTRIBUTING.md)",
+    "whatsapp": "unknown (removed 2026-10-31: no owner-published public source; see CONTRIBUTING.md)",
+    "instagram": "@rsi.sultanagung_banjarbaru",
+    "website": "https://rsisabanjarbaru.com/ (official hospital site; no doctor schedule page) ; group site https://www.rsisultanagung.co.id/rsi-sultan-agung-banjarbaru/",
+    "email": "unknown"
+  },
+  "hours": {
+    "rs_igd": "24 jam",
+    "poli_jiwa": "see schedule (stale)"
+  },
+  "schedule": [
+    {
+      "practitioner": "dr. Sinta Dyah Amrih Lestari, SpKJ",
+      "day": "Senin, Rabu–Jumat 14.00–16.00; Selasa 12.00–14.00",
+      "as_of": "Jul 2025 (third-party blog) — NO NEWER SOURCE FOUND"
+    }
+  ],
+  "services": [
+    "psikiatri rawat jalan"
+  ],
+  "price_range": "unknown (BPJS & mandiri accepted per Google review Jan 2026)",
+  "booking": [
+    "janji via hotline WA (no owner-published number yet)"
+  ],
+  "local_notes": "Google rating 4.5 (1,581 reviews), reviews to Jan 2026 say it accepts BPJS and self-pay. Same psychiatrist also at RSD Idaman (mornings).",
+  "field_confidence": {
+    "exists": "confirmed (2+ sources)",
+    "address": "confirmed (2+ sources) (Exa + Kemkes SIRS snippet)",
+    "contacts": "single source",
+    "schedule": "stale (>1 year)",
+    "psychologist": "unverified, omitted",
+    "lat_lng": "single source (Exa/Google Maps)",
+    "hotline": "confirmed (2+ sources)",
+    "phone": "removed 2026-10-31: no owner-published public source"
+  },
+  "sources": [
+    {
+      "url": "https://www.avitaliahealth.com/2024/03/jadwal-praktik-dokter-rsi-sultan-agung.html",
+      "note": "third-party blog, schedule updated Jul 2025",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://www.instagram.com/rsi.sultanagung_banjarbaru/p/C00IWjZvX9C/",
+      "note": "official IG post on anxiety, Dec 2023",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://exa.ai/library/place/1dxdcdjyqvz",
+      "note": "Exa Places (Google-Maps-derived listing): coords, 24h, phone, reviews to 2026-01-27",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://rsisabanjarbaru.com/",
+      "note": "official site: tipe C, 12 klinik spesialis; /jadwal-dokter/ 404",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://sirs.kemkes.go.id/fo/home/profile_rs/6372022",
+      "note": "Kemkes RS Online profile (search snippet): address",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://www.avitaliahealth.com/2024/03/jadwal-praktik-dokter-rsi-sultan-agung.html",
+      "note": "third-party schedule, updated Jul 2025",
+      "checked": "2026-10-31"
+    }
+  ],
+  "validation_note": "Hospital solid; psychiatry schedule still stale (Jul 2025). Tell users to confirm via hotline.",
+  "id": "rsi-sultan-agung-banjarbaru",
+  "lat": -3.430984,
+  "lng": 114.698899,
+  "status": "active",
+  "verified_at": "2026-10-31",
+  "archived_from": "inbox/2026-10-31-explorer-kesehatan-mental-batch1.json",
+  "latlng_method": "Exa Places (Google-Maps-derived)",
+  "what_changed": "Added lat/lng (Exa), official domain rsisabanjarbaru.com, BPJS note, address confirmed by 2nd source. Psychiatry schedule NOT refreshed: rsisultanagung.co.id kejiwaan page 404, rsisabanjarbaru.com has no schedule page, X search returned 0 posts.",
+  "history": [
+    {
+      "batch": "1b",
+      "date": "2026-10-31",
+      "what_changed": "Added lat/lng (Exa), official domain rsisabanjarbaru.com, BPJS note, address confirmed by 2nd source. Psychiatry schedule NOT refreshed: rsisultanagung.co.id kejiwaan page 404, rsisabanjarbaru.com has no schedule page, X search returned 0 posts."
+    },
+    {
+      "batch": "privacy-audit",
+      "date": "2026-10-31",
+      "what_changed": "Phone consent policy: removed 4 phone/WhatsApp number(s) that had no owner-published public source in this record (Google-Maps mirrors, directories, third-party pages or personal contacts). Re-add only with a contact_sources link where the owner publishes the number."
+    }
+  ],
+  "open_issues": "psychiatry schedule stale (Jul 2025); confirm via hotline",
+  "short": "RSI Sultan Agung Banjarbaru",
+  "checked": "2026-10-31",
+  "address_display": "Jl. Achmad Yani Km 17,5 RT 015 RW 003, Komp. Kota Citra Graha (KCG)",
+  "kelurahan_display": "Landasan Ulin Barat",
+  "note_id": "Jadwal poli jiwa terakhir dari Juli 2025, mungkin sudah berubah. Pastikan lewat hotline.",
+  "hours_note_id": "Jadwal poli jiwa terakhir dari Juli 2025; pastikan lewat hotline.",
+  "booking_display": [
+    "Janji temu lewat hotline WA (nomor resmi belum tercatat)"
+  ],
+  "search_terms": [
+    "psikiater",
+    "dokter jiwa",
+    "kesehatan jiwa",
+    "rumah sakit",
+    "IGD"
+  ],
+  "city_display": "Banjarbaru"
+}

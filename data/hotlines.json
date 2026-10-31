@@ -1,0 +1,264 @@
+[
+  {
+    "name": "SAPA 129 (KemenPPPA) – pengaduan kekerasan perempuan & anak",
+    "category": "hotline/kekerasan",
+    "subcategories": [],
+    "tags": [],
+    "scope": "NATIONAL (usable in Banjarbaru; routes to local UPTD PPA)",
+    "address": null,
+    "kelurahan": "unknown",
+    "kecamatan": "unknown",
+    "city": "nasional",
+    "lat": null,
+    "lng": null,
+    "coord_method": null,
+    "approx_coords": null,
+    "contacts": {
+      "phone": "129",
+      "whatsapp": "0811-1129-129",
+      "online_form": "https://laporsapa129.kemenpppa.go.id/"
+    },
+    "hours": {
+      "note": "24 hours (KemenPPPA banner); online form 'selalu tersedia'"
+    },
+    "schedule": [],
+    "services": [
+      "pengaduan",
+      "pendampingan psikologis",
+      "pemeriksaan kesehatan/visum",
+      "rumah aman",
+      "dukungan hukum"
+    ],
+    "cost": "free",
+    "price_range": "unknown",
+    "eligibility": "victims or witnesses of violence against women/children",
+    "booking": [
+      "call/WA/form"
+    ],
+    "complaint_method": [
+      "129",
+      "WA 08111129129",
+      "online form"
+    ],
+    "local_notes": "",
+    "field_confidence": {
+      "numbers": "confirmed (2+ sources) (laporsapa129 official + kemenpppa.go.id)",
+      "24h": "confirmed (2+ sources)"
+    },
+    "sources": [
+      {
+        "url": "https://laporsapa129.kemenpppa.go.id/",
+        "note": "official: numbers, services",
+        "checked": "2026-10-31"
+      },
+      {
+        "url": "https://www.kemenpppa.go.id/",
+        "note": "official banner: SAPA 129 24 jam",
+        "checked": "2026-10-31"
+      }
+    ],
+    "validation_note": "National service.",
+    "contact_sources": [
+      {
+        "number": "0811-1129-129",
+        "url": "https://laporsapa129.kemenpppa.go.id/",
+        "note": "checked 2026-10-31: number appears on this page",
+        "checked": "2026-10-31"
+      }
+    ]
+  },
+  {
+    "name": "Healing119 (Kemenkes) – pertolongan pertama psikologis / pencegahan bunuh diri",
+    "category": "hotline/kesehatan-jiwa",
+    "subcategories": [],
+    "tags": [],
+    "scope": "NATIONAL",
+    "address": null,
+    "kelurahan": "unknown",
+    "kecamatan": "unknown",
+    "city": "nasional",
+    "lat": null,
+    "lng": null,
+    "coord_method": null,
+    "approx_coords": null,
+    "contacts": {
+      "phone": "119 ext 8",
+      "web": "https://www.healing119.id/",
+      "whatsapp": "button on healing119.id (number not captured)"
+    },
+    "hours": {
+      "note": "24 hours (queues possible)"
+    },
+    "schedule": [],
+    "services": [
+      "psychological first aid by phone/text",
+      "emotional support in crisis",
+      "referral to professionals/faskes"
+    ],
+    "cost": "free",
+    "price_range": "unknown",
+    "eligibility": "anyone in Indonesia, any age; no registration",
+    "booking": [
+      "call 119 ext 8",
+      "web/WA"
+    ],
+    "complaint_method": [],
+    "local_notes": "Not long-term therapy; sessions are 30 min, extendable to 60. For local follow-up see batch-1 RSJ Sambang Lihum / RSD Idaman psikiatri / puskesmas.",
+    "field_confidence": {
+      "details": "single source (Liputan6 Jan 2026 quoting indonesia.go.id), corroborated by Kemenkes FAQ PDF, ANTARA, Komdigi listings (not opened)"
+    },
+    "sources": [
+      {
+        "url": "https://www.liputan6.com/health/read/6254035/butuh-teman-bicara-saat-krisis-mental-kemenkes-sediakan-healing119id",
+        "note": "news Jan 2026: access, free, 24h",
+        "checked": "2026-10-31"
+      },
+      {
+        "url": "https://kesprimkom.kemkes.go.id/assets/uploads/contents/others/FAQ_Cegah_Bunuh_Diri,_Dukung_Kesehatan_Jiwa__Kenali_Layanan_Healing119.id.pdf",
+        "note": "Kemenkes FAQ (search listing)",
+        "checked": "2026-10-31"
+      },
+      {
+        "url": "https://www.antaranews.com/berita/5733359/kemenkes-healing119-terima-500-600-kontak-per-hari",
+        "note": "ANTARA (search listing)",
+        "checked": "2026-10-31"
+      }
+    ],
+    "validation_note": "National service."
+  },
+  {
+    "name": "Call Center 112 Kota Banjarbaru (darurat terpadu) + PSC 119 Ambulans Banjarbaru",
+    "category": "hotline/darurat",
+    "subcategories": [],
+    "tags": [],
+    "scope": "LOCAL (112 is the national short code, run by Pemko Banjarbaru)",
+    "address": null,
+    "kelurahan": "unknown",
+    "kecamatan": "unknown",
+    "city": "Banjarbaru",
+    "lat": null,
+    "lng": null,
+    "coord_method": null,
+    "approx_coords": null,
+    "contacts": {
+      "emergency": "112 (toll-free)",
+      "psc_119_ambulans": "0811-5039-119",
+      "polres_banjarbaru": "110",
+      "ipsm_banjarbaru": "0895-2533-3394 (Ikatan Pekerja Sosial Masyarakat)",
+      "igd_rsd_idaman": "0511-6749-889"
+    },
+    "hours": {
+      "note": "112: 24h (standard); others unknown"
+    },
+    "schedule": [],
+    "services": [],
+    "cost": "free (112/110)",
+    "price_range": "unknown",
+    "eligibility": "anyone in Banjarbaru",
+    "booking": [],
+    "complaint_method": [
+      "112",
+      "SP4N LAPOR for non-emergency complaints"
+    ],
+    "local_notes": "",
+    "field_confidence": {
+      "112": "confirmed (2+ sources) (Kel. Mentaos page + Media Center Banjarbaru Feb 2025)",
+      "psc119_number": "single source (Kel. Mentaos official page)",
+      "110": "single source",
+      "ipsm": "single source"
+    },
+    "sources": [
+      {
+        "url": "https://kel-mentaos.banjarbarukota.go.id/organisasi/posbankum",
+        "note": "official kelurahan page: city emergency numbers",
+        "checked": "2026-10-31"
+      },
+      {
+        "url": "https://mediacenter.banjarbarukota.go.id/2025/02/27/jangan-salah-lapor-ketahui-cara-tepat-gunakan-call-center-112-dan-sp4n-lapor/",
+        "note": "Media Center Banjarbaru: 112 vs SP4N LAPOR (search listing)",
+        "checked": "2026-10-31"
+      }
+    ],
+    "validation_note": "Local numbers come from an official kelurahan page.",
+    "contact_sources": [
+      {
+        "number": "0811-5039-119",
+        "url": "https://kel-mentaos.banjarbarukota.go.id/organisasi/posbankum",
+        "note": "checked 2026-10-31: number appears on this page",
+        "checked": "2026-10-31"
+      },
+      {
+        "number": "0895-2533-3394",
+        "url": "https://kel-mentaos.banjarbarukota.go.id/organisasi/posbankum",
+        "note": "checked 2026-10-31: number appears on this page (published by the city kelurahan page)",
+        "checked": "2026-10-31"
+      },
+      {
+        "number": "0511-6749-889",
+        "url": "https://kel-mentaos.banjarbarukota.go.id/organisasi/posbankum",
+        "note": "checked 2026-10-31: number appears on this page",
+        "checked": "2026-10-31"
+      }
+    ]
+  },
+  {
+    "name": "KPSI (Komunitas Peduli Skizofrenia Indonesia) – hotline & Simpul Kalimantan Selatan (Facebook group)",
+    "category": "komunitas/kesehatan-jiwa",
+    "subcategories": [],
+    "tags": [],
+    "scope": "NATIONAL community with a Kalsel online group (no Banjarbaru-specific simpul found)",
+    "address": null,
+    "kelurahan": "unknown",
+    "kecamatan": "unknown",
+    "city": "Kalsel (online)",
+    "lat": null,
+    "lng": null,
+    "coord_method": null,
+    "approx_coords": null,
+    "contacts": {
+      "hotline_wa": "+62 857-7388-3889 (to join caregiver/regional WA groups)",
+      "facebook_kalsel": "https://www.facebook.com/groups/903695796372255",
+      "email": "info.kpsi@gmail.com"
+    },
+    "hours": {},
+    "schedule": [],
+    "services": [
+      "peer support for people with schizophrenia and caregivers",
+      "regional WA/FB groups"
+    ],
+    "cost": "free (community)",
+    "price_range": "unknown",
+    "eligibility": "ODS, caregivers, families",
+    "booking": [
+      "WA hotline"
+    ],
+    "complaint_method": [],
+    "local_notes": "",
+    "field_confidence": {
+      "hotline": "confirmed (2+ sources) (skizofrenia.org simpul page + home/services listings)",
+      "kalsel_group": "single source (official KPSI simpul list, Oct 2025)",
+      "banjarbaru_activity": "unknown"
+    },
+    "sources": [
+      {
+        "url": "https://skizofrenia.org/daftar-simpul-kpsi-se-indonesia/",
+        "note": "official simpul list Oct 2025: Kalsel FB group, hotline",
+        "checked": "2026-10-31"
+      },
+      {
+        "url": "https://skizofrenia.org/services/",
+        "note": "KPSI services (search listing)",
+        "checked": "2026-10-31"
+      }
+    ],
+    "validation_note": "Online-only for Kalsel. Group activity wasn't checked because FB requires a login.",
+    "contact_sources": [
+      {
+        "number": "+62 857-7388-3889",
+        "url": "https://skizofrenia.org/daftar-simpul-kpsi-se-indonesia/",
+        "note": "checked 2026-10-31: number appears on this page",
+        "checked": "2026-10-31"
+      }
+    ]
+  }
+]

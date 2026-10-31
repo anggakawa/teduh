@@ -1,0 +1,118 @@
+{
+  "name": "Posbakumadin Banjarbaru (Pos Bantuan Hukum Advokat Indonesia) – accredited OBH",
+  "category": "layanan-pendampingan/bantuan-hukum/obh-lbh",
+  "subcategories": [
+    "bantuan hukum litigasi",
+    "non-litigasi",
+    "pendampingan"
+  ],
+  "tags": [
+    "OBH",
+    "LBH",
+    "terakreditasi",
+    "gratis",
+    "BPHN"
+  ],
+  "scope": "local (Banjarbaru)",
+  "address": "Jl. Sidodadi 2 No.28 RT/RW 005/005, Loktabat Selatan, Banjarbaru Selatan 70721",
+  "kelurahan": "Loktabat Selatan",
+  "kecamatan": "Banjarbaru Selatan",
+  "city": "Banjarbaru",
+  "lat": null,
+  "lng": null,
+  "coord_method": "none for the building",
+  "approx_coords": {
+    "lat": -3.4490707,
+    "lng": 114.8111105,
+    "method": "OSM Nominatim street-level geocode (street centroid, NOT building) for Jalan Sidodadi, Loktabat Selatan"
+  },
+  "contacts": {
+    "phone": "unknown (removed 2026-10-31: no owner-published public source; see CONTRIBUTING.md)"
+  },
+  "hours": {
+    "note": "unknown"
+  },
+  "schedule": [],
+  "services": [
+    "state-funded bantuan hukum (litigasi & non-litigasi) under UU 16/2011"
+  ],
+  "cost": "free for eligible poor clients (state-funded under BPHN contract)",
+  "price_range": "unknown",
+  "eligibility": "orang/kelompok miskin per UU 16/2011 (proof such as SKTM)",
+  "booking": [
+    "phone",
+    "walk-in"
+  ],
+  "complaint_method": [
+    "Kanwil Kemenkum Kalsel (bantuan hukum supervisor)"
+  ],
+  "local_notes": "Accreditation C (2022 list). Verified in the field for 2025–2027 re-accreditation (Sep 2024). Signed a bantuan hukum contract addendum on 1 Sep 2025. It is the only accredited PBH found headquartered in Banjarbaru.",
+  "field_confidence": {
+    "exists": "confirmed (2+ sources)",
+    "address": "confirmed (2+ sources) (JDIH Kalsel list + Banjarmasinpost 2022)",
+    "phones": "single source (JDIH list; stale (>1 year))",
+    "accreditation": "confirmed (2+ sources)",
+    "active_2025": "confirmed (2+ sources) (Kemenkum Kalsel 2024 & 2025)",
+    "coords": "approx only",
+    "hours": "unknown",
+    "phone": "removed 2026-10-31: no owner-published public source"
+  },
+  "sources": [
+    {
+      "url": "JDIH Kalsel PBH accreditation list (found earlier this batch)",
+      "note": "address, phones, accreditation C",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "Banjarmasinpost 3 Jan 2022 (found earlier this batch)",
+      "note": "accredited PBH list Kalsel",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://kalsel.kemenkum.go.id/berita-utama/verifikasi-lapangan-dalam-rangka-akreditasi-ulang-pbh-telah-selesai-kemenkumham-kalsel-segera-kirim-hasil-verifikasi-ke-bphn",
+      "note": "re-accreditation verification Sep 2024",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "kalsel.kemenkum.go.id news 1 Sep 2025 (found earlier this batch)",
+      "note": "contract addendum 2025",
+      "checked": "2026-10-31"
+    }
+  ],
+  "validation_note": "Active as of 2025. Phone numbers removed (only from a 2022 list without a public link; no owner-published source).",
+  "id": "posbakumadin-banjarbaru",
+  "verified_at": "2026-10-31",
+  "status": "active",
+  "open_issues": " approx_coords = OSM street midpoint, NOT a building pin; do not display as pin.",
+  "archived_from": "inbox/2026-10-31-explorer-pendampingan-batch3.json",
+  "short": "Posbakumadin Banjarbaru",
+  "checked": "2026-10-31",
+  "address_display": "Jl. Sidodadi 2 No. 28, RT/RW 005/005, Loktabat Selatan, Banjarbaru Selatan 70721",
+  "kelurahan_display": "Loktabat Selatan",
+  "note_id": "Titik lokasi persis belum diketahui. Nomor telepon resmi belum tercatat.",
+  "booking_display": [
+    "Telepon (nomor resmi belum tercatat)",
+    "Datang langsung"
+  ],
+  "services_display": [
+    "bantuan hukum yang dibiayai negara (litigasi & nonlitigasi) sesuai UU 16/2011"
+  ],
+  "search_terms": [
+    "bantuan hukum",
+    "konsultasi hukum",
+    "hukum gratis",
+    "pengacara",
+    "advokat",
+    "LBH",
+    "pendampingan hukum"
+  ],
+  "city_display": "Banjarbaru",
+  "name_display": "Posbakumadin Banjarbaru (Pos Bantuan Hukum Advokat Indonesia) – OBH terakreditasi",
+  "history": [
+    {
+      "batch": "privacy-audit",
+      "date": "2026-10-31",
+      "what_changed": "Phone consent policy: removed 2 phone/WhatsApp number(s) that had no owner-published public source in this record (Google-Maps mirrors, directories, third-party pages or personal contacts). Re-add only with a contact_sources link where the owner publishes the number."
+    }
+  ]
+}

@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Teduh — Peta layanan Banjarbaru</title>
+  <meta name="description" content="Teduh: peta layanan kesehatan mental, tumbuh kembang anak, pendampingan & hukum, dan biro tes psikologi di Banjarbaru.">
+  <meta name="referrer" content="no-referrer">
+  <meta name="theme-color" content="#F7F4EE">
+  <link rel="icon" type="image/svg+xml" href="assets/brand/logo-icon.svg">
+  <link rel="apple-touch-icon" href="assets/brand/app-icon.png">
+  <!-- Leaflet 1.9.4 + Leaflet.markercluster 1.5.3, vendored (works offline and over file://). -->
+  <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+  <link rel="stylesheet" href="vendor/markercluster/MarkerCluster.css">
+  <link rel="stylesheet" href="css/fonts.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body data-mode="list" data-search="0">
+  <div class="app" id="app">
+    <!-- Top row: brand (or map-back in detail) + Keluar cepat. Always above everything (z --z-qexit). -->
+    <div class="toprow" id="toprow">
+      <button type="button" class="round back-map" id="mapBack" aria-label="Kembali ke daftar" hidden>
+        <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 6l-6 6 6 6"/></svg>
+      </button>
+      <a class="brand" id="brand" href="./" aria-label="Teduh — kembali ke awal">
+        <img src="assets/brand/logo-icon.svg" width="24" height="24" alt="">
+        <span class="wm">Teduh</span>
+        <span class="tagline">Peta layanan bantuan<br>Banjarbaru &amp; sekitar</span>
+      </a>
+      <button type="button" class="qexit" id="quickExit" aria-describedby="qexitTip">
+        <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4.5h4a1.5 1.5 0 0 1 1.5 1.5v12a1.5 1.5 0 0 1-1.5 1.5h-4"/><path d="M10 8l-4 4 4 4M6 12h9"/></svg>
+        <span>Keluar cepat</span>
+        <span class="tip" id="qexitTip" role="tooltip">Tekan <kbd class="kbd">Esc</kbd> 3× untuk keluar</span>
+      </button>
+    </div>
+
+    <!-- Search + filters (mobile: floating over the map; desktop: top of the left panel) -->
+    <header class="controls" id="controls">
+      <form class="search" id="searchForm" role="search" action="#" autocomplete="off">
+        <span class="s-ic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg></span>
+        <button type="button" class="s-back" id="qBack" aria-label="Tutup pencarian">
+          <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 6l-6 6 6 6"/></svg>
+        </button>
+        <input id="q" type="search" enterkeyhint="search" spellcheck="false"
+               placeholder="Cari layanan, tempat, BPJS…" aria-label="Cari layanan, tempat, BPJS">
+        <button type="button" class="sclear" id="qClear" aria-label="Hapus pencarian" hidden>
+          <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/></svg>
+        </button>
+      </form>
+      <div class="search-extra" id="searchExtra" hidden>
+        <div class="sx-row" id="recentRow" hidden>
+          <span class="sx-l"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.4-5.7"/><path d="M4 4.5v3.5h3.5"/><path d="M12 8v4.2l2.8 1.8"/></svg>Terakhir dicari:</span>
+          <span class="sx-chips" id="recent"></span>
+          <span class="sx-note">hanya sesi ini</span>
+        </div>
+        <div class="sx-row">
+          <span class="sx-l">Saran:</span>
+          <span class="sx-chips" id="suggest"></span>
+        </div>
+      </div>
+      <div class="chips" id="chips" role="group" aria-label="Saring"></div>
+    </header>
+
+    <!-- List + detail: bottom sheet on mobile, 380px left panel on desktop -->
+    <aside class="sheet" id="sheet" data-state="peek" role="region" aria-label="Daftar layanan">
+      <div class="grab" id="sheetGrab">
+        <button type="button" id="grabBtn" aria-label="Perbesar daftar"><span></span></button>
+      </div>
+
+      <section class="view view-list" id="viewList">
+        <div class="shead" id="shead">
+          <div class="shead-text">
+            <h1 class="sh1" id="sh1">Memuat…</h1>
+            <p class="sh2" id="sh2"></p>
+          </div>
+          <label class="sort" id="sortWrap">
+            <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5v14M4 16l3 3 3-3M17 19V5M14 8l3-3 3 3"/></svg>
+            <span id="sortLabel">Urutkan</span>
+            <select id="sort" aria-label="Urutkan daftar"></select>
+          </label>
+          <button type="button" class="linkbtn" id="clearFilters" hidden>Hapus filter</button>
+          <button type="button" class="linkbtn" id="toMap" hidden>
+            <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></svg>Peta
+          </button>
+        </div>
+        <div class="sbody" id="listScroll">
+          <div class="skeleton" id="skeleton" aria-hidden="true">
+            <div class="skc"><i class="sk sk-tile"></i><span><i class="sk sk-l1"></i><i class="sk sk-l2"></i><i class="sk sk-l3"></i></span></div>
+            <div class="skc"><i class="sk sk-tile"></i><span><i class="sk sk-l1"></i><i class="sk sk-l2"></i><i class="sk sk-l3"></i></span></div>
+            <div class="skc"><i class="sk sk-tile"></i><span><i class="sk sk-l1"></i><i class="sk sk-l2"></i><i class="sk sk-l3"></i></span></div>
+          </div>
+          <ul class="cards" id="list" aria-label="Layanan dengan titik di peta"></ul>
+          <section class="unpinned" id="unpinnedSection" hidden>
+            <h2 class="seclabel" id="unpinnedTitle">Tanpa titik di peta</h2>
+            <p class="sec-note" id="unpinnedNote"></p>
+            <ul class="cards" id="listUnpinned" aria-labelledby="unpinnedTitle"></ul>
+          </section>
+          <div class="empty" id="empty" hidden></div>
+          <div class="data-error" id="dataError" hidden></div>
+          <p class="meta" id="dataMeta"></p>
+        </div>
+        <p class="sr" id="liveCount" aria-live="polite"></p>
+      </section>
+
+      <section class="view view-detail" id="viewDetail" hidden>
+        <div class="dtop">
+          <button type="button" class="dback" id="detailBack">
+            <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 6l-6 6 6 6"/></svg>Daftar
+          </button>
+          <span class="dpos" id="detailPos"></span>
+        </div>
+        <div class="sbody" id="detailScroll"><article id="detailBody" aria-live="polite"></article></div>
+      </section>
+
+      <button type="button" class="emg" id="emgRow" aria-haspopup="dialog">
+        <span class="emgi"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 3.5h2.6l1.6 4.2-2 1.3a11 11 0 0 0 5.2 5.2l1.3-2 4.2 1.6v2.6a2 2 0 0 1-2.2 2A15.6 15.6 0 0 1 4.6 5.7a2 2 0 0 1 2-2.2z"/></svg></span>
+        <span class="emgt"><b>Darurat?</b> 112 · SAPA 129 <span class="mut">(perempuan &amp; anak)</span></span>
+        <svg class="ic chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 6l6 6-6 6"/></svg>
+      </button>
+    </aside>
+
+    <main class="map" id="map" aria-label="Peta layanan"></main>
+
+    <!-- Map overlays: Keterangan (ⓘ FAB on mobile, pill on desktop), zoom (desktop), lokasi saya -->
+    <button type="button" class="legend-btn" id="legendBtn" aria-expanded="false" aria-controls="legendPop" aria-label="Keterangan peta">
+      <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5.2M12 7.8v.1"/></svg>
+      <span class="lb-t">Keterangan</span>
+      <svg class="ic lb-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 9.5l5.5 5.5 5.5-5.5"/></svg>
+    </button>
+    <div class="legend-pop" id="legendPop" role="dialog" aria-label="Keterangan peta" hidden></div>
+    <div class="mapctl" id="mapCtl">
+      <div class="zoom" id="zoomCtl">
+        <button type="button" id="zoomIn" aria-label="Perbesar peta"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5.5v13M5.5 12h13"/></svg></button>
+        <button type="button" id="zoomOut" aria-label="Perkecil peta"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 12h13"/></svg></button>
+      </div>
+      <button type="button" class="fab" id="locateBtn" aria-label="Tampilkan lokasi saya">
+        <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="1.6"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3"/></svg>
+      </button>
+    </div>
+    <p class="mapnote" id="mapNote" hidden>
+      <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5.2M12 7.8v.1"/></svg>Tidak ada tempat yang cocok di peta
+    </p>
+    <div class="notice-inline tile-error" id="tileError" role="status" hidden>
+      <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5.2M12 7.8v.1"/></svg>
+      <span><b>Peta belum bisa dimuat.</b> Daftar tetap bisa dipakai. <button type="button" class="linkbtn" id="tileRetry">Coba lagi</button></span>
+    </div>
+  </div>
+
+  <!-- Emergency hotlines: modal sheet (mobile) / dialog (desktop) -->
+  <div class="modal" id="emgModal" hidden>
+    <div class="scrim" data-close></div>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="emgTitle">
+      <div class="grab" aria-hidden="true"><span></span></div>
+      <div class="mhead">
+        <div><h2 id="emgTitle">Bantuan darurat</h2><p class="mh2" id="emgSub">Gratis · nomor resmi</p></div>
+        <button type="button" class="round" data-close aria-label="Tutup">
+          <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/></svg>
+        </button>
+      </div>
+      <div id="hotlines"></div>
+    </div>
+  </div>
+
+  <!-- Two different numbers from different sources: let the user pick, showing each source -->
+  <div class="modal" id="phoneModal" hidden>
+    <div class="scrim" data-close></div>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="phoneTitle">
+      <div class="grab" aria-hidden="true"><span></span></div>
+      <div class="mhead">
+        <div><h2 id="phoneTitle">Pilih nomor</h2><p class="mh2">Sumber publik mencatat nomor yang berbeda. Coba salah satu.</p></div>
+        <button type="button" class="round" data-close aria-label="Tutup">
+          <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/></svg>
+        </button>
+      </div>
+      <div id="phoneList"></div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" hidden></div>
+
+  <script src="vendor/leaflet/leaflet.js"></script>
+  <script src="vendor/markercluster/leaflet.markercluster.js"></script>
+  <!-- Classic scripts (not ES modules) so the page also works when opened via file:// -->
+  <script src="js/config.js"></script>
+  <script src="js/util.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/map.js"></script>
+  <script src="js/sheet.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

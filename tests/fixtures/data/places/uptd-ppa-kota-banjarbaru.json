@@ -1,0 +1,151 @@
+{
+  "name": "UPTD PPA Kota Banjarbaru (Perlindungan Perempuan & Anak) – under Dinas P3APMP2KB Kota Banjarbaru",
+  "category": "layanan-pendampingan/layanan-perlindungan/uptd-ppa",
+  "subcategories": [
+    "pengaduan kekerasan perempuan & anak",
+    "penjangkauan",
+    "pendampingan psikologis",
+    "pendampingan hukum",
+    "rujukan rumah aman"
+  ],
+  "tags": [
+    "UPTD PPA",
+    "DP3A",
+    "KDRT",
+    "kekerasan seksual",
+    "perlindungan anak",
+    "pemerintah"
+  ],
+  "scope": "local (Banjarbaru)",
+  "address": "Dinas office: Jl. Taman Gembira Barat RT.05/RW.01 (new office opened 10 Jan 2024). UPTD PPA's own address is not published.",
+  "kelurahan": "conflicting sources: Guntung Paikat (KIM Banjarbaru) vs Komet (OSM street)",
+  "kecamatan": "Banjarbaru Selatan/Utara (follows kelurahan conflict)",
+  "city": "Banjarbaru",
+  "lat": null,
+  "lng": null,
+  "coord_method": "none for the building. Exa pin 'DP3APPKB' (-3.427683, 114.851946, Mentaos) is NOT used because it doesn't match the 2024 office address and is probably the old office.",
+  "approx_coords": {
+    "lat": -3.4449365,
+    "lng": 114.8320486,
+    "method": "OSM Nominatim street-level geocode (street centroid, NOT building) for Jl. Taman Gembira Barat"
+  },
+  "contacts": {
+    "whatsapp": "0813-6533-6697 (wa 6281365336697, SI SAPA Kalsel official profile)",
+    "office_phone": "not published ('Data belum tersedia')"
+  },
+  "hours": {
+    "note": "unknown (likely office hours; not published)"
+  },
+  "schedule": [],
+  "services": [
+    "menerima pengaduan kekerasan terhadap perempuan & anak",
+    "penjangkauan korban",
+    "pendampingan kesehatan/psikologis (incl. pemeriksaan psikologi)",
+    "pendampingan hukum",
+    "rujukan rumah aman (provincial programme via UPTD kab/kota)"
+  ],
+  "cost": "not stated in any Banjarbaru source (government service, so presumably free; unverified)",
+  "price_range": "unknown",
+  "eligibility": "women and children who are victims of violence, plus people reporting such cases",
+  "booking": [
+    "walk-in to the office",
+    "WhatsApp"
+  ],
+  "complaint_method": [
+    "datang langsung",
+    "hotline/WA",
+    "media sosial (per ANTARA 2025)",
+    "national SAPA 129 also routes cases to the local UPTD"
+  ],
+  "local_notes": "Caseload: 81 cases in 2024, 63 in 2023 (ANTARA, Feb 2025). Head of dinas Erma Epiyana; head of UPTD PPA Lia Rahmawati (Feb 2025). In Oct 2024 it handled psychological assessment of a viral KDRT victim. Rumah aman locations are deliberately not published.",
+  "field_confidence": {
+    "exists": "confirmed (2+ sources)",
+    "parent_dinas_address": "single source (KIM Banjarbaru, Jan 2024)",
+    "uptd_address": "unknown",
+    "kelurahan": "conflicting sources",
+    "whatsapp": "single source (official provincial portal)",
+    "services": "confirmed (2+ sources)",
+    "heads": "single source (ANTARA Feb 2025)",
+    "coords": "approx only",
+    "hours": "unknown",
+    "cost": "unknown"
+  },
+  "sources": [
+    {
+      "url": "https://sisapa.kalselprov.go.id/profil-uptd/2",
+      "note": "official SI SAPA Kalsel: UPTD PPA Kota Banjarbaru WA; address 'Data belum tersedia'",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://kalsel.antaranews.com/berita/450745/dinas-p3apmp2kb-banjarbaru-tangani-81-kasus-perempuan-dan-anak-selama-2024",
+      "note": "news Feb 2025: caseload, heads, complaint channels",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "http://suarabanuanews.com/2024/10/27/dp3apmp2kb-banjarbaru-lakukan-pendampingan-dan-pemeriksaan-psikologi-terhadap-korban-kdrt-yang-viral/",
+      "note": "news Oct 2024: pendampingan & pemeriksaan psikologi (search listing)",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://kim.banjarbarukota.go.id/2024/01/aditya-kantor-baru-dp3apmp2kb-mudah.html",
+      "note": "city KIM: new DP3APMP2KB office, Jl. Taman Gembira Barat",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://exa.ai/library/place/l47rsb813ph",
+      "note": "Exa 'DP3APPKB' pin in Mentaos, rejected as mismatched",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://kalsel.antaranews.com/berita/403800/pemprov-kalsel-sediakan-rumah-aman-bagi-korban-kekerasan",
+      "note": "news Feb 2024: rumah aman via UPTD kab/kota",
+      "checked": "2026-10-31"
+    }
+  ],
+  "validation_note": "The service and its WA number are confirmed by an official portal and news. The building location is not verified, so only a street-level approximation is given. The city DP3A website returned nothing useful.",
+  "id": "uptd-ppa-kota-banjarbaru",
+  "verified_at": "2026-10-31",
+  "status": "needs-check",
+  "open_issues": " approx_coords = OSM street midpoint, NOT a building pin; do not display as pin.",
+  "archived_from": "inbox/2026-10-31-explorer-pendampingan-batch3.json",
+  "short": "UPTD PPA Kota Banjarbaru",
+  "checked": "2026-10-31",
+  "address_display": "Kantor dinas: Jl. Taman Gembira Barat RT 05/RW 01",
+  "kelurahan_display": null,
+  "kecamatan_display": null,
+  "address_note_id": "Ini alamat kantor dinas (kantor baru sejak Januari 2024); alamat UPTD PPA sendiri belum dipublikasikan. Kelurahan berbeda antar sumber (Guntung Paikat / Komet).",
+  "note_id": "Alamat dan titik lokasi kantor UPTD PPA belum pasti. Nomor telepon kantor belum dipublikasikan; hubungi lewat WhatsApp.",
+  "booking_display": [
+    "Datang langsung ke kantor",
+    "WhatsApp"
+  ],
+  "services_display": [
+    "menerima pengaduan kekerasan terhadap perempuan & anak",
+    "penjangkauan korban",
+    "pendampingan kesehatan/psikologis (termasuk pemeriksaan psikologi)",
+    "pendampingan hukum",
+    "rujukan rumah aman (program provinsi lewat UPTD kab/kota)"
+  ],
+  "search_terms": [
+    "KDRT",
+    "kekerasan dalam rumah tangga",
+    "kekerasan anak",
+    "kekerasan perempuan",
+    "kekerasan seksual",
+    "pelecehan",
+    "korban kekerasan",
+    "perlindungan anak",
+    "pendampingan hukum",
+    "bantuan hukum"
+  ],
+  "city_display": "Banjarbaru",
+  "name_display": "UPTD PPA Kota Banjarbaru (Perlindungan Perempuan & Anak) – di bawah Dinas P3APMP2KB Kota Banjarbaru",
+  "contact_sources": [
+    {
+      "number": "0813-6533-6697",
+      "url": "https://sisapa.kalselprov.go.id/profil-uptd/2",
+      "note": "checked 2026-10-31: number appears on this page",
+      "checked": "2026-10-31"
+    }
+  ]
+}

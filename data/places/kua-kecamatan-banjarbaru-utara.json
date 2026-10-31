@@ -1,0 +1,137 @@
+{
+  "name": "KUA Kecamatan Banjarbaru Utara – bimbingan perkawinan (catin) & konsultasi keluarga",
+  "category": "layanan-pendampingan/konseling-keluarga/kua",
+  "subcategories": [
+    "bimbingan perkawinan calon pengantin",
+    "konsultasi keluarga sakinah",
+    "rujuk"
+  ],
+  "tags": [
+    "KUA",
+    "Kemenag",
+    "bimwin",
+    "catin",
+    "konseling keluarga"
+  ],
+  "scope": "local (Banjarbaru)",
+  "address": "Jl. Melati, Komet, Banjarbaru Utara 70714 (Google/Exa) — conflicting sources: an indozone 2026 guide says Jl. Karang Anyar",
+  "kelurahan": "Komet",
+  "kecamatan": "Banjarbaru Utara",
+  "city": "Banjarbaru",
+  "lat": -3.441213,
+  "lng": 114.834653,
+  "coord_method": "Exa Places (Google-Maps mirror)",
+  "approx_coords": null,
+  "contacts": {},
+  "hours": {
+    "office": "Mon–Thu 07.30–16.00, Fri 07.30–16.30 WITA, Sat–Sun closed (Exa/Google); indozone gives 08.00 start"
+  },
+  "schedule": [],
+  "services": [
+    "pendaftaran nikah (SIMKAH online)",
+    "bimbingan perkawinan catin",
+    "konsultasi keluarga sakinah / masalah rumah tangga"
+  ],
+  "cost": "bimwin free (Kemenag national); KUA consultation not priced in sources",
+  "price_range": "unknown",
+  "eligibility": "residents of Banjarbaru Utara (catin, married couples)",
+  "booking": [
+    "walk-in",
+    "simkah4.kemenag.go.id for marriage registration"
+  ],
+  "complaint_method": [
+    "walk-in"
+  ],
+  "local_notes": "Reviews (2021–2025) mention a small office near a school, with clear guidance on online registration. There are 5 KUA in Banjarbaru (Utara, Selatan, Landasan Ulin, Liang Anggang, Cempaka); only this one has been pinned. A Banjarbaru-specific BP4 counselling unit was NOT verified.",
+  "field_confidence": {
+    "exists": "confirmed (2+ sources)",
+    "address": "conflicting sources",
+    "coords": "single source",
+    "hours": "confirmed (2+ sources) (Exa + indozone, small difference)",
+    "family_consultation": "single source (indozone, 'berbagai sumber')",
+    "bimwin_free": "single source (national Kemenag source, not Banjarbaru-specific)",
+    "bp4": "unknown"
+  },
+  "sources": [
+    {
+      "url": "https://exa.ai/library/place/qcjb4pdzgyh",
+      "note": "Exa: coords, hours, reviews",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://kalsel.indozone.id/lifestyle/2486673292/kantor-kua-banjarbaru-alamat-jam-buka-dan-prosedur-layanan",
+      "note": "guide Feb 2026: 5 KUA, hours, services (low-quality aggregate)",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://kua.or.id/kemenag-siapkan-3700-fasilitator-profesional-bimbingan-perkawinan",
+      "note": "bimwin free (search listing)",
+      "checked": "2026-10-31"
+    }
+  ],
+  "validation_note": "Location comes from the Google pin with an address conflict. Counselling services are described generically, so treat them as single source.",
+  "id": "kua-kecamatan-banjarbaru-utara",
+  "verified_at": "2026-10-31",
+  "status": "needs-check",
+  "archived_from": "inbox/2026-10-31-explorer-pendampingan-batch3.json",
+  "short": "KUA Kecamatan Banjarbaru Utara",
+  "checked": "2026-10-31",
+  "open_issues": "Alamat berbeda antar sumber; layanan konsultasi keluarga baru dari satu sumber.",
+  "address_display": "Jl. Melati, Komet, Banjarbaru Utara 70714",
+  "kelurahan_display": "Komet",
+  "address_note_id": "Alamat berbeda antar sumber (Jl. Melati / Jl. Karang Anyar). Pastikan sebelum datang.",
+  "note_id": "Alamat berbeda antar sumber, dan layanan konsultasi keluarga baru tercatat dari satu sumber.",
+  "hours_normalized": [
+    {
+      "day": "senin",
+      "open": "07.30",
+      "close": "16.00"
+    },
+    {
+      "day": "selasa",
+      "open": "07.30",
+      "close": "16.00"
+    },
+    {
+      "day": "rabu",
+      "open": "07.30",
+      "close": "16.00"
+    },
+    {
+      "day": "kamis",
+      "open": "07.30",
+      "close": "16.00"
+    },
+    {
+      "day": "jumat",
+      "open": "07.30",
+      "close": "16.30"
+    },
+    {
+      "day": "sabtu",
+      "open": null,
+      "close": null,
+      "closed": true
+    },
+    {
+      "day": "minggu",
+      "open": null,
+      "close": null,
+      "closed": true
+    }
+  ],
+  "hours_note_id": "Jam kantor menurut Google; satu sumber lain menyebut buka mulai 08.00.",
+  "booking_display": [
+    "Datang langsung",
+    "Pendaftaran nikah lewat simkah4.kemenag.go.id"
+  ],
+  "search_terms": [
+    "konseling keluarga",
+    "konseling pernikahan",
+    "masalah rumah tangga",
+    "calon pengantin",
+    "bimbingan perkawinan",
+    "nikah"
+  ],
+  "city_display": "Banjarbaru"
+}

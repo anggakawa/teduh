@@ -1,0 +1,183 @@
+{
+  "name": "SLB Negeri Kota Banjarbaru",
+  "category": "tumbuh-kembang-anak/pendidikan/SLB",
+  "subcategories": [
+    "sekolah luar biasa"
+  ],
+  "tags": [
+    "SLB",
+    "ABK",
+    "bina diri",
+    "negeri"
+  ],
+  "address": "Jl. Abadi (III), Komp. Wengga, RT 44/RW 3, Guntungmanggis, Landasan Ulin 70721 (Google lists postcode 70731)",
+  "kelurahan": "Guntungmanggis",
+  "kecamatan": "Landasan Ulin",
+  "city": "Banjarbaru",
+  "lat": -3.474118,
+  "lng": 114.802905,
+  "coord_method": "Exa Places (Google Maps mirror) listing dskb0w2l1xs. It agrees with the Kemendikdasmen registry (-3.474, 114.8028) to within about 15 m.",
+  "contacts": {
+    "phone": "0511-5913369",
+    "email": "slbn.banjarbaru@gmail.com",
+    "website": "https://slbbanjarbaruku.wixsite.com/slbbjb",
+    "instagram": "@slbnbanjarbaru (exists: 807 followers, 351 posts)",
+    "facebook": "https://facebook.com/548209448709312"
+  },
+  "hours": {
+    "senin_kamis": "07.00–16.00",
+    "jumat": "07.00–11.30",
+    "sabtu_minggu": "tutup"
+  },
+  "schedule": [
+    {
+      "head": "Elik Supriyati (kepala sekolah, Kemendikdasmen)"
+    }
+  ],
+  "therapists": [],
+  "services": [
+    "TKLB",
+    "SDLB",
+    "SMPLB",
+    "SMLB",
+    "program bina diri"
+  ],
+  "price_range": "unknown",
+  "price_per_session": "unknown",
+  "bpjs": "unknown",
+  "waitlist": "unknown",
+  "booking": [],
+  "local_notes": "SK pendirian 036/2015 (5 Mar 2015). Land 4.819 m². The registry was updated 20 Feb 2026. Exa's organisation page says 'founded 2011', which conflicts with the 2015 SK.",
+  "field_confidence": {
+    "exists": "confirmed (2+ sources)",
+    "address": "confirmed (2+ sources)",
+    "coords": "confirmed (2+ sources)",
+    "phone": "confirmed (2+ sources) (registry + Google)",
+    "head": "single source",
+    "accreditation": "stale (>1 year)",
+    "email": "single source (registry)",
+    "hours": "single source (Google)",
+    "programs": "single source (registry)",
+    "founded": "conflicting sources"
+  },
+  "sources": [
+    {
+      "url": "https://referensi.data.kemendikdasmen.go.id/pendidikan/npsn/69896976",
+      "note": "official registry incl. coordinates",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://sekolah.data.kemendikdasmen.go.id/profil-sekolah/A7D19A91-59C1-43AE-BB3C-AEE5884B59CF",
+      "note": "official profile",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://idalamat.com/alamat/431464/slb-negeri-kota-banjarbaru-banjar-baru-kalimantan-selatan",
+      "note": "directory, phone",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://daftarsekolah.net/sekolah/473877/slb-negeri-kota-banjarbaru",
+      "note": "directory",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://exa.ai/library/place/dskb0w2l1xs",
+      "note": "Google-Maps-derived coordinates and hours",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://sekolah.data.kemendikdasmen.go.id/profil-sekolah/A7D19A91-59C1-43AE-BB3C-AEE5884B59CF",
+      "note": "official profile, lintang/bujur",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://referensi.data.kemdikbud.go.id/pendidikan/npsn/69896976",
+      "note": "registry: programs, SK, contacts",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://referensi.data.kemendikdasmen.go.id/snpmb/site/sekolah?npsn=69896976",
+      "note": "registry update 20 Feb 2026",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://www.instagram.com/slbnbanjarbaru/",
+      "note": "IG meta via curl",
+      "checked": "2026-10-31"
+    }
+  ],
+  "validation_note": "The registry coordinates are coarse (about 10 m precision at best) and school-reported.",
+  "id": "slb-negeri-kota-banjarbaru",
+  "verified_at": "2026-10-31",
+  "status": "active",
+  "open_issues": null,
+  "archived_from": "inbox/2026-10-31-explorer-tumbuhkembang-batch2.json",
+  "task": "(2) coordinates",
+  "what_changed": "Replaced the 4-decimal registry coordinate with the Google Maps coordinate, which two sources agree on. Added email, website, IG, FB, hours and programs.",
+  "history": [
+    {
+      "batch": "2b",
+      "date": "2026-10-31",
+      "what_changed": "Replaced the 4-decimal registry coordinate with the Google Maps coordinate, which two sources agree on. Added email, website, IG, FB, hours and programs."
+    }
+  ],
+  "short": "SLB Negeri Kota Banjarbaru",
+  "checked": "2026-10-31",
+  "address_display": "Jl. Abadi (III), Komp. Wengga, RT 44/RW 3, Guntung Manggis, Landasan Ulin",
+  "kelurahan_display": "Guntung Manggis",
+  "hours_normalized": [
+    {
+      "day": "senin",
+      "open": "07.00",
+      "close": "16.00"
+    },
+    {
+      "day": "selasa",
+      "open": "07.00",
+      "close": "16.00"
+    },
+    {
+      "day": "rabu",
+      "open": "07.00",
+      "close": "16.00"
+    },
+    {
+      "day": "kamis",
+      "open": "07.00",
+      "close": "16.00"
+    },
+    {
+      "day": "jumat",
+      "open": "07.00",
+      "close": "11.30"
+    },
+    {
+      "day": "sabtu",
+      "open": null,
+      "close": null,
+      "closed": true
+    },
+    {
+      "day": "minggu",
+      "open": null,
+      "close": null,
+      "closed": true
+    }
+  ],
+  "search_terms": [
+    "sekolah luar biasa",
+    "anak berkebutuhan khusus",
+    "disabilitas",
+    "sekolah negeri"
+  ],
+  "city_display": "Banjarbaru",
+  "contact_sources": [
+    {
+      "number": "0511-5913369",
+      "url": "https://referensi.data.kemendikdasmen.go.id/pendidikan/npsn/69896976",
+      "note": "checked 2026-10-31: number appears on this page",
+      "checked": "2026-10-31"
+    }
+  ]
+}

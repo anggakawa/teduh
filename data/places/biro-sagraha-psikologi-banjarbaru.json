@@ -1,0 +1,177 @@
+{
+  "name": "Biro Sagraha Psikologi Banjarbaru",
+  "category": "kesehatan-mental/biro-psikologi",
+  "subcategories": [
+    "psikolog",
+    "tumbuh kembang anak / ABK"
+  ],
+  "tags": [
+    "biro psikologi",
+    "anak",
+    "ABK",
+    "tumbuh kembang",
+    "tes IQ",
+    "konseling",
+    "terapi"
+  ],
+  "address": "Jl. Kelapa Gading I, Komp. Keruing Indah Blok C No. 15 (Google Maps) / No. 16 (idalamat) — UNRESOLVED",
+  "kelurahan": "Sungai Besar",
+  "kecamatan": "Banjarbaru Selatan",
+  "city": "Banjarbaru",
+  "lat": -3.459361,
+  "lng": 114.8535,
+  "contacts": {
+    "phone": "unknown (removed 2026-10-31: no owner-published public source; see CONTRIBUTING.md)",
+    "instagram": "@sagrahapsikologi (unconfirmed: IG profile returns login wall to anonymous fetch)",
+    "whatsapp": "unknown",
+    "website": "unknown",
+    "email": "unknown"
+  },
+  "hours": {
+    "senin_jumat": "09.00–18.00",
+    "sabtu": "09.00–13.00",
+    "minggu": "tutup"
+  },
+  "schedule": [
+    {
+      "practitioner": "Founder: Ibu Thaifah; psikolog co-founders: Ibu Kinan, Pak Fajar (full names/titles not given)",
+      "as_of": "~Mar 2025 (LinkedIn post)"
+    }
+  ],
+  "services": [
+    "konsultasi psikolog",
+    "konseling",
+    "terapi anak & dewasa",
+    "asesmen tumbuh kembang (DDST)",
+    "tes inteligensi (Stanford-Binet, CPM)"
+  ],
+  "price_range": "unknown",
+  "booking": [
+    "janji (phone) — no owner-published number yet"
+  ],
+  "local_notes": "Focus on child development / ABK. LinkedIn post (~Mar 2025, 6th anniversary) says Sagraha has 3 branches; this Banjarbaru one is the only branch located. Opened ~2019.",
+  "field_confidence": {
+    "exists": "confirmed (2+ sources)",
+    "address": "conflicting sources (house no. 15 vs 16)",
+    "phone": "removed 2026-10-31: no owner-published public source",
+    "hours": "confirmed (2+ sources)",
+    "practitioners": "single source (LinkedIn, ~Mar 2025, first names only)",
+    "services": "single source (LinkedIn profile of ex-staff, 2023–2024)"
+  },
+  "sources": [
+    {
+      "url": "https://idalamat.com/alamat/672731/biro-sagraha-psikologi-banjarbaru-banjar-baru-kalimantan-selatan",
+      "note": "directory",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://exa.ai/library/place/x169jrlprp0",
+      "note": "Google-Maps-derived, reviews to Jun 2025",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://www.linkedin.com/posts/stevanny-putri-nathalia-6185a0237_happy-6th-anniversarybiro-sagraha-psikologi-activity-7303229878118535169-zEUN",
+      "note": "LinkedIn 6th anniversary (search snippet only; fetch timed out)",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://exa.ai/library/place/x169jrlprp0",
+      "note": "Exa Places (Google-Maps-derived listing): No.15, [number removed], hours, reviews to 2025-06-24",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://idalamat.com/alamat/672731/biro-sagraha-psikologi-banjarbaru-banjar-baru-kalimantan-selatan",
+      "note": "directory: No.16, [number removed] (also mirrored at idalamat 672116)",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://www.linkedin.com/posts/stevanny-putri-nathalia-6185a0237_happy-6th-anniversarybiro-sagraha-psikologi-activity-7303229878118535169-zEUN",
+      "note": "LinkedIn ~Mar 2025: founders, 3 branches, ABK focus (search snippet; direct fetch timed out)",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://www.linkedin.com/in/stevanny-putri-nathalia-6185a0237",
+      "note": "LinkedIn profile: Tester & Crew Mar 2023–May 2024, DDST / Stanford-Binet / CPM (search snippet)",
+      "checked": "2026-10-31"
+    }
+  ],
+  "validation_note": "Exists and active (reviews to Jun 2025). The Google Maps listing (No.15) is the more likely current one since it is owner-editable, but this is a judgment, not verified.",
+  "id": "biro-sagraha-psikologi-banjarbaru",
+  "status": "needs-check",
+  "verified_at": "2026-10-31",
+  "archived_from": "inbox/2026-10-31-explorer-kesehatan-mental-batch1.json",
+  "what_changed": "Added founders/psychologists (first names), ABK/tumbuh-kembang focus, test instruments, 3-branch note. Phone and house-number conflict NOT resolved: reverse searches on both numbers returned nothing; no third source (IG blocked, not in HIMPSI 2024 biro list). Needs a phone call or IG check.",
+  "history": [
+    {
+      "batch": "1b",
+      "date": "2026-10-31",
+      "what_changed": "Added founders/psychologists (first names), ABK/tumbuh-kembang focus, test instruments, 3-branch note. Phone and house-number conflict NOT resolved: reverse searches on both numbers returned nothing; no third source (IG blocked, not in HIMPSI 2024 biro list). Needs a phone call or IG check."
+    },
+    {
+      "batch": "privacy-audit",
+      "date": "2026-10-31",
+      "what_changed": "Phone consent policy: removed 2 phone/WhatsApp number(s) that had no owner-published public source in this record (Google-Maps mirrors, directories, third-party pages or personal contacts). Re-add only with a contact_sources link where the owner publishes the number."
+    }
+  ],
+  "open_issues": "house no. 15 vs 16 conflict; phone numbers removed (no owner-published source); needs a call",
+  "also_in_categories": [
+    "tumbuh-kembang-anak"
+  ],
+  "short": "Biro Sagraha Psikologi Banjarbaru",
+  "checked": "2026-10-31",
+  "address_display": "Jl. Kelapa Gading I, Komp. Keruing Indah Blok C No. 15/16",
+  "kelurahan_display": "Sungai Besar",
+  "address_note_id": "Nomor rumah belum pasti (15 atau 16). Tanyakan saat menelepon.",
+  "note_id": "Ada 2 nomor rumah (15 atau 16) dari sumber berbeda. Nomor telepon belum dicantumkan karena belum ada sumber resmi dari pemiliknya.",
+  "hours_normalized": [
+    {
+      "day": "senin",
+      "open": "09.00",
+      "close": "18.00"
+    },
+    {
+      "day": "selasa",
+      "open": "09.00",
+      "close": "18.00"
+    },
+    {
+      "day": "rabu",
+      "open": "09.00",
+      "close": "18.00"
+    },
+    {
+      "day": "kamis",
+      "open": "09.00",
+      "close": "18.00"
+    },
+    {
+      "day": "jumat",
+      "open": "09.00",
+      "close": "18.00"
+    },
+    {
+      "day": "sabtu",
+      "open": "09.00",
+      "close": "13.00"
+    },
+    {
+      "day": "minggu",
+      "open": null,
+      "close": null,
+      "closed": true
+    }
+  ],
+  "booking_display": [
+    "Lewat telepon (nomor resmi belum tercatat)"
+  ],
+  "search_terms": [
+    "psikolog",
+    "konseling",
+    "anak berkebutuhan khusus",
+    "tes inteligensi",
+    "tes kecerdasan",
+    "psikotes",
+    "tumbuh kembang anak"
+  ],
+  "city_display": "Banjarbaru"
+}

@@ -1,0 +1,143 @@
+{
+  "name": "Bina Autis Indonesia / Layanan Inklusi Yayasan Cahaya Keluarga Madani (SDI Al Madani)",
+  "category": "tumbuh-kembang-anak/terapi-ABK/sekolah-inklusi",
+  "subcategories": [
+    "terapi autisme",
+    "sekolah inklusi",
+    "bina diri"
+  ],
+  "tags": [
+    "autis",
+    "ABA",
+    "terapi wicara",
+    "okupasi",
+    "sensori integrasi",
+    "inklusi"
+  ],
+  "address": "Jl. Raya Guntung Manggis RT 18/RW III",
+  "kelurahan": "Guntungmanggis",
+  "kecamatan": "Landasan Ulin",
+  "city": "Banjarbaru",
+  "lat": -3.469175,
+  "lng": 114.789652,
+  "coord_method": "Exa Places (Google-Maps mirror)",
+  "contacts": {
+    "phone_whatsapp": "0818-505-808",
+    "email": "yckm.bjb@gmail.com",
+    "website": "https://www.almadanibanjarbaru.sch.id/difabel"
+  },
+  "hours": {
+    "senin_jumat": "09.00–17.00 (Exa)"
+  },
+  "schedule": [],
+  "therapists": [],
+  "services": [
+    "terapi ABA, wicara, okupasi, sensori integrasi, aktivitas, bermain (ULM paper)",
+    "bina diri",
+    "pendidikan inklusif SD",
+    "pendampingan difabel non-formal",
+    "asesmen psikolog (via jejaring)",
+    "Kejar Paket modifikasi"
+  ],
+  "price_range": "unknown",
+  "price_per_session": "unknown",
+  "bpjs": "unknown",
+  "waitlist": "unknown",
+  "booking": [],
+  "local_notes": "A ULM paper reports 23 ABK enrolled. The yayasan explicitly invites families and the community to consult (WA admin), so it is open to the public, not only enrolled pupils.",
+  "field_confidence": {
+    "exists": "confirmed (2+ sources)",
+    "address": "confirmed (2+ sources)",
+    "phone": "confirmed (2+ sources)",
+    "coords": "single source",
+    "therapy_types": "single source (ULM journal; date not re-checked, treat as possibly stale (>1 year))",
+    "public_access": "single source (official site)",
+    "price": "unknown",
+    "bpjs": "not applicable / unknown"
+  },
+  "sources": [
+    {
+      "url": "https://exa.ai/library/place/bcm30m7by72",
+      "note": "Google-Maps-derived",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://doi.org/10.20527/jtamlanting.v10i1.630",
+      "note": "ULM journal: Pusat Pelayanan Autis di Banjarbaru",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://www.almadanibanjarbaru.sch.id/difabel",
+      "note": "official yayasan inclusion page",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://idr.uin-antasari.ac.id/28201/7/BAB%20IV.pdf",
+      "note": "UIN thesis on SDI Al Madani",
+      "checked": "2026-10-31"
+    }
+  ],
+  "validation_note": "Well corroborated. The therapy menu comes from an academic paper, so the current offering should be confirmed by WA.",
+  "id": "bina-autis-indonesia-layanan-inklusi-yayasan-cahaya-keluarga",
+  "verified_at": "2026-10-31",
+  "status": "active",
+  "archived_from": "inbox/2026-10-31-explorer-tumbuhkembang-batch2.json",
+  "short": "Bina Autis Indonesia",
+  "checked": "2026-10-31",
+  "address_display": "Jl. Raya Guntung Manggis RT 18/RW III",
+  "kelurahan_display": "Guntung Manggis",
+  "hours_normalized": [
+    {
+      "day": "senin",
+      "open": "09.00",
+      "close": "17.00"
+    },
+    {
+      "day": "selasa",
+      "open": "09.00",
+      "close": "17.00"
+    },
+    {
+      "day": "rabu",
+      "open": "09.00",
+      "close": "17.00"
+    },
+    {
+      "day": "kamis",
+      "open": "09.00",
+      "close": "17.00"
+    },
+    {
+      "day": "jumat",
+      "open": "09.00",
+      "close": "17.00"
+    }
+  ],
+  "services_display": [
+    "terapi ABA, wicara, okupasi, sensori integrasi, aktivitas, bermain (menurut makalah ULM)",
+    "bina diri",
+    "pendidikan inklusif SD",
+    "pendampingan difabel nonformal",
+    "asesmen psikolog (lewat jejaring)",
+    "Kejar Paket modifikasi"
+  ],
+  "search_terms": [
+    "autisme",
+    "anak berkebutuhan khusus",
+    "difabel",
+    "disabilitas",
+    "inklusi",
+    "keterlambatan bicara",
+    "speech therapy",
+    "terapi okupasi"
+  ],
+  "city_display": "Banjarbaru",
+  "contact_sources": [
+    {
+      "number": "0818-505-808",
+      "url": "https://www.almadanibanjarbaru.sch.id/difabel",
+      "note": "checked 2026-10-31: number appears on this page",
+      "checked": "2026-10-31"
+    }
+  ]
+}

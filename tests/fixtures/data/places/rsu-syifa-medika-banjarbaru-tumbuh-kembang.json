@@ -1,0 +1,157 @@
+{
+  "name": "RSU Syifa Medika Banjarbaru – Klinik Spesialis Rehabilitasi Medik & Klinik Spesialis Anak (tumbuh kembang)",
+  "category": "tumbuh-kembang-anak/rumah-sakit/rehab-medik",
+  "subcategories": [
+    "rehabilitasi medik",
+    "fisioterapi",
+    "terapi okupasi",
+    "terapi wicara",
+    "pemantauan tumbuh kembang",
+    "deteksi stunting"
+  ],
+  "tags": [
+    "RS swasta",
+    "BPJS",
+    "Sp.KFR",
+    "Sp.A(K)",
+    "screening tumbuh kembang"
+  ],
+  "address": "Jl. R.O. Ulin No. 93",
+  "kelurahan": "Loktabat Selatan",
+  "kecamatan": "Banjarbaru Selatan",
+  "city": "Banjarbaru",
+  "lat": -3.458218,
+  "lng": 114.816687,
+  "coord_method": "Exa Places (Google-Maps mirror)",
+  "contacts": {
+    "phone_operator": "0511 5910 889",
+    "whatsapp_poli": "0821 5342 4447",
+    "whatsapp_eksekutif": "0821 5461 8061",
+    "homecare": "0821 5421 2947",
+    "email": "info.rsusyifamedika@gmail.com",
+    "website": "https://rsusyifamedika.co.id/"
+  },
+  "hours": {},
+  "schedule": [
+    {
+      "practitioner": "dr. Teguh Purwanti, Sp.K.F.R.",
+      "poli_reguler_BPJS": "Jum 17.00–selesai, Sab 09.00–selesai",
+      "eksekutif": "Sab 13.00–14.00"
+    },
+    {
+      "practitioner": "dr. Mami Losa Rama S, Sp.KFR",
+      "time": "Sen, Rab, Kam 14.00–selesai (search synthesis of official doctor list only)"
+    },
+    {
+      "practitioner": "dr. Choirul Anam, Sp.A(K), M.Biomed",
+      "time": "Sen–Jum 18.30 (or 17.00)–selesai, Sab 16.00–selesai"
+    }
+  ],
+  "therapists": [
+    "fisioterapis, terapis okupasi, terapis wicara listed by role only, no names"
+  ],
+  "services": [
+    "konsultasi Sp.KFR",
+    "fisioterapi",
+    "terapi okupasi",
+    "terapi wicara",
+    "pemantauan tumbuh kembang & deteksi stunting (Klinik Anak)",
+    "Screening Tumbuh Kembang Anak via Syifa Medika Mobile"
+  ],
+  "price_range": "unknown",
+  "price_per_session": "unknown",
+  "bpjs": "Yes: doctor page labels the regular poli as 'Poli Reguler (BPJS)'",
+  "waitlist": "unknown",
+  "booking": [
+    "WA pendaftaran poli 0821 5342 4447",
+    "Syifa Medika Mobile app"
+  ],
+  "local_notes": "The rehab page reads as adult/neuro-oriented. Child therapy is plausible but not explicitly advertised, so confirm by WA. Schedules 'dapat berubah sewaktu-waktu'.",
+  "field_confidence": {
+    "exists": "confirmed (2+ sources)",
+    "address": "confirmed (2+ sources)",
+    "coords": "single source",
+    "rehab_services": "single source (official page)",
+    "dr_Teguh_schedule": "single source (official doctor page)",
+    "dr_Mami": "single source (synthesis of official list, not opened)",
+    "pediatric_tumbuh_kembang": "single source (official)",
+    "bpjs": "single source (official)",
+    "price": "unknown",
+    "waitlist": "unknown"
+  },
+  "sources": [
+    {
+      "url": "https://rsusyifamedika.co.id/klinik-spesialis-rehabilitasi-medik/",
+      "note": "official rehab clinic page",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://rsusyifamedika.co.id/dr-teguh-purwanti-sp-kfr/",
+      "note": "official doctor page, BPJS schedule",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://rsusyifamedika.co.id/draft-dokter-kami/",
+      "note": "official doctor list",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://rsusyifamedika.co.id/",
+      "note": "official site; Klinik Anak, contacts",
+      "checked": "2026-10-31"
+    }
+  ],
+  "validation_note": "The hospital and its contacts are confirmed (official site plus batch 1). It is not confirmed that the child-specific rehab is separate from adult rehab.",
+  "facility_id": "rsu-syifa-medika-banjarbaru",
+  "id": "rsu-syifa-medika-banjarbaru-tumbuh-kembang",
+  "verified_at": "2026-10-31",
+  "status": "active",
+  "archived_from": "inbox/2026-10-31-explorer-tumbuhkembang-batch2.json",
+  "short": "RSU Syifa Medika – Rehab Medik & Tumbuh Kembang",
+  "checked": "2026-10-31",
+  "address_display": "Jl. R.O. Ulin No. 93",
+  "kelurahan_display": "Loktabat Selatan",
+  "services_display": [
+    "konsultasi dokter Sp.KFR",
+    "fisioterapi",
+    "terapi okupasi",
+    "terapi wicara",
+    "pemantauan tumbuh kembang & deteksi stunting (Klinik Anak)",
+    "skrining tumbuh kembang anak lewat aplikasi Syifa Medika Mobile"
+  ],
+  "search_terms": [
+    "keterlambatan bicara",
+    "terlambat bicara",
+    "speech therapy",
+    "fisioterapi anak",
+    "tumbuh kembang anak",
+    "rumah sakit"
+  ],
+  "city_display": "Banjarbaru",
+  "contact_sources": [
+    {
+      "number": "0511 5910 889",
+      "url": "https://rsusyifamedika.co.id/",
+      "note": "checked 2026-10-31: number appears on this page",
+      "checked": "2026-10-31"
+    },
+    {
+      "number": "0821 5342 4447",
+      "url": "https://rsusyifamedika.co.id/",
+      "note": "checked 2026-10-31: number appears on this page",
+      "checked": "2026-10-31"
+    },
+    {
+      "number": "0821 5461 8061",
+      "url": "https://rsusyifamedika.co.id/",
+      "note": "checked 2026-10-31: number appears on this page",
+      "checked": "2026-10-31"
+    },
+    {
+      "number": "0821 5421 2947",
+      "url": "https://rsusyifamedika.co.id/",
+      "note": "checked 2026-10-31: number appears on this page",
+      "checked": "2026-10-31"
+    }
+  ]
+}

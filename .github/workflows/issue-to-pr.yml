@@ -1,0 +1,97 @@
+# Issue form -> place JSON -> pull request.
+# Runs when a maintainer adds the label "data-submission" to an issue opened from a Teduh form
+# (forms only add "usulan-data"; the extra label is the human triage step against spam).
+# The issue body is untrusted: it is passed through an env var into a file, never into a
+# shell command or expression, and the generator validates every field.
+name: Usulan data ke PR
+
+on:
+  issues:
+    types: [labeled]
+
+permissions: {}
+
+concurrency:
+  group: data-issue-${{ github.event.issue.number }}
+  cancel-in-progress: false
+
+jobs:
+  submission:
+    if: github.event.label.name == 'data-submission' && !github.event.issue.pull_request
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+    env:
+      ISSUE: ${{ github.event.issue.number }}
+      # PRs opened with the default GITHUB_TOKEN do not trigger the PR CI workflow.
+      # Set TEDUH_BOT_TOKEN (GitHub App or machine-user token, NOT a code owner) to get CI on bot PRs.
+      GH_TOKEN: ${{ secrets.TEDUH_BOT_TOKEN || github.token }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          token: ${{ secrets.TEDUH_BOT_TOKEN || github.token }}
+
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install
+        run: pip install -r requirements.txt
+
+      - name: Save issue body (untrusted) to a file
+        env:
+          BODY: ${{ github.event.issue.body }}
+        run: |
+          printf '%s' "$BODY" > "$RUNNER_TEMP/body.md"
+          cp -r data "$RUNNER_TEMP/base-data"
+
+      - name: Generate or patch place JSON
+        id: gen
+        run: |
+          set +e
+          python scripts/issue_to_place.py --body-file "$RUNNER_TEMP/body.md" --issue "$ISSUE" --out "$RUNNER_TEMP/out"
+          code=$?
+          echo "code=$code" >> "$GITHUB_OUTPUT"
+          [ "$code" -le 2 ] || exit "$code"
+          [ "$code" -ne 1 ] || exit 1
+
+      - name: Rejected - comment on the issue
+        if: steps.gen.outputs.code == '2'
+        run: |
+          gh issue comment "$ISSUE" --body-file "$RUNNER_TEMP/out/comment.md"
+          gh issue edit "$ISSUE" --remove-label data-submission --add-label perlu-perbaikan || true
+
+      - name: Validate (schema, hard rules, guard, build)
+        if: steps.gen.outputs.code == '0'
+        run: |
+          python scripts/validate.py
+          python scripts/guard_pr.py --base "$RUNNER_TEMP/base-data" --head data --author "github-actions[bot]" --codeowners .github/CODEOWNERS
+          python scripts/build-data.py --strict --out "$RUNNER_TEMP/site-data"
+
+      - name: Open or update the pull request
+        if: steps.gen.outputs.code == '0'
+        run: |
+          out="$RUNNER_TEMP/out"
+          branch=$(jq -r .branch "$out/summary.json")
+          title=$(jq -r .title "$out/summary.json")
+          file=$(jq -r .file "$out/summary.json")
+          base=$(git rev-parse --abbrev-ref HEAD)
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -C "$branch"
+          git add -- "$file"
+          git commit -m "$title" -m "Dari issue #$ISSUE (otomatis, status needs-check)."
+          git push --force origin "$branch"
+          url=$(gh pr list --head "$branch" --state open --json url --jq '.[0].url // empty')
+          if [ -z "$url" ]; then
+            url=$(gh pr create --base "$base" --head "$branch" --title "$title" --body-file "$out/pr_body.md")
+          else
+            gh pr edit "$url" --title "$title" --body-file "$out/pr_body.md"
+          fi
+          sed "s#__PR_URL__#$url#" "$out/comment.md" > "$out/comment-final.md"
+          gh issue comment "$ISSUE" --body-file "$out/comment-final.md"
+          gh issue edit "$ISSUE" --remove-label perlu-perbaikan || true

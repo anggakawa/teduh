@@ -1,0 +1,86 @@
+# PR checks. Uses pull_request (not pull_request_target): fork PRs run read-only, without secrets.
+name: CI
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  data:
+    name: Data (schema, rules, guard, build, tests)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install
+        run: pip install -r requirements.txt
+
+      - name: JSON Schema + hard rules (approx_coords never a pin, ids, sources, no markup)
+        run: python scripts/validate.py
+
+      - name: Guard (no contributor flip to verified; pin provenance; new sources are URLs)
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          AUTHOR: ${{ github.event.pull_request.user.login }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/base"
+          # CODEOWNERS comes from the base branch, so a PR cannot add its own author.
+          git archive "$BASE_SHA" data .github/CODEOWNERS | tar -x -C "$RUNNER_TEMP/base"
+          python scripts/guard_pr.py --base "$RUNNER_TEMP/base/data" --head data \
+            --author "$AUTHOR" --codeowners "$RUNNER_TEMP/base/.github/CODEOWNERS"
+
+      - name: build-data.py
+        run: python scripts/build-data.py --strict
+
+      - name: Pipeline tests (sample issues, generator, validator, guard)
+        run: python tests/test_pipeline.py
+
+  ui:
+    name: UI check (check.mjs on the frozen fixture)
+    needs: data
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: "22"
+
+      - name: Install playwright-core (uses the runner's Google Chrome)
+        run: npm install --no-save --prefix "$RUNNER_TEMP/pw" playwright-core@1.64.1
+
+      - name: Build the site against tests/fixtures/data and run check.mjs
+        env:
+          PW_DIR: ${{ runner.temp }}/pw
+          SITE_DIR: ${{ runner.temp }}/uisite
+          CHROME: /usr/bin/google-chrome
+        run: |
+          cp -r site "$SITE_DIR"
+          python scripts/build-data.py --src tests/fixtures/data --out "$SITE_DIR/data" --strict
+          (cd "$SITE_DIR" && python -m http.server 8765 >/dev/null 2>&1 &)
+          sleep 1
+          node scripts/check.mjs http://localhost:8765/

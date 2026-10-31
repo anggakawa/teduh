@@ -1,0 +1,154 @@
+{
+  "name": "Posbakum Pengadilan Negeri Banjarbaru",
+  "category": "layanan-pendampingan/bantuan-hukum/posbakum",
+  "subcategories": [
+    "informasi hukum",
+    "konsultasi",
+    "advis",
+    "pembuatan dokumen",
+    "rujukan ke OBH"
+  ],
+  "tags": [
+    "Posbakum",
+    "gratis",
+    "pidana",
+    "perdata",
+    "Perma 1/2014",
+    "pengadilan negeri"
+  ],
+  "scope": "local (Banjarbaru)",
+  "address": "Jl. Trikora No.3, Banjarbaru 70714 (court building)",
+  "kelurahan": "Guntung Paikat (search synthesis of official address page; not opened)",
+  "kecamatan": "Banjarbaru Selatan",
+  "city": "Banjarbaru",
+  "lat": -3.461148,
+  "lng": 114.832234,
+  "coord_method": "Exa Places (Google-Maps mirror) (court building)",
+  "approx_coords": null,
+  "contacts": {
+    "phone": "+62 511 4782115",
+    "email": "pn.banjarbarukalsel@gmail.com",
+    "website": "https://pn-banjarbaru.go.id/"
+  },
+  "hours": {
+    "court_office": "Mon–Thu 08.00–16.30, Fri 08.00–17.00 WITA, Sat–Sun closed (Exa/Google)",
+    "posbakum": "unknown"
+  },
+  "schedule": [],
+  "services": [
+    "informasi, konsultasi, advis hukum",
+    "pembuatan dokumen hukum",
+    "rujukan ke Organisasi Bantuan Hukum (OBH) for representation"
+  ],
+  "cost": "free",
+  "price_range": "unknown",
+  "eligibility": "people unable to pay (SKTM / social-assistance card / statement), whether plaintiff, defendant, accused or witness (Perma 1/2014)",
+  "booking": [
+    "walk-in at PN PTSP/Posbakum desk"
+  ],
+  "complaint_method": [
+    "PN contacts"
+  ],
+  "local_notes": "Recent Google reviews (2025–26) praise the PTSP. The Posbakum page itself dates from 2019, and the current operating OBH is not named.",
+  "field_confidence": {
+    "exists": "confirmed (2+ sources)",
+    "address": "confirmed (2+ sources) (Exa + official/search)",
+    "coords": "single source",
+    "hours": "single source",
+    "phone": "single source",
+    "posbakum_details": "stale (>1 year) (2019 official page)",
+    "cost": "confirmed (2+ sources) (official page + Perma 1/2014)"
+  },
+  "sources": [
+    {
+      "url": "https://exa.ai/library/place/thntyzgggz9",
+      "note": "Exa: coords, hours, phone, email",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://pn-banjarbaru.go.id/web/index.php/layanan-hukum/layanan-bantuan-hukum/pos-bantuan-hukum",
+      "note": "official Posbakum page (2019)",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://pn-banjarbaru.go.id/web/index.php/tentang-pengadilan/profil-pengadilan/alamat-pengadilan",
+      "note": "official address page (search listing)",
+      "checked": "2026-10-31"
+    }
+  ],
+  "validation_note": "The court is confirmed. The Posbakum details are from 2019 and need re-checking, and the Posbakum's own hours and current operator are unknown.",
+  "id": "posbakum-pengadilan-negeri-banjarbaru",
+  "verified_at": "2026-10-31",
+  "status": "needs-check",
+  "archived_from": "inbox/2026-10-31-explorer-pendampingan-batch3.json",
+  "short": "Posbakum Pengadilan Negeri Banjarbaru",
+  "checked": "2026-10-31",
+  "open_issues": "Info Posbakum dari 2019; jam layanan dan pengelola saat ini belum diketahui.",
+  "address_display": "Jl. Trikora No. 3, Banjarbaru 70714 (gedung pengadilan)",
+  "kelurahan_display": "Guntung Paikat",
+  "note_id": "Info Posbakum dari 2019; jam layanan dan pengelola saat ini belum diketahui.",
+  "hours_normalized": [
+    {
+      "day": "senin",
+      "open": "08.00",
+      "close": "16.30"
+    },
+    {
+      "day": "selasa",
+      "open": "08.00",
+      "close": "16.30"
+    },
+    {
+      "day": "rabu",
+      "open": "08.00",
+      "close": "16.30"
+    },
+    {
+      "day": "kamis",
+      "open": "08.00",
+      "close": "16.30"
+    },
+    {
+      "day": "jumat",
+      "open": "08.00",
+      "close": "17.00"
+    },
+    {
+      "day": "sabtu",
+      "open": null,
+      "close": null,
+      "closed": true
+    },
+    {
+      "day": "minggu",
+      "open": null,
+      "close": null,
+      "closed": true
+    }
+  ],
+  "hours_note_id": "Jam kantor Pengadilan Negeri. Jam Posbakum sendiri belum diketahui.",
+  "booking_display": [
+    "Datang langsung ke meja PTSP/Posbakum di Pengadilan Negeri"
+  ],
+  "services_display": [
+    "informasi, konsultasi, advis hukum",
+    "pembuatan dokumen hukum",
+    "rujukan ke Organisasi Bantuan Hukum (OBH) untuk pendampingan perkara"
+  ],
+  "search_terms": [
+    "bantuan hukum",
+    "konsultasi hukum",
+    "hukum gratis",
+    "pidana",
+    "perdata"
+  ],
+  "city_display": "Banjarbaru",
+  "contact_sources": [
+    {
+      "number": "+62 511 4782115",
+      "url": "https://pn-banjarbaru.go.id/web/index.php/layanan-hukum/layanan-bantuan-hukum/pos-bantuan-hukum",
+      "note": "checked 2026-10-31: number appears on this page",
+      "checked": "2026-10-31"
+    }
+  ]
+}

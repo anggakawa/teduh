@@ -1,0 +1,144 @@
+{
+  "name": "Klinik Psikologi FUSFA (Jehan Safitri, S.Psi., M.Psi., Psikolog)",
+  "category": "kesehatan-mental/psikolog",
+  "subcategories": [
+    "psikolog klinis praktik / klinik psikologi",
+    "terapi anak berkebutuhan khusus (ABK)"
+  ],
+  "tags": [
+    "psikolog klinis",
+    "klinik psikologi",
+    "anak",
+    "ABK",
+    "terapi anak",
+    "dewasa",
+    "SIPP aktif",
+    "satu lokasi dengan homestay"
+  ],
+  "address": "Jl. Panglima Batur Timur No. 17, RT 02 RW 03",
+  "kelurahan": "Loktabat Utara",
+  "kecamatan": "Banjarbaru Utara",
+  "city": "Banjarbaru",
+  "lat": -3.439302,
+  "lng": 114.833468,
+  "latlng_method": "Exa Places (Google-Maps-derived listing 'Klinik Psikologi Fusfa'). The same-address Google listing 'Fusfa Homestay' sits at -3.439412, 114.83373 (~30 m), so the location agrees.",
+  "contacts": {
+    "phone": "unknown (removed 2026-10-31: no owner-published public source; see CONTRIBUTING.md)",
+    "whatsapp": "unknown (removed 2026-10-31: no owner-published public source; see CONTRIBUTING.md)",
+    "instagram": "unknown; '@klinikpsikologifusfa' appears only in a web-search summary and the profile could not be read (login wall), so it is unconfirmed",
+    "website": "unknown",
+    "email": "unknown (removed 2026-10-31: personal email of the practitioner, not published by the clinic itself)"
+  },
+  "hours": "unknown (no source gives clinic hours)",
+  "schedule": [
+    {
+      "practitioner": "Jehan Safitri, S.Psi., M.Psi., Psikolog",
+      "role": "psikolog penanggung jawab (the only permanent psychologist, per HIMPSI 2024)",
+      "note": "Also a full-time lecturer (Lektor) at S1 Psikologi ULM Banjarbaru, so clinic hours are probably limited. Confirm by phone."
+    }
+  ],
+  "services": [
+    "konsultasi psikolog klinis (HIMPSI scope: Klinis)",
+    "konseling dan terapi anak & dewasa (directory description, generic)",
+    "terapi anak berkebutuhan khusus (2015 ULM community-service project 'di klinik terapi fusfa banjarbaru', a diet programme for ABK)"
+  ],
+  "price_range": "unknown",
+  "booking": [
+    "janji via phone (no owner-published number yet)"
+  ],
+  "local_notes": "Founded 10 Jan 2010 (HIMPSI). SIPP 20100605-2023-03-1784, valid to 02 Aug 2028; SIAP 20100605, listed validity 09 Mar 2024 (may be lapsed or renewed, unverified). Shares the address with 'Fusfa Homestay' (homestay syariah, 14 rooms, opened 2019), so look for the clinic sign at the homestay. Near Lapangan Murjani and the Panglima Batur area. Jehan Safitri was head of Bidang Sertifikasi & Ijin Praktik at HIMPSI Kalsel (2018–2022), her M.Psi Profesi is from Unair (2010), and she teaches clinical psychology, counselling and psychotherapy. She is NOT on the IPK Banjarbaru clinical registry page (HIMPSI is a separate body).",
+  "field_confidence": {
+    "exists": "confirmed (2+ sources) (HIMPSI 2024 list + Google Maps/Exa 'Klinik Psikologi Fusfa' + idalamat + ULM biodata)",
+    "address": "confirmed (2+ sources) (HIMPSI, Exa, idalamat, ULM biodata)",
+    "kelurahan_kecamatan": "confirmed (2+ sources) (Exa + idalamat)",
+    "lat_lng": "confirmed (2+ sources) (Exa clinic + Exa homestay at same address)",
+    "practitioner": "confirmed (2+ sources) (HIMPSI + ULM biodata/Sitendik + HIMPSI Kalsel)",
+    "mobile_phone": "confirmed (2+ sources) (HIMPSI 2024 + ULM biodata; biodata is stale (>1 year))",
+    "landline": "single source (idalamat)",
+    "email": "confirmed (2+ sources)",
+    "licence_SIPP": "single source (HIMPSI 2024 list)",
+    "services": "single source (HIMPSI scope) / stale (>1 year) (2015 ABK project)",
+    "hours": "unknown",
+    "price": "unknown",
+    "instagram": "unverified",
+    "phone": "removed 2026-10-31: no owner-published public source"
+  },
+  "sources": [
+    {
+      "url": "https://praditadirgantara.sch.id/wp-content/uploads/2024/01/LIST-BIRO-HIMPSI-INDONESIA.pdf",
+      "note": "HIMPSI 'Daftar Fasilitas Layanan Psikologi' (2024), row 225: FUSFA, address, [number removed], founded 2010, 1 psychologist, SIPP, scope Klinis",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://exa.ai/library/place/hrmq6x3kn5z",
+      "note": "Exa Places (Google Maps): 'Klinik Psikologi Fusfa', psychologist, Open, coords, 5.0 from 3 reviews, latest review 2025-11-20",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://exa.ai/library/place/h3mnzvkh3kl",
+      "note": "Exa Places: 'Fusfa Homestay', same address, coords ~30 m away, phone [number removed] (homestay), reviews to 2026-01",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://idalamat.com/alamat/672734/fusfa-homestay-dan-klinik-psikologi-banjar-baru-kalimantan-selatan",
+      "note": "directory 'Fusfa Homestay Dan Klinik Psikologi': Loktabat Utara, Banjarbaru Utara 70711, [number removed] (also mirrored at idalamat 672121)",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://psikologi.ulm.ac.id/id/wp-content/uploads/2016/02/Biodata-Jehan.pdf",
+      "note": "ULM lecturer biodata (~2016): 2015 ABK project at 'klinik terapi fusfa banjarbaru' (personal contact details not copied)",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://sitendik.ulm.ac.id/index.php/dosen/tabel/73201",
+      "note": "ULM staff table: Jehan Safitri, Lektor, active (search snippet)",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://himpsikalsel.org/index.php/susunan-pengurus-himpsi-wilayah-kalsel-periode-2014-2019/",
+      "note": "HIMPSI Kalsel board: Jehan Safitri, M.Psi, Psikolog, head of certification & practice licensing",
+      "checked": "2026-10-31"
+    },
+    {
+      "url": "https://data.ipkindonesia.or.id/layanan-psikologi-klinis/banjar-baru/",
+      "note": "IPK Banjarbaru list: she is not listed (checked, negative)",
+      "checked": "2026-10-31"
+    }
+  ],
+  "what_changed": "New entry. The batch-1b lead is promoted to confirmed: an independent Google Maps listing (via Exa) and the ULM biodata corroborate the HIMPSI row. Added coordinates, kelurahan/kecamatan, landline, licence details, ABK-therapy history and the homestay co-location note.",
+  "validation_note": "Confirmed: the clinic exists at this address (the Maps listing is marked open, with a review from Nov 2025), and the practitioner is a licensed psychologist (SIPP valid to 2028 per HIMPSI). Gaps: hours, prices, socials and an itemised service list. The only numbers found were the practitioner's personal mobile and directory listings, so no number is published here. Searches on X and Instagram turned up nothing.",
+  "id": "klinik-psikologi-fusfa",
+  "status": "active",
+  "verified_at": "2026-10-31",
+  "open_issues": "hours, price, phone and WA unknown (numbers removed: no owner-published source); IG unconfirmed",
+  "archived_from": "inbox/2026-10-31-explorer-fusfa.json",
+  "also_in_categories": [
+    "tumbuh-kembang-anak"
+  ],
+  "short": "Klinik Psikologi FUSFA",
+  "checked": "2026-10-31",
+  "address_display": "Jl. Panglima Batur Timur No. 17, RT 02 RW 03",
+  "kelurahan_display": "Loktabat Utara",
+  "note_id": "Jam buka, biaya, dan nomor telepon resmi belum diketahui.",
+  "booking_display": [
+    "Lewat telepon (nomor resmi belum tercatat)"
+  ],
+  "services_display": [
+    "konsultasi psikolog klinis (bidang Klinis menurut HIMPSI)",
+    "konseling dan terapi anak & dewasa (deskripsi umum dari direktori)",
+    "terapi anak berkebutuhan khusus (menurut kegiatan pengabdian ULM 2015)"
+  ],
+  "search_terms": [
+    "psikolog",
+    "konseling",
+    "anak berkebutuhan khusus"
+  ],
+  "city_display": "Banjarbaru",
+  "history": [
+    {
+      "batch": "privacy-audit",
+      "date": "2026-10-31",
+      "what_changed": "Phone consent policy: removed 3 phone/WhatsApp number(s) that had no owner-published public source in this record (Google-Maps mirrors, directories, third-party pages or personal contacts). Re-add only with a contact_sources link where the owner publishes the number."
+    }
+  ]
+}
