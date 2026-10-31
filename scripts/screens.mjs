@@ -1,8 +1,11 @@
 // Screenshots for review. Usage: node scripts/screens.mjs [baseUrl]  → screenshots/*.png (390×844 and 1440×900).
+// Map tiles are stubbed locally (scripts/tile-stub.mjs) so screenshot runs never hit a public tile server;
+// LIVE_TILES=1 shows the real base map for a one-off review.
 // Uses the read-only ?now= override so the hours copy matches the mockups (Sabtu 31 Okt 2026, 13.56 WITA).
 import { createRequire } from 'module';
 import { fileURLToPath } from 'url';
 import path from 'path';
+import { stubTiles } from './tile-stub.mjs';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');   // screenshots/ at the repo root
 const require = createRequire((process.env.PW_DIR || '/tmp/pw') + '/');
 const { chromium } = require('playwright-core');
@@ -12,6 +15,7 @@ const b = await chromium.launch({ executablePath: process.env.CHROME || '/usr/bi
 const w = (p, ms = 600) => p.waitForTimeout(ms);
 async function page(width, height, mobile) {
   const ctx = await b.newContext({ viewport: { width, height }, deviceScaleFactor: mobile ? 2 : 1, isMobile: mobile, hasTouch: mobile, timezoneId: 'Asia/Makassar' });
+  await stubTiles(ctx);
   const p = await ctx.newPage();
   await p.goto(base); await p.waitForSelector('body[data-ready="1"]'); await w(p, 2500);
   return p;
