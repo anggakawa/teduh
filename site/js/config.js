@@ -108,7 +108,8 @@ Peta.config = {
         bersyarat: { tag: 'Gratis bersyarat', aria: 'Gratis dengan syarat' }
       },
       row: 'Biaya',
-      recheck: 'perlu dicek ulang'
+      recheck: 'perlu dicek ulang',
+      cardRecheck: 'cek ulang'       // short hint on the card tag when perlu_cek_ulang (aria says "perlu dicek ulang")
     },
     loadErrorFile: 'Data tidak bisa dimuat. Jalankan "python3 build-data.py" lalu buka lewat server lokal (lihat README).'
   },

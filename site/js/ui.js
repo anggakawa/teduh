@@ -45,12 +45,15 @@
   // SCHEMA v5 gratis tag, from _d.gratis.status only (never from text or from BPJS).
   function gratisInfo(p) {
     var g = p._d.gratis, T = C.text.gratis.status, st = g && typeof g.status === 'string' ? g.status : '';
-    return st && has.call(T, st) ? { status: st, label: T[st].tag, aria: T[st].aria } : null;
+    return st && has.call(T, st) ? { status: st, label: T[st].tag, aria: T[st].aria, recheck: g.recheck === true } : null;
   }
   function gratisTag(p, o) {
     var i = gratisInfo(p);
     if (!i) return '';
-    return '<span class="tag tag-gratis gratis--' + esc(i.status) + '" data-gratis="' + esc(i.status) + '"' + (o && o.hidden ? ' aria-hidden="true"' : '') + '>' + esc(i.label) + '</span>';
+    // perlu_cek_ulang: a short "· cek ulang" on the visible tag (the detail row says it in full).
+    var hint = i.recheck && !(o && o.hidden) ? '<span class="tag-recheck"> · ' + esc(C.text.gratis.cardRecheck) + '</span>' : '';
+    return '<span class="tag tag-gratis gratis--' + esc(i.status) + '" data-gratis="' + esc(i.status) + '"' + (i.recheck ? ' data-recheck="1"' : '') +
+      (o && o.hidden ? ' aria-hidden="true"' : '') + '>' + esc(i.label) + hint + '</span>';
   }
   function tagsHtml(p, ctx, o) {
     var out = (p._d.tags || []).map(function (t) { return '<span class="tag">' + esc(t) + '</span>'; });
@@ -128,7 +131,7 @@
     var parts = [p.name_display || p.name, statusText(p), h.text];
     if (bpjsChip(p, { card: true })) parts.push(bpjsInfo(p).aria);
     var gi = gratisInfo(p);
-    if (gi) parts.push(gi.aria);
+    if (gi) parts.push(gi.aria + (gi.recheck ? ', ' + C.text.gratis.recheck : ''));
     return parts.join(', ');
   }
   function card(p, ctx) {

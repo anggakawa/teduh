@@ -10,12 +10,14 @@ data/SCHEMA.md, adds a small `_d` (derived) block the page needs, and writes int
 The source is read-only. site/data/ is generated (git-ignored); CI and the Pages deploy run this.
 
 Usage:  python3 scripts/build-data.py [--src data] [--out site/data] [--strict]
-        --strict: exit 1 if any record is skipped (used by CI)
+        --strict: exit 1, before writing anything, if any record is skipped (used by CI)
 
-Leak guard: every output payload is serialised first and the build exits non-zero, before
-writing anything, if the text "catatan_internal" or a key named *internal* appears in any of them.
+Leak guard: every output payload is built first and the build exits non-zero, before writing
+anything, if the text "catatan_internal" appears in any of them, or if any key in the parsed
+payloads contains "internal" after Unicode folding (NFKC + casefold, combining marks removed,
+dotless ı -> i): NOTE_INTERNAL, catatan-internal, "catatan internal", catatan_ınternal … all fail.
 """
-import argparse, glob, json, os, re, sys
+import argparse, glob, json, os, re, sys, unicodedata
 from datetime import datetime, timezone
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -184,13 +186,33 @@ def hours_of(rec):
 
 
 BPJS_STATUS = {"ya", "sebagian", "tidak", "tidak_relevan", "belum_diketahui"}   # SCHEMA.md v4
-BPJS_PUBLIC = ("status", "rujukan", "basis", "catatan_display", "sources", "checked")   # never catatan_internal
+BPJS_PUBLIC = ("status", "rujukan", "catatan_display", "sources", "checked")   # never catatan_internal; basis is not shipped
 BPJS_SOURCE_PUBLIC = ("url", "note", "checked")
 BPJS_ACCEPTS = ("ya", "sebagian")    # the statuses the "Terima BPJS" filter keeps
 BPJS_SEARCH_WORDS = " bpjs jkn kis"   # SCHEMA v4 search_terms for places that take BPJS
 LEAK_MARKER = "catatan_internal"
-# Keys whose name says "internal" (catatan_internal, catatanInternal, ...) must never reach the site.
-INTERNAL_KEY_RE = re.compile(r'"[A-Za-z0-9_]*[Ii]nternal[A-Za-z0-9_]*"\s*:')
+
+
+def is_internal_key(k):
+    """Same rule as the repo's scripts/leaks.py: "internal" in the folded key (NFKC, casefold,
+    combining marks removed, dotless ı -> i). catatan_internal, NOTE_INTERNAL, catatan-internal,
+    "catatan internal", catatanInternal, catatan_ınternal all count."""
+    s = unicodedata.normalize("NFKC", str(k)).casefold()
+    s = "".join(c for c in unicodedata.normalize("NFKD", s) if not unicodedata.combining(c))
+    return "internal" in s.replace("\u0131", "i")
+
+
+def internal_key_paths(v, path=""):
+    """JSON paths of every key in a parsed payload that is_internal_key, at any depth."""
+    if isinstance(v, dict):
+        for k, x in v.items():
+            p = f"{path}.{k}" if path else str(k)
+            if is_internal_key(k):
+                yield p
+            yield from internal_key_paths(x, p)
+    elif isinstance(v, list):
+        for i, x in enumerate(v):
+            yield from internal_key_paths(x, f"{path}[{i}]")
 
 # SCHEMA.md v5 biaya_gratis. The "Gratis" tag comes only from this status (never from free text,
 # never from BPJS acceptance). basis is evidence bookkeeping and is not shipped.
@@ -209,7 +231,9 @@ def public_sources(srcs):
     out = []
     for s in srcs if isinstance(srcs, list) else []:
         if isinstance(s, dict):
-            out.append({k: s[k] for k in BPJS_SOURCE_PUBLIC if k in s})
+            kept = {k: s[k] for k in BPJS_SOURCE_PUBLIC if k in s}
+            if kept:                  # a source with nothing public left ({} husk) is dropped
+                out.append(kept)
         elif isinstance(s, str) and re.match(r"https?://", s.strip()):
             out.append({"url": s.strip()})
     return out
@@ -720,9 +744,15 @@ def main():
     leaked = [name for name, text in outputs.items() if LEAK_MARKER in text]
     if leaked:
         sys.exit(f"BUG: {LEAK_MARKER} would ship in {', '.join(leaked)}; nothing written")
-    leaked = [name for name, text in outputs.items() if INTERNAL_KEY_RE.search(text)]
+    payloads = {"places.json": {"meta": meta, "places": places}, "hotlines.json": {"meta": meta, "hotlines": hotlines},
+                "build-report.json": report}
+    leaked = [f"{name}: {p}" for name, obj in payloads.items() for p in list(internal_key_paths(obj))[:3]]
     if leaked:
-        sys.exit(f"BUG: a key named *internal* would ship in {', '.join(leaked)}; nothing written")
+        sys.exit(f"BUG: a key named *internal* would ship ({'; '.join(leaked)}; data.js too); nothing written")
+    if a.strict and report["skipped"]:
+        for sk in report["skipped"]:
+            print(f"SKIPPED {sk['file']}: {sk['reason']}")
+        sys.exit(f"--strict: {len(report['skipped'])} record(s) skipped; nothing written")
     os.makedirs(out_dir, exist_ok=True)
     for name, text in outputs.items():
         with open(os.path.join(out_dir, name), "w", encoding="utf-8") as fh:
@@ -737,8 +767,6 @@ def main():
         print(f"WARN {w['file']}: {w['msg']}")
     print(f"hours parsed into a week for {c['hours_parsed']}/{c['places']} places (rest shown as written)")
     print("schema drift:", json.dumps(report["schema_drift"], ensure_ascii=False))
-    if a.strict and report["skipped"]:
-        sys.exit(f"--strict: {len(report['skipped'])} record(s) skipped")
 
 
 if __name__ == "__main__":

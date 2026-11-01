@@ -18,9 +18,10 @@ dibangun dari data itu dan diterbitkan ke GitHub Pages.
 | `scripts/build-data.py` | Membaca `data/`, memvalidasi, menulis `site/data/`. |
 | `scripts/validate.py` | JSON Schema + aturan wajib (approx_coords tidak pernah jadi pin, nomor bersumber, tanpa nomor di `bpjs_info`/`biaya_gratis`, tanpa catatan internal, dll.). |
 | `scripts/guard_pr.py` | Aturan PR: kontributor tidak bisa mengubah status jadi terverifikasi. |
-| `scripts/phones.py` | Mengenali nomor telepon/WA di data (dipakai untuk aturan persetujuan nomor). |
+| `scripts/phones.py` | Mengenali nomor telepon/WA di data (dipakai untuk aturan persetujuan nomor). Untuk `bpjs_info` / `biaya_gratis` ada pemindai ketat (`find_strict`): teks dinormalisasi NFKC, pemisah dibuang, URL `wa.me` / `tel:` ikut diperiksa. |
+| `scripts/leaks.py` | Aturan bersama untuk kunci `*internal*` (dilipat: NFKC, huruf kecil, ı → i) dan alamat email. |
 | `scripts/issue_to_place.py` | Mengubah isian formulir issue menjadi perubahan JSON. |
-| `scripts/migrate-from-store.py` | Migrasi dari arsip lama (penuh: sudah dijalankan 31 Okt 2026). `--fields bpjs_info,biaya_gratis` hanya menyalin kolom itu ke tempat yang sudah ada, membuang kunci `*internal*`, dan tidak menyentuh kontak yang sudah disaring. |
+| `scripts/migrate-from-store.py` | Migrasi dari arsip lama (penuh: sudah dijalankan 31 Okt 2026). `--fields bpjs_info,biaya_gratis` hanya menyalin dua kolom itu (kolom lain ditolak) ke tempat yang sudah ada, membuang kunci `*internal*`, dan berhenti tanpa menulis apa pun bila ada nomor telepon, email, atau kunci internal. Nilai yang diubah tangan di repo dipertahankan kecuali `--force` (jejak sinkron terakhir: `data/.store-sync.json`); `--only <id>` membatasi ke tempat tertentu. Kontak yang sudah disaring tidak pernah disentuh. |
 | `scripts/check.mjs`, `scripts/screens.mjs` | Uji browser dan tangkapan layar situs. |
 | `tests/` | Contoh isi issue, tes pipeline, dan data beku untuk uji UI. |
 | `.github/` | Formulir issue, workflow, CODEOWNERS. |
@@ -73,8 +74,8 @@ PW_DIR=/tmp/pw node scripts/screens.mjs http://localhost:8765/   # tangkapan lay
 ## BPJS dan Gratis
 
 - **BPJS** (`bpjs_info`, SCHEMA v4): chip di kartu dan detail untuk `ya` / `sebagian` (+ "perlu rujukan") / `tidak`; `belum_diketahui` hanya tampil di detail (abu-abu, tidak pernah ditulis "tidak"); `tidak_relevan` tanpa chip. Filter "Terima BPJS" = `ya` + `sebagian`.
-- **Gratis** (`biaya_gratis`, SCHEMA v5): tag hanya dari `biaya_gratis.status`: `ya` → "Gratis", `bersyarat` → "Gratis bersyarat" (syarat tampil di detail), `tidak` / `belum_diketahui` → tanpa tag. `perlu_cek_ulang: true` menampilkan "perlu dicek ulang" di detail. Teks bebas tidak pernah dibaca sebagai "gratis", dan terima BPJS tidak berarti gratis.
-- **Privasi**: `catatan_internal` (dan kunci apa pun yang memuat "internal") tidak pernah masuk repo publik ini maupun situs. `build-data.py` juga berhenti tanpa menulis apa pun jika teks itu muncul di keluaran. Tidak boleh ada nomor telepon di `bpjs_info` / `biaya_gratis`. `basis` disimpan di data repo sebagai asal-usul, tetapi tidak dikirim ke situs.
+- **Gratis** (`biaya_gratis`, SCHEMA v5): tag hanya dari `biaya_gratis.status`: `ya` → "Gratis", `bersyarat` → "Gratis bersyarat" (syarat tampil di detail), `tidak` / `belum_diketahui` → tanpa tag. `perlu_cek_ulang: true` menambah "· cek ulang" di tag kartu (aria: "perlu dicek ulang") dan "perlu dicek ulang" di detail. Teks bebas tidak pernah dibaca sebagai "gratis", dan terima BPJS tidak berarti gratis.
+- **Privasi**: `catatan_internal` dan kunci lain yang memuat "internal" setelah dilipat (NFKC + huruf kecil + ı → i, jadi juga `NOTE_INTERNAL`, `catatan-internal`, `catatan internal`, `catatan_ınternal`) ditolak `validate.py` (tempat dan `hotlines.json`), dibuang oleh `migrate-from-store.py --fields`, dan membuat `build-data.py` berhenti tanpa menulis apa pun bila muncul sebagai kunci di keluaran (atau bila teks `catatan_internal` muncul). Tidak boleh ada nomor telepon atau email di `bpjs_info` / `biaya_gratis`; URL sumbernya wajib `http(s)://` dan bukan `wa.me`. `basis` disimpan di data repo sebagai asal-usul, tetapi tidak dikirim ke situs (`bpjs_info` maupun `biaya_gratis`).
 
 Coba generator dengan contoh isi issue:
 

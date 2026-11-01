@@ -60,7 +60,7 @@ The derived `_d` block contains:
 - `phones[]`: each with `tel`, `wa_url`, and the flags `wa` (the source confirms WhatsApp) and `conflict`
 - `links[]`: websites, Instagram, and `mailto:` links
 - `maps_url`, `dir_url`
-- `q`: the search text. Places that take BPJS also match `bpjs`, `jkn` and `kis` (SCHEMA v4 search terms).
+- `q`: the search text. Places that take BPJS also match `bpjs`, `jkn` and `kis` (SCHEMA v4 search terms); these three match whole words only (`kis` never finds "kisaran"). Other tokens of 3 letters or fewer match at the start of a word (`psi` finds "psikolog", `rs` finds "rsud" but not "kursus"); longer tokens match anywhere.
 
 ## BPJS (SCHEMA v4 `bpjs_info`)
 
@@ -87,11 +87,11 @@ The tag comes only from `biaya_gratis.status`. No free text (cost, notes, `bpjs_
 | `bersyarat` | `Gratis bersyarat` tag | `Gratis bersyarat` row with `syarat_display` |
 | `tidak`, `belum_diketahui`, missing | no tag | no row |
 
-`perlu_cek_ulang: true` adds a quiet italic "perlu dicek ulang" under the detail row. Only `status, syarat_display, perlu_cek_ulang, sources (url/note/checked; non-URL strings dropped), checked` ship; `basis` stays in the source data (provenance) and is not shipped.
+`perlu_cek_ulang: true` adds a short muted "· cek ulang" to the card tag (card aria: "…, perlu dicek ulang") and a quiet italic "perlu dicek ulang" under the detail row. Only `status, syarat_display, perlu_cek_ulang, sources (url/note/checked; non-URL strings dropped), checked` ship; `basis` stays in the source data (provenance) and is not shipped.
 
 ## Leak guard
 
-`catatan_internal` and anything internal are never shipped. `bpjs_info` and `biaya_gratis` are whitelisted field by field. `build-data.py` serialises every output (`places.json`, `hotlines.json`, `data.js`, `build-report.json`) first and exits without writing anything if one contains the string `catatan_internal` or any key whose name contains `internal`. `check.mjs` greps all four files again and runs the build against injected fixtures to prove it fails.
+`catatan_internal` and anything internal are never shipped. `bpjs_info` and `biaya_gratis` are whitelisted field by field. `build-data.py` serialises every output (`places.json`, `hotlines.json`, `data.js`, `build-report.json`) first and exits without writing anything if one contains the string `catatan_internal` or if any key in the parsed payloads contains `internal` after Unicode folding (NFKC, casefold, combining marks removed, dotless ı → i), so `NOTE_INTERNAL`, `catatan-internal`, `catatan internal` and `catatan_ınternal` are caught as well as `catatan_internal`. `check.mjs` greps all four files again and runs the build against injected fixtures to prove it fails. `bpjs_info` ships `status, rujukan, catatan_display, sources, checked`; `basis` (for both fields) stays in the source data (provenance) and is not shipped.
 
 ## Hard rules (enforced in two places, checked by a test)
 
@@ -157,7 +157,7 @@ Add `?now=2026-10-31T13:56` to the URL to freeze "now" for the hours copy, as in
 - No orange, dashed or "!" styling. Clusters show hollow grey counts. List and marker hover are linked.
 - Details: verified (RSD, TraitCare) and unverified (Sagraha: notice, phone chooser). The selected pin is 1.3× and drawn above the clusters.
 - Filters and search: m04 filter results, the m07 empty state with "tampilkan yang belum dicek", search highlights, and the d03 empty state with broader-term chips.
-- Leak guard: no `catatan_internal` in any of the four outputs; build tests on a temp copy (`--out`) with `catatan_internal` injected at top level, in hotlines, and as a camelCase `catatanInternal` key must exit non-zero and write nothing.
+- Leak guard: no `catatan_internal` in any of the four outputs; build tests on a temp copy (`--out`) with `catatan_internal` injected at top level, in hotlines, and as keys `catatanInternal`, `NOTE_INTERNAL`, `catatan-internal`, `catatan internal` and `catatan_ınternal` must exit non-zero and write nothing.
 - BPJS: only public `bpjs_info` fields; invalid status dropped with the note kept; one chip per status on exactly the matching cards; no unknown chip on cards; no chip for `tidak_relevan`; the unknown chip is grey and never says "tidak" (chip, aria, card aria, filter note, empty state); fixtures for every status, hostile statuses and escaping; the detail BPJS row announced once; "Terima BPJS" = ya + sebagian (list and map), aria-pressed, header sub, Hapus filter; search `bpjs` / `jkn` / `kis` (short tokens match whole words).
 - Gratis: only public `biaya_gratis` fields; statuses match the archive files; no `Gratis` in `_d.tags`; tags per status on cards and in aria; BPJS alone never shows a tag; negative build fixtures (gratis in free text, cost "Free" without the field, BPJS ya with unknown cost, invalid status, non-object, bersyarat + perlu_cek_ulang with source whitelisting); detail rows with `syarat_display` and "perlu dicek ulang" for every gratis place.
 - Darurat modal: order, focus trap, Esc returning focus, and Keluar cepat drawn above the modal.

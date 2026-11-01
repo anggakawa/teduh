@@ -49,6 +49,11 @@ jobs:
       - name: build-data.py
         run: python scripts/build-data.py --strict
 
+      - name: UI fixture matches data/ (the ui job builds from tests/fixtures/data)
+        run: |
+          diff -r --exclude=SCHEMA.md data tests/fixtures/data || {
+            echo "::error::tests/fixtures/data differs from data/. Re-sync it (tests/fixtures/README.md) so the UI check runs on the real data."; exit 1; }
+
       - name: Pipeline tests (sample issues, generator, validator, guard, bpjs_info / biaya_gratis)
         run: python tests/test_pipeline.py
 

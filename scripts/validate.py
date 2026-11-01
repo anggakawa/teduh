@@ -9,10 +9,12 @@ Hard rules (errors):
   - phone consent policy: every phone/WhatsApp number in a record (any field) is listed in
     contact_sources with a public http(s) URL where the owner publishes it, and every
     contact_sources entry matches a number in the record (also for hotlines.json)
-  - no phone number at all in bpjs_info / biaya_gratis (SCHEMA.md v5: display fields carry no
-    contacts), even a cited one
-  - no key whose name contains "internal" anywhere (private archive notes such as
-    bpjs_info.catatan_internal never enter this public repo)
+  - no phone number and no email address at all in bpjs_info / biaya_gratis (SCHEMA.md v4/v5: these
+    fields carry no contacts), even a cited one. Phones use the strict, separator-blind detector
+    (phones.find_strict) over every string, URLs included (wa.me/…, tel:…)
+  - no key whose name contains "internal" anywhere, after Unicode folding (leaks.is_internal_key:
+    NOTE_INTERNAL, catatan-internal, "catatan internal", catatan_ınternal …), in places and in
+    hotlines.json: private archive notes such as bpjs_info.catatan_internal never enter this repo
 Prints GitHub annotations when run in Actions. Exit 1 on any error.
 
 Usage: python3 scripts/validate.py [--data data] [files...]   (files default to all places)
@@ -22,7 +24,7 @@ from jsonschema import Draft202012Validator
 from referencing import Registry, Resource
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import phones
+import leaks, phones
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BOUNDS = {"lat": (-3.8, -3.1), "lng": (114.4, 115.2)}   # keep in sync with scripts/build-data.py
@@ -72,25 +74,30 @@ def check_place(rec, fname, ids):
         if BAD_TEXT.search(s):
             errs.append(f"{path}: markup/script-like text is not allowed")
     errs += check_phones(rec)
-    for fld in ("bpjs_info", "biaya_gratis"):
-        found = phones.in_record({fld: rec.get(fld)}) if rec.get(fld) is not None else {}
-        for n, paths in sorted(found.items()):
-            errs.append(f"phone {n} in {', '.join(paths[:3])}: no phone numbers in {fld} (SCHEMA.md v5; contacts live in `contacts`)")
-    for path in internal_keys(rec):
-        errs.append(f"{path}: keys containing 'internal' are private archive notes and must not be in the public repo")
+    errs += contact_free_errors(rec)
+    errs += internal_key_errors(rec)
     return errs
 
 
-def internal_keys(v, path=""):
-    if isinstance(v, dict):
-        for k, x in v.items():
-            p = f"{path}.{k}" if path else k
-            if re.search(r"internal", k, re.I):
-                yield p
-            yield from internal_keys(x, p)
-    elif isinstance(v, list):
-        for i, x in enumerate(v):
-            yield from internal_keys(x, f"{path}[{i}]")
+CONTACT_FREE = ("bpjs_info", "biaya_gratis")
+
+
+def contact_free_errors(rec):
+    """SCHEMA v4/v5: bpjs_info / biaya_gratis hold no phone and no email, cited or not."""
+    errs = []
+    for fld in CONTACT_FREE:
+        if rec.get(fld) is None:
+            continue
+        for n, paths in sorted(phones.in_record({fld: rec[fld]}, strict=True).items()):
+            errs.append(f"phone {n} in {', '.join(paths[:3])}: no phone numbers in {fld} (SCHEMA.md v5; contacts live in `contacts`)")
+        for path, e in leaks.emails(rec[fld], fld):
+            errs.append(f"email {e} in {path}: no email addresses in {fld} (SCHEMA.md v5; contacts live in `contacts`)")
+    return errs
+
+
+def internal_key_errors(v, path=""):
+    return [f"{p}: keys containing 'internal' are private archive notes and must not be in the public repo"
+            for p in leaks.internal_keys(v, path)]
 
 
 def check_phones(rec):
@@ -158,6 +165,8 @@ def main():
             if isinstance(h, dict):
                 for m in check_phones(h):
                     report(hp, f"[{i}] {m}")
+        for m in internal_key_errors(hot):
+            report(hp, m)
 
     n = len([f for f in files if f.endswith(".json")])
     print(f"validated {n} place file(s) + hotlines: {problems} error(s)")

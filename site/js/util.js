@@ -54,13 +54,16 @@
     }).join('') + '</dl>';
   }
 
-  // Search token match. Tokens of 3 letters or fewer match whole words only (so "kis" never hits
-  // "kisaran", "rs" never hits "kursus"); longer tokens match anywhere, as you type.
+  // Search token match. The BPJS alias terms (bpjs, jkn, kis) match whole words only, so "kis"
+  // never hits "kisaran"/"kisah". Other tokens of 3 letters or fewer match at the start of a word
+  // ("psi" finds "psikolog", "rs" finds "rsud" but never "kursus"); longer tokens match anywhere.
   var SHORT_TOKEN = 3;
+  var EXACT_TERMS = ['bpjs', 'jkn', 'kis'];
   function reEscape(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
   function matchToken(text, w) {
+    if (EXACT_TERMS.indexOf(w) >= 0) return new RegExp('(^|[^a-z0-9])' + reEscape(w) + '($|[^a-z0-9])').test(text);
     if (w.length > SHORT_TOKEN) return text.indexOf(w) >= 0;
-    return new RegExp('(^|[^a-z0-9])' + reEscape(w) + '($|[^a-z0-9])').test(text);
+    return new RegExp('(^|[^a-z0-9])' + reEscape(w)).test(text);
   }
 
   function fold(s) { return String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''); }

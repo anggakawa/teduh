@@ -223,6 +223,7 @@ body[data-search="1"] .mapnote, body[data-mode="detail"] .mapnote { display: non
 .bpjs--sebagian { color: var(--primary); }
 .bpjs--tidak { color: var(--neutral-ink); }   /* outlined like .tag, quieter ink: a source-confirmed "no", not an alarm */
 .tag-gratis { color: var(--primary); border-color: var(--primary-tint-2); }
+.tag-gratis .tag-recheck { color: var(--muted); font-weight: 400; }
 .irow-gratis .im { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); }
 .irow-gratis .recheck { color: var(--muted); font-style: italic; }
 .bpjs--belum_diketahui { background: var(--neutral-chip); border-color: var(--neutral-chip); color: var(--neutral-ink); }

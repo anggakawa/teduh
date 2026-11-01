@@ -234,8 +234,8 @@ class Guard(unittest.TestCase):
         self.assertEqual(self.guard("random-contributor").returncode, 0)
 
 
-class BpjsGratis(unittest.TestCase):
-    """SCHEMA v4 bpjs_info + v5 biaya_gratis: schema, privacy rules, field sync, and the site tag."""
+class TmpData(unittest.TestCase):
+    """Base: a throwaway copy of data/ plus helpers (edit a place, validate, build)."""
     def setUp(self):
         self.tmp = tempfile.mkdtemp()
         self.data = os.path.join(self.tmp, "data")
@@ -260,6 +260,9 @@ class BpjsGratis(unittest.TestCase):
         b = run("scripts/build-data.py", "--src", self.data, "--out", out, "--strict")
         return b, out
 
+
+class BpjsGratis(TmpData):
+    """SCHEMA v4 bpjs_info + v5 biaya_gratis: schema, privacy rules, field sync, and the site tag."""
     def test_repo_data_has_both_fields_and_no_internal_notes(self):
         counts = {}
         for f in sorted(os.listdir(os.path.join(ROOT, "data", "places"))):
@@ -352,6 +355,197 @@ class BpjsGratis(unittest.TestCase):
         self.assertEqual({k: after[k] for k in after if k not in ("bpjs_info", "biaya_gratis")},
                          {k: before[k] for k in before if k not in ("bpjs_info", "biaya_gratis")})
         self.assertEqual(self.validate().returncode, 0)
+
+
+
+class PrivacyGuards(TmpData):
+    """QA re-check 2026-11-01: R-B1 (field allowlist + pre-write checks), R-M1 (folded internal keys),
+    R-M2 (strict phone scan), R-M3 (hand edits kept), R-m4..m8 and --strict before writing."""
+    SAGRAHA = "biro-sagraha-psikologi-banjarbaru"
+
+    def archive(self):
+        arc = os.path.join(self.tmp, "archive")
+        if not os.path.exists(arc):
+            shutil.copytree(os.path.join(ROOT, "data"), arc)
+        return arc
+
+    def tree(self):
+        out = {}
+        for dp, _, fs in os.walk(self.data):
+            for f in fs:
+                out[os.path.relpath(os.path.join(dp, f), self.data)] = open(os.path.join(dp, f), "rb").read()
+        return out
+
+    def sync(self, *extra, fields="bpjs_info,biaya_gratis"):
+        return run("scripts/migrate-from-store.py", "--src", self.archive(), "--fields", fields, "--data", self.data, *extra)
+
+    # ---- R-B1 ----
+    def test_qa_attack_contacts_booking_sources_is_refused_and_writes_nothing(self):
+        arc = self.archive()
+        def attack(r):
+            r["contacts"] = {"phone": "0812-0000-2222", "email": "orang.pribadi@gmail.com"}
+            r["booking_display"] = "WA 0812 0000 3333"
+            r["sources"] = (r.get("sources") or []) + [{"url": "https://wa.me/6281200004444", "note": "kontak pribadi"}]
+        for pid in ("bnn-kota-banjarbaru", self.SAGRAHA, "talenta-aditama"):
+            self.edit(pid, attack, data=arc)
+        before = self.tree()
+        for fields in ("contacts,booking_display,sources", "bpjs_info,contacts", "cost", "sources"):
+            r = self.sync(fields=fields)
+            self.assertNotEqual(r.returncode, 0, fields)
+            self.assertIn("only bpjs_info, biaya_gratis may be synced", r.stderr)
+        self.assertEqual(self.tree(), before)
+        self.assertEqual(self.validate().returncode, 0)
+
+    def test_phone_email_or_internal_key_in_synced_fields_aborts_the_whole_run(self):
+        cases = {
+            "spaced": lambda r: r["bpjs_info"].update(catatan_display="Daftar via 62 812 3456 7890."),
+            "wa_prefix": lambda r: r["biaya_gratis"].update(syarat_display="Hubungi WA0812-3456-7890."),
+            "note": lambda r: r["biaya_gratis"].update(sources=[{"url": "https://example.org/a", "note": "SKTM,08123456789"}]),
+            "wa_url": lambda r: r["bpjs_info"].update(sources=[{"url": "https://wa.me/6281234567890"}]),
+            "tel_url": lambda r: r["bpjs_info"].update(sources=[{"url": "tel:+62-812-3456-7890"}]),
+            "email": lambda r: r["biaya_gratis"].update(syarat_display="Tanya ke admin.posbakum@gmail.com."),
+        }
+        for name, fn in cases.items():
+            with self.subTest(name):
+                shutil.rmtree(os.path.join(self.tmp, "archive"), ignore_errors=True)
+                arc = self.archive()
+                # an innocent change elsewhere must not be written either (collect first, write second)
+                self.edit("talenta-aditama", lambda r: r["bpjs_info"].update(catatan_display="Catatan baru yang sah."), data=arc)
+                self.edit("posbakum-pengadilan-agama-banjarbaru", fn, data=arc)
+                before = self.tree()
+                r = self.sync()
+                self.assertNotEqual(r.returncode, 0, name)
+                self.assertIn("nothing written", r.stderr)
+                self.assertEqual(self.tree(), before, name)
+
+    def test_internal_keys_are_stripped_with_folding_and_no_husks(self):
+        arc = self.archive()
+        def side(r):
+            r["bpjs_info"] = {"status": "ya", "catatan_display": "Terima BPJS.", "NOTE_INTERNAL": "a", "catatan-internal": "b",
+                              "catatan internal": "c", "catatan_\u0131nternal": "d",
+                              "sources": [{"url": "https://example.org"}, {"internal_note": "only private"}], "checked": "2026-11-01"}
+        self.edit(self.SAGRAHA, side, data=arc)
+        r = self.sync()
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+        after = json.load(open(self.path(self.SAGRAHA), encoding="utf-8"))
+        self.assertEqual(after["bpjs_info"], {"status": "ya", "catatan_display": "Terima BPJS.", "sources": [{"url": "https://example.org"}], "checked": "2026-11-01"})
+        self.assertEqual(self.validate().returncode, 0)
+
+    # ---- R-M3 ----
+    def test_hand_edit_is_kept_without_force_and_never_popped(self):
+        arc = self.archive()
+        hand = "Koreksi tangan di repo: rehabilitasi gratis, bawa KTP."
+        self.edit("bnn-kota-banjarbaru", lambda r: r["bpjs_info"].update(catatan_display=hand))
+        self.edit("bnn-kota-banjarbaru", lambda r: r["bpjs_info"].update(catatan_display="Versi arsip yang baru."), data=arc)
+        self.edit("talenta-aditama", lambda r: r.pop("biaya_gratis"), data=arc)
+        r = self.sync()
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+        self.assertIn("KEPT (differs from the last sync and from the archive, use --force): bnn-kota-banjarbaru.bpjs_info", r.stdout)
+        self.assertIn("KEPT (archive has no biaya_gratis; use --force to remove): talenta-aditama.biaya_gratis", r.stdout)
+        self.assertEqual(json.load(open(self.path("bnn-kota-banjarbaru"), encoding="utf-8"))["bpjs_info"]["catatan_display"], hand)
+        self.assertIn("biaya_gratis", json.load(open(self.path("talenta-aditama"), encoding="utf-8")))
+        r = self.sync("--force")
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+        self.assertIn("OVERWRITE (--force) bnn-kota-banjarbaru.bpjs_info", r.stdout)
+        self.assertEqual(json.load(open(self.path("bnn-kota-banjarbaru"), encoding="utf-8"))["bpjs_info"]["catatan_display"], "Versi arsip yang baru.")
+        self.assertNotIn("biaya_gratis", json.load(open(self.path("talenta-aditama"), encoding="utf-8")))
+
+    def test_unchanged_since_last_sync_is_updated_and_only_limits_the_run(self):
+        arc = self.archive()
+        self.edit("bnn-kota-banjarbaru", lambda r: r["bpjs_info"].update(catatan_display="Versi arsip yang baru."), data=arc)
+        self.edit("talenta-aditama", lambda r: r["bpjs_info"].update(catatan_display="Juga baru."), data=arc)
+        r = self.sync("--only", "bnn-kota-banjarbaru")
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+        self.assertIn("UPDATE bnn-kota-banjarbaru.bpjs_info", r.stdout)
+        self.assertEqual(json.load(open(self.path("bnn-kota-banjarbaru"), encoding="utf-8"))["bpjs_info"]["catatan_display"], "Versi arsip yang baru.")
+        self.assertNotEqual(json.load(open(self.path("talenta-aditama"), encoding="utf-8"))["bpjs_info"]["catatan_display"], "Juga baru.")
+
+    # ---- R-m7 ----
+    def test_repo_only_place_is_reported(self):
+        arc = self.archive()
+        os.remove(self.path("talenta-aditama", arc))
+        r = self.sync()
+        self.assertEqual(r.returncode, 0, r.stderr)
+        self.assertIn("NOT IN STORE: talenta-aditama", r.stdout)
+
+    # ---- R-M2 / R-m4 ----
+    def test_phone_detector_formats_and_no_false_positives(self):
+        sys.path.insert(0, os.path.join(ROOT, "scripts"))
+        import phones
+        hits = ["62 812 3456 7890", "62-812-3456-7890", "WA0812-3456-7890", "SKTM,08123456789", "0 8 1 2 3 4 5 6 7 8 9 0",
+                "08 12 34 56 78 90", "0812\u20133456\u20137890", "\uff10\uff18\uff11\uff12\uff13\uff14\uff15\uff16\uff17\uff18\uff19\uff10",
+                "+\uff16\uff12 812 3456 7890", "https://wa.me/6281234567890", "tel:+62-812-3456-7890", "Telp 0812 3456 7890"]
+        for t in hits:
+            self.assertTrue(phones.find_strict(t), t)
+        for t in ("Rp290.000", "Rp 1.500.000", "tahun 2019-2024", "UU No. 35 Tahun 2014", "NIK 6372041234567890", "2026-11-01",
+                  "Senin\u2013Jumat 08.00\u201316.00, Sabtu 08.00 - 12.00", "NIP 198012312005011001",
+                  "https://bnn.go.id/konten/unggahan/2024/05/Rehabilitasi_Standar-Pelayanan.pdf"):
+            self.assertEqual(phones.find_strict(t), [], t)
+        self.assertEqual(phones.find("https://wa.me/6281234567890"), ["6281234567890"])   # consent check sees wa.me links too
+
+    def test_validate_rejects_phone_email_and_non_http_urls_in_display_fields(self):
+        self.edit("posbakum-pengadilan-agama-banjarbaru", lambda r: r["biaya_gratis"].update(syarat_display="Tanya 62 812 3456 7890 atau admin@posbakum.id."))
+        self.edit("rsd-idaman-kota-banjarbaru", lambda r: r["bpjs_info"].update(sources=[{"url": "tel:0812"}, {"url": "https://wa.me/6281234567890"}, {"url": "MC Kalsel 2019"}]))
+        v = self.validate()
+        self.assertNotEqual(v.returncode, 0)
+        self.assertIn("phone 6281234567890 in biaya_gratis.syarat_display", v.stdout)
+        self.assertIn("email admin@posbakum.id in biaya_gratis.syarat_display", v.stdout)
+        for i in range(3):
+            self.assertIn(f"schema: bpjs_info/sources/{i}", v.stdout)
+        self.assertIn("phone 6281234567890 in bpjs_info.sources[1].url", v.stdout)
+
+    # ---- R-M1 / R-m5 ----
+    def test_folded_internal_keys_fail_validate_and_build(self):
+        for key in ("NOTE_INTERNAL", "catatan-internal", "catatan internal", "catatan_\u0131nternal"):
+            with self.subTest(key):
+                self.edit("talenta-aditama", lambda r: r.update(services_meta=[{key: "x"}]))
+                v = self.validate()
+                self.assertNotEqual(v.returncode, 0)
+                self.assertIn("must not be in the public repo", v.stdout)
+                b, out = self.build()
+                self.assertNotEqual(b.returncode, 0)
+                self.assertIn("key named *internal* would ship", b.stderr)
+                self.assertFalse(os.path.exists(out))
+                self.edit("talenta-aditama", lambda r: r.pop("services_meta"))
+
+    def test_hotlines_nested_internal_key_is_rejected(self):
+        f = os.path.join(self.data, "hotlines.json")
+        h = json.load(open(f, encoding="utf-8"))
+        L = h if isinstance(h, list) else h["hotlines"]
+        L[0]["contacts"] = dict(L[0].get("contacts") or {}, **{"NOTE_INTERNAL": "x"})
+        json.dump(h, open(f, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
+        v = self.validate()
+        self.assertNotEqual(v.returncode, 0)
+        self.assertIn("NOTE_INTERNAL: keys containing 'internal'", v.stdout)
+
+    # ---- R-m3 / R-m6 / --strict ----
+    def test_basis_and_empty_sources_do_not_ship(self):
+        self.edit("rsd-idaman-kota-banjarbaru", lambda r: r["bpjs_info"].update(sources=[{"url": "https://example.org"}]))
+        b, out = self.build()
+        self.assertEqual(b.returncode, 0, b.stderr)
+        places = json.load(open(os.path.join(out, "places.json"), encoding="utf-8"))["places"]
+        for p in places:
+            self.assertNotIn("basis", p.get("bpjs_info") or {}, p["id"])
+            self.assertNotIn("basis", p.get("biaya_gratis") or {}, p["id"])
+            for fld in ("bpjs_info", "biaya_gratis"):
+                self.assertNotIn({}, (p.get(fld) or {}).get("sources") or [], p["id"])
+
+    def test_strict_exits_before_writing(self):
+        self.edit("talenta-aditama", lambda r: r.update(name=None))
+        b, out = self.build()
+        self.assertNotEqual(b.returncode, 0)
+        self.assertIn("nothing written", b.stderr)
+        self.assertFalse(os.path.exists(out))
+
+    # ---- R-m8 ----
+    def test_ui_fixture_matches_data(self):
+        """CI builds the UI check from tests/fixtures/data; it must be the same as data/ so real data is exercised."""
+        fx = os.path.join(ROOT, "tests", "fixtures", "data")
+        names = lambda d: sorted(os.listdir(os.path.join(d, "places")))
+        self.assertEqual(names(fx), names(os.path.join(ROOT, "data")))
+        for rel in [os.path.join("places", n) for n in names(fx)] + ["hotlines.json", ".store-sync.json"]:
+            self.assertEqual(open(os.path.join(fx, rel), "rb").read(), open(os.path.join(ROOT, "data", rel), "rb").read(),
+                             f"tests/fixtures/data/{rel} differs from data/{rel}: re-sync the fixture (see tests/fixtures/README.md)")
 
 
 class Templates(unittest.TestCase):

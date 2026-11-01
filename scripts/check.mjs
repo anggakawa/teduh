@@ -37,10 +37,11 @@ ok(stale.length === 0, `app.css hardcodes none of the old values (${stale.join('
 const builtFiles = ['data/places.json', 'data/hotlines.json', 'data/data.js', 'data/build-report.json'].map(f => [f, readFileSync(path.join(root, f), 'utf8')]);
 const leaks = builtFiles.map(([f, t]) => [f, (t.match(/catatan_internal/g) || []).length]).filter(([, n]) => n);
 ok(leaks.length === 0, `built data never carries catatan_internal (${builtFiles.map(([f]) => f).join(', ')}: ${leaks.map(x => x.join(' ')).join(', ') || '0 hits'})`);
-const BPJS_KEYS = ['status', 'rujukan', 'basis', 'catatan_display', 'sources', 'checked'];
+const BPJS_KEYS = ['status', 'rujukan', 'catatan_display', 'sources', 'checked'];   // basis is not shipped (QA R-m3)
 const bpjsRecs = data.filter(p => p.bpjs_info);
 ok(bpjsRecs.length > 0 && bpjsRecs.every(p => Object.keys(p.bpjs_info).every(k => BPJS_KEYS.includes(k)) && (p.bpjs_info.sources || []).every(s => Object.keys(s).every(k => ['url', 'note', 'checked'].includes(k)))),
-  `bpjs_info ships only the public fields (${bpjsRecs.length} places)`);
+  `bpjs_info ships only the public fields, no basis (${bpjsRecs.length} places)`);
+ok(data.every(p => !p.biaya_gratis || !('basis' in p.biaya_gratis)), 'biaya_gratis ships without basis');
 const bStat = st => data.filter(p => p._d.bpjs?.status === st);
 const accepts = data.filter(p => p._d.bpjs?.accepts);
 ok(accepts.length > 0 && accepts.every(p => ['ya', 'sebagian'].includes(p.bpjs_info.status)) && data.filter(p => ['ya', 'sebagian'].includes(p.bpjs_info?.status)).length === accepts.length, `_d.bpjs.accepts = ya + sebagian (${accepts.length})`);
@@ -100,6 +101,13 @@ ok(data.every(p => !(p._d.tags || []).includes('BPJS') || !p._d.bpjs), 'no legac
     patchJson(firstFile(src), o => { o.services_meta = { catatanInternal: 'INJECTED' }; });
     r = build(src, out);
     ok(r.status !== 0 && /key named \*internal\*/.test(r.stderr) && !existsSync(out), `build guard: a key named *Internal* -> exit ${r.status}, nothing written`);
+    // 4b. QA R-M1: the guard folds keys (NFKC + casefold, dotless ı -> i) instead of a [A-Za-z0-9_] regex
+    for (const [label, key] of [['NOTE_INTERNAL', 'NOTE_INTERNAL'], ['catatan-internal', 'catatan-internal'], ['"catatan internal"', 'catatan internal'], ['dotless ı', 'catatan_\u0131nternal']]) {
+      src = fresh('k' + label.length); out = path.join(tmp, 'out-k' + label.length);
+      patchJson(firstFile(src), o => { o.services_meta = [{ [key]: 'INJECTED' }]; });
+      r = build(src, out);
+      ok(r.status !== 0 && /key named \*internal\*/.test(r.stderr) && !existsSync(out), `build guard: key ${label} -> exit ${r.status}, nothing written`);
+    }
     // 5. gratis negatives (QA m3): the tag comes only from biaya_gratis.status. Expected values are written out
     //    here as literals, not recomputed with the build's rules.
     src = fresh('e'); out = path.join(tmp, 'out-e');
@@ -336,6 +344,7 @@ const bc = await page.$$eval('.card', bs => bs.map(b => { const t = b.querySelec
   return { id: b.dataset.id, st: t?.dataset.bpjs || null, text: t?.textContent || '', aria: t?.getAttribute('aria-label') || '', card: b.getAttribute('aria-label'),
     gratis: b.querySelector('.tag-gratis')?.textContent || null, first: b.querySelector('.crow--tags .tag') === t && !!t }; }));
 const bcOf = id => bc.find(c => c.id === id);
+const gLabel = p => p._d.gratis.tag + (p._d.gratis.recheck ? ' · cek ulang' : '');   // QA R-m1: the card tag carries the recheck hint
 for (const st of ['ya', 'sebagian', 'tidak']) ok(bStat(st).every(p => bcOf(p.id)?.st === st) && bc.filter(c => c.st === st).length === bStat(st).length, `card BPJS chip "${st}" on exactly the ${bStat(st).length} places with that status`);
 ok(bStat('belum_diketahui').length > 0 && bStat('belum_diketahui').every(p => bcOf(p.id).st === null) && bc.every(c => c.st !== 'belum_diketahui'), `no "BPJS belum diketahui" chip on cards (detail only; ${bStat('belum_diketahui').length} places)`);
 ok(bStat('tidak_relevan').length > 0 && bStat('tidak_relevan').every(p => bcOf(p.id).st === null), `no BPJS chip where BPJS is tidak_relevan (${bStat('tidak_relevan').length})`);
@@ -345,9 +354,17 @@ ok(data.filter(p => p._d.bpjs?.rujukan).every(p => / · perlu rujukan$/.test(bcO
 const TIDAK = /tidak (terima|menerima) bpjs|tanpa bpjs|non.?bpjs|bukan bpjs/i;
 ok(bStat('belum_diketahui').every(p => !TIDAK.test(bcOf(p.id).card) && !/BPJS/.test(bcOf(p.id).card)), 'unknown BPJS: card aria says nothing about BPJS (never "tidak")');
 ok(bc.filter(c => c.st).every(c => c.card.includes(c.aria)), 'card aria-label carries the BPJS status when the chip shows');
-ok(gStat('ya').every(p => bcOf(p.id).gratis === 'Gratis') && gStat('bersyarat').every(p => bcOf(p.id).gratis === 'Gratis bersyarat') && bc.filter(c => c.gratis).length === gStat('ya').length + gStat('bersyarat').length,
+ok(gStat('ya').every(p => bcOf(p.id).gratis === gLabel(p) && gLabel(p).startsWith('Gratis')) && gStat('bersyarat').every(p => bcOf(p.id).gratis === gLabel(p) && gLabel(p).startsWith('Gratis bersyarat')) && bc.filter(c => c.gratis).length === gStat('ya').length + gStat('bersyarat').length,
   `card gratis tag: "Gratis" on ${gStat('ya').length}, "Gratis bersyarat" on ${gStat('bersyarat').length}, nowhere else`);
 ok(gStat('bersyarat').every(p => /Gratis dengan syarat/.test(bcOf(p.id).card)) && gStat('ya').every(p => /, Gratis(,|$)/.test(bcOf(p.id).card)), 'card aria carries the gratis tag');
+const rechecks = [...gStat('ya'), ...gStat('bersyarat')].filter(p => p._d.gratis.recheck);
+ok(rechecks.every(p => / · cek ulang$/.test(bcOf(p.id).gratis) && /Gratis[^,]*, perlu dicek ulang/.test(bcOf(p.id).card)) &&
+   [...gStat('ya'), ...gStat('bersyarat')].filter(p => !p._d.gratis.recheck).every(p => !/cek ulang/.test(bcOf(p.id).gratis + bcOf(p.id).card)),
+  `perlu_cek_ulang: card tag "· cek ulang" + aria "perlu dicek ulang" on ${rechecks.length} (${rechecks.map(p => p.id).join(', ')}), nowhere else`);
+// Puspaga Provinsi regression (QA, 6196841): the 2019 source never said gratis -> no tag, no row, no "Gratis" in aria
+const PUSPAGA = 'puspaga-provinsi-kalimantan-selatan';
+ok(bcOf(PUSPAGA) && byId[PUSPAGA]._d.gratis?.status === 'belum_diketahui' && bcOf(PUSPAGA).gratis === null && !/gratis/i.test(bcOf(PUSPAGA).card),
+  `${PUSPAGA}: belum_diketahui, no gratis tag on the card, no "Gratis" in its aria label`);
 ok(accepts.filter(p => !['ya', 'bersyarat'].includes(p._d.gratis?.status)).every(p => !bcOf(p.id).gratis), 'BPJS acceptance never shows a gratis tag on its own');
 const gStyle = await page.evaluate(() => { const g = document.querySelector('.card .tag-gratis'), t = document.querySelector('.card .tag:not(.bpjs):not(.tag-gratis)'); return g && t ? [getComputedStyle(g).color, getComputedStyle(t).color] : null; });
 ok(!gStyle || gStyle[0] !== gStyle[1], '.tag-gratis has its own style');
@@ -373,7 +390,8 @@ const fx = await page.evaluate(() => {
     hostile: [read(mk(B('row'), { status: 'row' })), read(mk(B('filter'), { status: 'filter' })), read(mk(B('"><b>x</b>'), { status: '"><b>x</b>' })), read(mk(B('toString'), { status: 'toString' }))],
     unknown: read(mk(B('belum_diketahui'), { status: 'belum_diketahui', catatan_display: 'Belum ada sumber.' })),
     relevan: read(mk(B('tidak_relevan'), { status: 'tidak_relevan', catatan_display: 'Bukan layanan kesehatan.' })),
-    tok: [['bpjs jkn kis', 'kis'], ['kisaran biaya', 'kis'], ['kisah anak', 'kis'], ['rs jiwa', 'rs'], ['kursus', 'rs'], ['psikolog anak', 'psik'], ['tes iq', 'iq'], ['bpjs', 'bpjs']].map(([t, w]) => Peta.util.matchToken(t, w))
+    tok: [['bpjs jkn kis', 'kis'], ['kisaran biaya', 'kis'], ['kisah anak', 'kis'], ['rs jiwa', 'rs'], ['kursus', 'rs'], ['psikolog anak', 'psik'], ['tes iq', 'iq'], ['bpjs', 'bpjs'],
+          ['psikolog anak', 'psi'], ['terapi wicara', 'ter'], ['rsud idaman', 'rs'], ['layanan jkn', 'jkn'], ['jknmobile', 'jkn'], ['bpjstk', 'bpjs'], ['tumbuh kembang', 'emb']].map(([t, w]) => Peta.util.matchToken(t, w))
   };
 });
 ok(fx.tidak.cardChip === 'Tidak terima BPJS' && /\bbpjs--tidak\b/.test(fx.tidak.cardCls) && fx.tidak.cardChipAria === 'Menurut sumber, tidak terima BPJS' && fx.tidak.cardAria.endsWith(', Menurut sumber, tidak terima BPJS'),
@@ -401,10 +419,11 @@ const gx = await page.evaluate(() => {
   };
 });
 ok(gx.ya.tag === 'Gratis' && gx.ya.row.includes('Gratis untuk semua warga.') && gx.ya.recheck === null && gx.ya.rowHidden === 'true', 'fixture gratis ya: "Gratis" tag, syarat in the detail, no recheck note');
-ok(gx.bersyarat.tag === 'Gratis bersyarat' && /Gratis dengan syarat/.test(gx.bersyarat.aria) && gx.bersyarat.row.includes('Bawa SKTM.') && gx.bersyarat.recheck === 'perlu dicek ulang', 'fixture gratis bersyarat + perlu_cek_ulang: "Gratis bersyarat", syarat + "perlu dicek ulang" in the detail');
+ok(gx.bersyarat.tag === 'Gratis bersyarat · cek ulang' && /Gratis dengan syarat, perlu dicek ulang/.test(gx.bersyarat.aria) && !/cek ulang/.test(gx.ya.tag + gx.ya.aria) && gx.bersyarat.row.includes('Bawa SKTM.') && gx.bersyarat.recheck === 'perlu dicek ulang', 'fixture gratis bersyarat + perlu_cek_ulang: card "Gratis bersyarat · cek ulang" + aria "perlu dicek ulang", syarat + "perlu dicek ulang" in the detail');
 ok([gx.tidak, gx.unknown, gx.none, gx.bpjsOnly].every(x => x.tag === null && x.row === '' && !/gratis/i.test(x.aria)), 'fixtures gratis tidak / belum_diketahui / null / BPJS-only: no tag, no row, nothing in aria');
 ok(gx.hostile.every(x => x.tag === null && x.row === '' && !x.undef), 'fixtures hostile gratis statuses: no tag, no "undefined"');
-ok(fx.tok.join() === 'true,false,false,true,false,true,true,true', `search tokens <=3 chars match whole words only ("kis" never hits "kisaran"/"kisah") (${fx.tok.join()})`);
+ok(fx.tok.join() === 'true,false,false,true,false,true,true,true,true,true,true,true,false,false,false',
+  `search: bpjs/jkn/kis match whole words only ("kis" never hits "kisaran"/"kisah", "jkn" not "jknmobile"); other short tokens prefix-match at word start ("psi" finds "psikolog", "ter" "terapi", "rs" "rsud" but not "kursus", "emb" not mid-word) (${fx.tok.join()})`);
 const nopin = await page.$$eval('#listUnpinned .card', bs => bs.map(b => !!b.querySelector('.hrs--nopin .ic')));
 ok(nopin.length > 0 && nopin.every(Boolean), `unpinned cards show the pin-off line instead of the hours line (SPEC §11.2, ${nopin.length})`);
 const H = id => cards.find(c => c.id === id).hrs;
@@ -569,8 +588,15 @@ for (const g of [...gStat('bersyarat'), ...gStat('ya')].slice(0, 6)) {
   await page.click(`.card[data-id="${g.id}"]`); await wait(page, 700);
   const gr = await page.evaluate(() => { const r = document.querySelector('#detailBody .irow-gratis'); return { head: document.querySelector('.drow .tag-gratis')?.textContent || null, row: r?.textContent || '', recheck: r?.querySelector('.recheck')?.textContent || null,
     recheckColor: r?.querySelector('.recheck') ? getComputedStyle(r.querySelector('.recheck')).color : '' }; });
-  ok(gr.head === g._d.gratis.tag && gr.row.includes(g.biaya_gratis.syarat_display) && (gr.recheck === 'perlu dicek ulang') === (g.biaya_gratis.perlu_cek_ulang === true),
+  ok(gr.head === gLabel(g) && gr.row.includes(g.biaya_gratis.syarat_display) && (gr.recheck === 'perlu dicek ulang') === (g.biaya_gratis.perlu_cek_ulang === true),
     `detail ${g.id}: "${gr.head}" + syarat_display${gr.recheck ? ' + "perlu dicek ulang"' : ''}`);
+  await page.click('#detailBack'); await wait(page, 400);
+}
+{ // Puspaga Provinsi regression: no gratis tag or row in the detail either, and no "gratis" claim in its BPJS note
+  await page.click(`.card[data-id="${PUSPAGA}"]`); await wait(page, 700);
+  const pg = await page.evaluate(() => ({ tag: document.querySelector('#detailBody .tag-gratis, .drow .tag-gratis')?.textContent || null, row: !!document.querySelector('#detailBody .irow-gratis'),
+    text: document.querySelector('#detailBody')?.textContent || '' }));
+  ok(pg.tag === null && !pg.row && !/(?<!tidak menyebut )gratis/i.test(pg.text), `detail ${PUSPAGA}: no gratis tag, no gratis row, no gratis claim` + (pg.tag || pg.row || /gratis/i.test(pg.text) ? ` [${JSON.stringify({tag: pg.tag, row: pg.row, m: (pg.text.match(/.{0,60}gratis.{0,40}/i) || [""])[0]})}]` : ""));
   await page.click('#detailBack'); await wait(page, 400);
 }
 
