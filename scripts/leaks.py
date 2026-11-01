@@ -1,8 +1,9 @@
 """Private-data detectors shared by validate.py, migrate-from-store.py and the tests.
 
 - Internal keys: a key is private when "internal" appears in it after Unicode folding
-  (NFKC, casefold, combining marks removed, dotless ı -> i). So catatan_internal, NOTE_INTERNAL,
-  catatan-internal, "catatan internal", catatanInternal and catatan_ınternal are all caught.
+  (NFKC, casefold, combining marks removed, dotless ı -> i) and with "_" / "-" dropped (R3-M2). So
+  catatan_internal, NOTE_INTERNAL, catatan-internal, "catatan internal", catatanInternal,
+  catatan_ınternal, catatan_inter_nal and inter-nal are all caught.
 - Key shape (R2-M2): every data key must be a plain ASCII identifier, KEY_RE = ^[A-Za-z0-9_-]+$.
   That closes what folding cannot: zero-width / soft-hyphen / word-joiner / BOM characters inside a
   key ("catatan_inter\u200bnal"), Cyrillic or small-caps look-alikes, spaces. The hyphen is allowed
@@ -69,7 +70,9 @@ def fold_key(k):
 
 
 def is_internal_key(k):
-    return "internal" in fold_key(k)
+    """True if the folded key spells "internal" once "_" and "-" are dropped (R3-M2), so
+    catatan_inter_nal, inter-nal, In-Ter_Nal and i_n_t_e_r_n_a_l are caught too."""
+    return "internal" in re.sub(r"[_-]", "", fold_key(k))
 
 
 def internal_keys(v, path=""):

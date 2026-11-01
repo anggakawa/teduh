@@ -12,8 +12,9 @@ Hard rules (errors):
   - no phone number and no email address at all in bpjs_info / biaya_gratis (SCHEMA.md v4/v5: these
     fields carry no contacts), even a cited one. Phones use the strict, separator-blind detector
     (phones.find_strict) over every string, URLs included (wa.me/…, tel:…)
-  - no key whose name contains "internal" anywhere, after Unicode folding (leaks.is_internal_key:
-    NOTE_INTERNAL, catatan-internal, "catatan internal", catatan_ınternal …), in places and in
+  - no key whose name contains "internal" anywhere, after Unicode folding and with "_" / "-" dropped
+    (leaks.is_internal_key: NOTE_INTERNAL, catatan-internal, "catatan internal", catatan_ınternal,
+    catatan_inter_nal, inter-nal …), in places and in
     hotlines.json: private archive notes such as bpjs_info.catatan_internal never enter this repo
   - every key, at any depth, in places and hotlines.json is a plain ASCII identifier
     (leaks.KEY_RE ^[A-Za-z0-9_-]+$): no zero-width / soft-hyphen / BOM characters, no look-alike

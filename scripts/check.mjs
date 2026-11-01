@@ -119,6 +119,14 @@ ok(data.every(p => !(p._d.tags || []).includes('BPJS') || !p._d.bpjs), 'no legac
         ok(r.status !== 0 && /hidden\/non-ASCII/.test(r.stderr) && !existsSync(out), `build guard: key with ${label} (${where}) -> exit ${r.status}, nothing written`);
       }
     }
+    // 4d. QA R3-M2: "internal" split by "_" or "-" (catatan_inter_nal, inter-nal, …) is still an internal key
+    for (const [where, key] of [['hotlines', 'inter-nal'], ['place', 'catatan_inter_nal'], ['nested', 'In-Ter_Nal'], ['nested', 'intern_al'], ['hotlines', 'i_n_t_e_r_n_a_l']]) {
+      const tag = 'k' + key.length + where; src = fresh(tag); out = path.join(tmp, 'out-' + tag);
+      if (where === 'hotlines') patchJson(path.join(src, 'hotlines.json'), o => { (Array.isArray(o) ? o[0] : o.hotlines ? o.hotlines[0] : o)[key] = 'SECRET'; });
+      else patchJson(firstFile(src), o => { if (where === 'place') o[key] = 'SECRET'; else o.services_meta = [{ [key]: 'SECRET' }]; });
+      r = build(src, out);
+      ok(r.status !== 0 && /key named \*internal\*/.test(r.stderr) && !existsSync(out), `build guard: key "${key}" (${where}) -> exit ${r.status}, nothing written`);
+    }
     // 5. gratis negatives (QA m3): the tag comes only from biaya_gratis.status. Expected values are written out
     //    here as literals, not recomputed with the build's rules.
     src = fresh('e'); out = path.join(tmp, 'out-e');

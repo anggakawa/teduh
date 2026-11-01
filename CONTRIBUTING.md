@@ -91,7 +91,7 @@ otomatis lewat "Closes #N".
 | Tes pipeline (contoh issue baru, koreksi, berbahaya/tidak valid) | `tests/test_pipeline.py` |
 | Uji tampilan situs di data beku | `scripts/check.mjs` |
 
-Batas pemindai yang diketahui (disengaja): nomor rekening yang mirip nomor HP ("No. rek 0812345678") ikut dianggap nomor telepon, jadi jangan menaruh nomor rekening di `bpjs_info` / `biaya_gratis` (memang tidak boleh). Email yang ditulis samar `nama [at] gmail [dot] com`, `nama (at) gmail.com`, `nama @ gmail . com` tertangkap; ejaan lain ("nama at gmail titik com") tidak, dan peninjau tetap membaca isinya. Slug URL yang panjang angkanya (mis. profil LinkedIn `…-041892191`) bisa terbaca sebagai nomor bila ditaruh di dua kolom itu.
+Batas pemindai yang diketahui (disengaja): nomor rekening yang mirip nomor HP ("No. rek 0812345678") ikut dianggap nomor telepon, jadi jangan menaruh nomor rekening di `bpjs_info` / `biaya_gratis` (memang tidak boleh). Email yang ditulis samar `nama [at] gmail [dot] com`, `nama (at) gmail.com`, `nama @ gmail . com` tertangkap; ejaan lain ("nama at gmail titik com") tidak, dan peninjau tetap membaca isinya. Slug URL yang panjang angkanya (mis. profil LinkedIn `…-041892191`) bisa terbaca sebagai nomor bila ditaruh di dua kolom itu. Jam buka (`08.00 - 12.00`, `jam 08.00 WITA`, `pukul 07.30 s.d. 14.00 WIB`) tidak dianggap nomor, tetapi jam yang bersebelahan dengan kelompok angka lain ikut dibaca sebagai bagian nomor (`jam 08.12 3456 7890` tertangkap). Koma di antara kelompok angka dianggap pemisah (`0812, 3456 7890` tertangkap; daftar tahun dan harga tidak). Nomor yang setiap kelompoknya kebetulan berupa jam yang sah dalam konteks jam (mis. `jam 08.12 12.34 15.58`) tidak tertangkap.
 
 ## Audit nomor telepon (31 Oktober 2026)
 

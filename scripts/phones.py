@@ -25,33 +25,72 @@ def normalize(s):
 
 
 # Strict detector for fields that must carry no contact at all (bpjs_info / biaya_gratis, SCHEMA v4/v5).
-# Separators (spaces, - . : / ( ) and every Unicode dash) are removed first, so "0 8 1 2 …", "62-812-…",
-# "08 12 34 56 78 90", "0812–3456–7890" and "0 5 1 1 4 7 7 2 1 2 3" collapse to one digit run; then a
-# number is (+)62 or 0, then 2-9 (mobile 8x or an area code), then 7-11 digits, not glued to other
-# digits (so NIK, prices, years never match).
-SEPARATORS = re.compile(r"[\s\-.:\/()\u2010-\u2015\u2212\ufe58\ufe63]+")
+# The text is cut into digit groups; groups joined only by separators (spaces, - . : / ( ), every
+# Unicode dash, the range words "s.d." / "s/d" / "sampai" / "hingga" and a WIB/WITA/WIT suffix) or by a
+# comma collapse to one digit run, so "0 8 1 2 …", "62-812-…", "0812–3456–7890", "0812, 3456 7890" and
+# "0 5 1 1 4 7 7 2 1 2 3" are one number. A number is (+)62 or 0, then 2-9 (mobile 8x or an area code),
+# then 7-11 digits, not glued to other digits (so NIK, prices, years never match).
+_SEP_CHARS = r"\s\-.:\/()\u2010-\u2015\u2212\ufe58\ufe63"
+SEPARATORS = re.compile(rf"[{_SEP_CHARS}]+")
 NUMBER_RUN = re.compile(r"(?<![\d+])(?:\+?62|0)[2-9]\d{7,11}(?!\d)")
 
-# Opening hours must not merge into a digit run once separators are gone ("08.00 - 12.00 08.00"), so a
-# REAL clock time is masked first (R2-M1). Real means: hour 00-23, minute 00-59, a whole token (not
-# glued to another digit group by . : , or digits, so "08.12.3456.7890" is never a time), and in a
-# time context: a range "08.00 - 16.00" / "08.00 s.d. 16.00", a zone suffix "08.00 WITA" (WIB/WITA/WIT),
-# or after "jam"/"pukul". A bare "08:12" next to other digits is NOT masked.
+# Opening hours must not merge into a digit run ("08.00 - 12.00 08.00"), so a REAL clock time is left
+# out of the run. Real means: hour 00-23, minute 00-59, a whole token (not glued to another digit group
+# by . : , or digits, so "08.12.3456.7890" is never a time), and in a time context: a range
+# "08.00 - 16.00" / "08.00 s.d. 16.00", a zone suffix "08.00 WITA" (WIB/WITA/WIT), or after "jam"/"pukul".
+# R3-M1: a time is only left out when it does not touch a digit group that is not a time, so the mask
+# can never hide the start of a phone ("jam 08.12 3456 7890", "08.00-08.12-34.56-78.90" are caught).
 _T = r"(?<![\d.:,])(?:[01]?\d|2[0-3])[.:][0-5]\d(?![\d]|[.:,]\d)"
 _RANGE_SEP = r"\s*(?:[-\u2010-\u2015\u2212]|s\.?\s?d\.?|s/d|sampai|hingga)\s*"
 CLOCK_CONTEXT = re.compile(
     rf"(?P<range>{_T}(?:{_RANGE_SEP}{_T})+)"
     rf"|(?P<zone>{_T})(?=\s*WIT[AB]?\b)"
     rf"|(?P<word>\b(?:jam|pukul)\s*){_T}", re.I)
+_GLUE = rf"(?:[{_SEP_CHARS}]|\bs\.?\s?d\b\.?|\bs/d\b|\bsampai\b|\bhingga\b|\bWIT[AB]?\b)+"
+_TOKENS = re.compile(rf"(?P<time>{_T})|(?P<num>\d+)|(?P<glue>{_GLUE})|(?P<comma>,)|(?P<other>.)", re.I | re.S)
 
 
-def mask_clock_times(text):
-    """Replace every real clock time (see CLOCK_CONTEXT) with '|' so it never joins a digit run."""
-    def sub(m):
-        if m.group("word") is not None:
-            return m.group("word") + "|"
-        return re.sub(_T, "|", m.group(0))
-    return CLOCK_CONTEXT.sub(sub, text)
+def clock_time_starts(text):
+    """Start offsets of every clock time that is in a time context (see CLOCK_CONTEXT)."""
+    return {m.start() + t.start() for m in CLOCK_CONTEXT.finditer(text) for t in re.finditer(_T, m.group(0))}
+
+
+def strict_digit_runs(text):
+    """The text as digit runs for NUMBER_RUN, in two readings (a number is reported if either has it):
+      1. a group of digit groups (joined by separators) is left out ('|') only if EVERY group in it is a
+         clock time and one of them is in a time context: "08.00 - 12.00 08.00" -> '|';
+      2. as 1, and inside a group that also holds non-time digits, a time in context is left out only if
+         its neighbours in the group are times too: "08.00-08.12-34.56-78.90" -> '|081234567890'.
+    A time next to a non-time digit group is never left out, so "08.12 - 13.45 67 89 0" stays one run.
+    Groups across a comma are joined; anything else (letters, '+', …) breaks the run."""
+    ctx = clock_time_starts(text)
+    items, cur = [], []
+    for m in _TOKENS.finditer(text):
+        kind = m.lastgroup
+        if kind in ("time", "num"):
+            cur.append((kind, m.group(), m.start()))
+        elif kind != "glue":
+            if cur:
+                items.append(cur); cur = []
+            items.append("" if kind == "comma" else " ")
+    if cur:
+        items.append(cur)
+    runs = []
+    for per_token in (False, True):
+        out = []
+        for it in items:
+            if isinstance(it, str):
+                out.append(it); continue
+            if all(k == "time" for k, _, _ in it) and any(st in ctx for _, _, st in it):
+                out.append("|"); continue
+            for i, (k, t, st) in enumerate(it):
+                near = [it[j][0] for j in (i - 1, i + 1) if 0 <= j < len(it)]
+                if per_token and k == "time" and st in ctx and all(n == "time" for n in near):
+                    out.append("|")
+                else:
+                    out.append(re.sub(r"\D", "", t))
+        runs.append("".join(out))
+    return runs
 
 
 def _collect(hits):
@@ -86,7 +125,7 @@ def find_strict(text):
         return []
     text = unicodedata.normalize("NFKC", text)
     hits = [m.group(0) for m in PHONE_RE.finditer(text)]
-    hits += [m.group(0) for m in NUMBER_RUN.finditer(SEPARATORS.sub("", mask_clock_times(text)))]
+    hits += [m.group(0) for run in strict_digit_runs(text) for m in NUMBER_RUN.finditer(run)]
     hits += re.findall(r"(?:wa\.me/|tel:|phone=)\s*\+?([\d\s\-.]{9,20}\d)", text, re.I)
     return _collect(hits)
 

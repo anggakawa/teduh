@@ -487,7 +487,13 @@ class PrivacyGuards(TmpData):
                 # QA R2-M1: dotted / coloned groups that only look like clock times
                 "08.12.3456.7890", "0 8.12 34.56 78.90", "08.12.34.56.78.90", "08:12 3456 7890", "+62 8.12 34.56 78.90",
                 # QA R2-m1: landlines with a bare 62 prefix or spaced-out digits
-                "62-511-4772123", "0 5 1 1 4 7 7 2 1 2 3", "(0511) 123456", "0511.4772123", "021-5551234"]
+                "62-511-4772123", "0 5 1 1 4 7 7 2 1 2 3", "(0511) 123456", "0511.4772123", "021-5551234",
+                # QA R3-M1: a clock time in context must not hide the first group of a phone
+                "jam 08.12 3456 7890", "Hubungi jam 08.12 3456 7890", "pukul 08.12-34.56 78.90 WITA",
+                "08.00\u201308.12 3456 7890", "08.12 WITA 3456 7890", "08.12 - 13.45 67 89 0", "08.12 s.d. 13.45 6789",
+                "08.00-08.12-34.56-78.90", "jam 08.12/3456/7890", "jam 08.12 (3456) 7890", "jam 08.12 34.56 78.90",
+                # QA R3-M1 note: a comma inside a digit run is a separator too
+                "0812, 3456 7890", "08.12,3456,7890", "jam 08.00, 0812 3456 7890"]
         for t in hits:
             self.assertTrue(phones.find_strict(t), t)
         for t in ("Rp290.000", "Rp 1.500.000", "tahun 2019-2024", "UU No. 35 Tahun 2014", "NIK 6372041234567890", "2026-11-01",
@@ -495,6 +501,10 @@ class PrivacyGuards(TmpData):
                   # real clock times stay masked (R2-M1): ranges, zone suffix, jam/pukul
                   "08.00 - 12.00", "jam 08.00 WITA", "08.00 - 12.00 08.00", "8:30-15:30", "08.00\u201316.00 WITA",
                   "pukul 07.30 s.d. 14.00 WIB", "jam 08.00-12.00 dan 13.00-15.00", "Rp 08.000", "Rp 50.000 - Rp 100.000",
+                  "jam 08.00 - 12.00 WITA, 13.00 - 15.00 WITA", "Senin 08.00-12.00, 2024", "08.00-14.00 (Senin-Kamis), 08.00-11.00 (Jumat)",
+                  # comma lists that must not become a number (R3-M1)
+                  "Rp 50.000, 75.000, 100.000", "Rp 25.000, 50.000 dan 100.000", "tahun 2019, 2020, 2021", "2019, 2020, 2021, 2022, 2023",
+                  "NIK 6372012345678901, 6271012345678902", "01-11-2026, 02-11-2026", "01, 02, 03, 04, 05, 06", "0, 5, 10, 15 km",
                   "https://bnn.go.id/konten/unggahan/2024/05/Rehabilitasi_Standar-Pelayanan.pdf"):
             self.assertEqual(phones.find_strict(t), [], t)
         self.assertEqual(phones.find("https://wa.me/6281234567890"), ["6281234567890"])   # consent check sees wa.me links too
@@ -594,6 +604,18 @@ class QaRecheck2(TmpData):
         self.assertEqual(self.tree(), before)
         self.edit("bnn-kota-banjarbaru", lambda r: r["bpjs_info"].update(catatan_display="Buka jam 08.00 WITA, Senin 08.00 - 12.00 08.00."))
         self.assertEqual(self.validate().returncode, 0)   # real opening hours are not a phone
+        # R3-M1: QA's end-to-end case - a time in context in front of the rest of the number
+        self.edit("bnn-kota-banjarbaru", lambda r: r["bpjs_info"].update(catatan_display="Hubungi jam 08.12 3456 7890"))
+        v = self.validate()
+        self.assertNotEqual(v.returncode, 0)
+        self.assertIn("6281234567890", v.stdout)   # validate is the CI gate for phones; build only guards keys
+        self.edit("bnn-kota-banjarbaru", lambda r: r["bpjs_info"].update(catatan_display="Buka 08.00 - 12.00 WITA."))
+        self.edit("bnn-kota-banjarbaru", lambda r: r["bpjs_info"].update(catatan_display="Hubungi jam 08.12 3456 7890"), data=self.archive())
+        before = self.tree()
+        r = self.migrate("--fields", "bpjs_info,biaya_gratis", "--only", "bnn-kota-banjarbaru")
+        self.assertNotEqual(r.returncode, 0)
+        self.assertIn("phone 6281234567890 in bpjs_info.catatan_display", r.stderr)
+        self.assertEqual(self.tree(), before)
 
     # ---- R2-m3: nothing about a refused run is echoed ----
     def test_refused_sync_prints_no_update_or_diff(self):
@@ -678,11 +700,59 @@ class QaRecheck2(TmpData):
         self.assertFalse(hasattr(bd, "is_internal_key") or hasattr(bd, "internal_key_paths"))
         self.assertEqual(os.path.realpath(bd.leaks.__file__), os.path.realpath(leaks.__file__))
         sample = {k: 1 for k in ("status", "catatan_internal", "NOTE_INTERNAL", "catatan-internal", "catatan internal", "catatan_\u0131nternal",
-                                 "catatan_inter\u200bnal", "catatan_\u0456nternal", "brand_link_Al-Birru", "kesehatan-mental")}
+                                 "catatan_inter\u200bnal", "catatan_\u0456nternal", "brand_link_Al-Birru", "kesehatan-mental",
+                                 "catatan_inter_nal", "inter-nal", "In-Ter_Nal", "intern_al", "i_n_t_e_r_n_a_l", "international", "catatan_intrnal")}
         self.assertEqual(bd.leaks.leaked_key_paths(sample), leaks.leaked_key_paths(sample))
         self.assertEqual(sorted(leaks.leaked_key_paths(sample)), sorted([
             "catatan_internal", "NOTE_INTERNAL", "catatan-internal",
+            "catatan_inter_nal", "inter-nal", "In-Ter_Nal", "intern_al", "i_n_t_e_r_n_a_l",
             ascii("catatan internal"), ascii("catatan_\u0131nternal"), ascii("catatan_inter\u200bnal"), ascii("catatan_\u0456nternal")]))
+
+    def test_split_internal_keys_fail_validate_build_and_sync(self):
+        """QA R3-M2: "internal" split by _ or - is still internal (place root, nested, hotlines)."""
+        hp = os.path.join(self.data, "hotlines.json")
+        pristine = open(hp, "rb").read()
+        for where, key in (("hotlines", "inter-nal"), ("place", "catatan_inter_nal"), ("nested", "In-Ter_Nal"),
+                           ("nested", "intern_al"), ("hotlines", "i_n_t_e_r_n_a_l")):
+            with self.subTest(f"{key} in {where}"):
+                try:
+                    if where == "hotlines":
+                        h = json.loads(pristine); L = h if isinstance(h, list) else h["hotlines"]; L[0][key] = "SECRET"
+                        json.dump(h, open(hp, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
+                    elif where == "place":
+                        self.edit("talenta-aditama", lambda r: r.update({key: "SECRET"}))
+                    else:
+                        self.edit("talenta-aditama", lambda r: r.update(services_meta=[{key: "SECRET"}]))
+                    v = self.validate()
+                    self.assertNotEqual(v.returncode, 0)
+                    self.assertIn("internal", v.stdout)
+                    b, out = self.build()
+                    self.assertNotEqual(b.returncode, 0)
+                    self.assertIn("a key named *internal* would ship", b.stderr)
+                    self.assertFalse(os.path.exists(out))
+                finally:
+                    open(hp, "wb").write(pristine)
+                    self.edit("talenta-aditama", lambda r: (r.pop(key, None), r.pop("services_meta", None)))
+        # migrate strips it like catatan_internal
+        self.edit("bnn-kota-banjarbaru", lambda r: r["bpjs_info"].update({"catatan_inter_nal": "SECRET"}), data=self.archive())
+        r = self.migrate("--fields", "bpjs_info,biaya_gratis", "--only", "bnn-kota-banjarbaru")
+        self.assertEqual(r.returncode, 0, r.stderr)
+        self.assertNotIn("SECRET", open(self.path("bnn-kota-banjarbaru"), encoding="utf-8").read())
+
+    def test_only_existing_internal_key_is_catatan_internal(self):
+        sys.path.insert(0, os.path.join(ROOT, "scripts"))
+        import leaks
+        keys = set()
+        def walk(v):
+            if isinstance(v, dict):
+                keys.update(v); [walk(x) for x in v.values()]
+            elif isinstance(v, list):
+                [walk(x) for x in v]
+        for d in (os.path.join(ROOT, "data"), os.path.join(ROOT, "tests", "fixtures", "data")):
+            walk(json.load(open(os.path.join(d, "hotlines.json"), encoding="utf-8")))
+            for f in os.listdir(os.path.join(d, "places")):
+                walk(json.load(open(os.path.join(d, "places", f), encoding="utf-8")))
+        self.assertEqual({k for k in keys if leaks.is_internal_key(k)} - {"catatan_internal"}, set())
 
     # ---- R2-M3 ----
     def test_a_mode_is_required(self):
