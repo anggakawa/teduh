@@ -47,7 +47,7 @@
     "rujukan masalah keluarga",
     "psikoedukasi"
   ],
-  "cost": "free per MC Kalsel 2019 description of the service (stale (>1 year)); not restated on the current page",
+  "cost": "unknown (MC Kalsel 2019 article re-checked 2026-11-01: no mention of gratis; official page silent on cost)",
   "price_range": "unknown",
   "eligibility": "families, children, catin in Kalsel",
   "booking": [
@@ -81,9 +81,9 @@
       "checked": "2026-10-31"
     },
     {
-      "url": "MC Kalsel 2019 article (found in earlier batch-3 search; URL not retained)",
+      "url": "https://diskominfomc.kalselprov.go.id/2019/07/27/puspaga-layanan-pembelajaran-dan-konseling-keluarga/",
       "note": "walk-in + telephone, psikolog counsellors",
-      "checked": "2026-10-31"
+      "checked": "2026-11-01"
     }
   ],
   "validation_note": "The institution and its contacts are confirmed. Building coordinates are only approximate (street).",
@@ -124,7 +124,7 @@
     "status": "tidak_relevan",
     "rujukan": null,
     "basis": "confirmed_online",
-    "catatan_display": "Bukan layanan kesehatan. Konseling disebut gratis (sumber 2019, perlu dicek ulang).",
+    "catatan_display": "Bukan layanan kesehatan, jadi BPJS tidak berlaku. Biaya konseling belum diketahui; tanyakan langsung.",
     "sources": [],
     "checked": "2026-11-01"
   },
