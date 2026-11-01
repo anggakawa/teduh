@@ -119,5 +119,32 @@
       "note": "checked 2026-10-31: number appears on this page",
       "checked": "2026-10-31"
     }
-  ]
+  ],
+  "bpjs_info": {
+    "status": "tidak_relevan",
+    "rujukan": null,
+    "basis": "confirmed_online",
+    "catatan_display": "Bukan layanan kesehatan. Konseling disebut gratis (sumber 2019, perlu dicek ulang).",
+    "sources": [],
+    "checked": "2026-11-01"
+  },
+  "biaya_gratis": {
+    "status": "ya",
+    "syarat_display": "Konseling disebut gratis, tapi sumbernya tahun 2019 dan tidak disebut lagi di halaman resmi sekarang. Perlu dicek ulang.",
+    "basis": "old_source",
+    "perlu_cek_ulang": true,
+    "sources": [
+      {
+        "url": "MC Kalsel 2019 article (URL not retained; found in batch-3 search)",
+        "note": "2019: service described as free",
+        "checked": "2026-10-31"
+      },
+      {
+        "url": "https://dpppakb.kalselprov.go.id/puspaga/527",
+        "note": "current official page: does not restate cost",
+        "checked": "2026-10-31"
+      }
+    ],
+    "checked": "2026-11-01"
+  }
 }

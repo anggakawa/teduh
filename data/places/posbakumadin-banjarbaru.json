@@ -114,5 +114,27 @@
       "date": "2026-10-31",
       "what_changed": "Phone consent policy: removed 2 phone/WhatsApp number(s) that had no owner-published public source in this record (Google-Maps mirrors, directories, third-party pages or personal contacts). Re-add only with a contact_sources link where the owner publishes the number."
     }
-  ]
+  ],
+  "bpjs_info": {
+    "status": "tidak_relevan",
+    "rujukan": null,
+    "basis": "confirmed_online",
+    "catatan_display": "Bukan layanan kesehatan. Bantuan hukum gratis untuk warga tidak mampu yang memenuhi syarat (dibiayai negara).",
+    "sources": [],
+    "checked": "2026-11-01"
+  },
+  "biaya_gratis": {
+    "status": "bersyarat",
+    "syarat_display": "Gratis untuk warga/kelompok miskin sesuai UU 16/2011 (bukti seperti SKTM); dibiayai negara.",
+    "basis": "confirmed_online",
+    "perlu_cek_ulang": false,
+    "sources": [
+      {
+        "url": "https://kalsel.kemenkum.go.id/berita-utama/verifikasi-lapangan-dalam-rangka-akreditasi-ulang-pbh-telah-selesai-kemenkumham-kalsel-segera-kirim-hasil-verifikasi-ke-bphn",
+        "note": "accredited PBH, state-funded bantuan hukum",
+        "checked": "2026-10-31"
+      }
+    ],
+    "checked": "2026-11-01"
+  }
 }

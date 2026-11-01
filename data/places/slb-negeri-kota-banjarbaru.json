@@ -179,5 +179,21 @@
       "note": "checked 2026-10-31: number appears on this page",
       "checked": "2026-10-31"
     }
-  ]
+  ],
+  "bpjs_info": {
+    "status": "tidak_relevan",
+    "rujukan": null,
+    "basis": "inferred",
+    "catatan_display": "Sekolah negeri, bukan fasilitas kesehatan, jadi BPJS tidak berlaku.",
+    "sources": [],
+    "checked": "2026-11-01"
+  },
+  "biaya_gratis": {
+    "status": "belum_diketahui",
+    "syarat_display": "Biaya belum diketahui; belum ada sumber.",
+    "basis": "none",
+    "perlu_cek_ulang": false,
+    "sources": [],
+    "checked": "2026-11-01"
+  }
 }

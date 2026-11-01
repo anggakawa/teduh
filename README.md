@@ -13,14 +13,14 @@ dibangun dari data itu dan diterbitkan ke GitHub Pages.
 | `site/` | Situs (HTML/CSS/JS, Leaflet & font disertakan). `site/data/` dibuat oleh `build-data.py`, tidak di-commit. |
 | `data/places/<id>.json` | Satu tempat per berkas. `id` = nama berkas. |
 | `data/hotlines.json` | Layanan tanpa lokasi (112, SAPA 129, dll.). |
-| `data/SCHEMA.md` | Penjelasan kolom (SCHEMA v3). |
-| `schema/*.schema.json` | JSON Schema yang diturunkan dari SCHEMA v3. |
+| `data/SCHEMA.md` | Penjelasan kolom (SCHEMA v5: v3 + `contact_sources`, v4 `bpjs_info`, v5 `biaya_gratis`). |
+| `schema/*.schema.json` | JSON Schema dari SCHEMA.md (`place`, `hotlines`, serta `bpjs_info` dan `biaya_gratis` yang dirujuk dari `place`). |
 | `scripts/build-data.py` | Membaca `data/`, memvalidasi, menulis `site/data/`. |
-| `scripts/validate.py` | JSON Schema + aturan wajib (approx_coords tidak pernah jadi pin, dll.). |
+| `scripts/validate.py` | JSON Schema + aturan wajib (approx_coords tidak pernah jadi pin, nomor bersumber, tanpa nomor di `bpjs_info`/`biaya_gratis`, tanpa catatan internal, dll.). |
 | `scripts/guard_pr.py` | Aturan PR: kontributor tidak bisa mengubah status jadi terverifikasi. |
 | `scripts/phones.py` | Mengenali nomor telepon/WA di data (dipakai untuk aturan persetujuan nomor). |
 | `scripts/issue_to_place.py` | Mengubah isian formulir issue menjadi perubahan JSON. |
-| `scripts/migrate-from-store.py` | Migrasi sekali jalan dari arsip lama (sudah dijalankan 31 Okt 2026). |
+| `scripts/migrate-from-store.py` | Migrasi dari arsip lama (penuh: sudah dijalankan 31 Okt 2026). `--fields bpjs_info,biaya_gratis` hanya menyalin kolom itu ke tempat yang sudah ada, membuang kunci `*internal*`, dan tidak menyentuh kontak yang sudah disaring. |
 | `scripts/check.mjs`, `scripts/screens.mjs` | Uji browser dan tangkapan layar situs. |
 | `tests/` | Contoh isi issue, tes pipeline, dan data beku untuk uji UI. |
 | `.github/` | Formulir issue, workflow, CODEOWNERS. |
@@ -66,8 +66,15 @@ npm install --prefix /tmp/pw playwright-core@1.64.1
 rm -rf /tmp/uisite && cp -r site /tmp/uisite
 python3 scripts/build-data.py --src tests/fixtures/data --out /tmp/uisite/data
 (cd /tmp/uisite && python3 -m http.server 8765 &)
-SITE_DIR=/tmp/uisite PW_DIR=/tmp/pw node scripts/check.mjs
+SITE_DIR=/tmp/uisite TEDUH_DATA=tests/fixtures/data PW_DIR=/tmp/pw node scripts/check.mjs
+PW_DIR=/tmp/pw node scripts/screens.mjs http://localhost:8765/   # tangkapan layar → screenshots/ (tidak di-commit)
 ```
+
+## BPJS dan Gratis
+
+- **BPJS** (`bpjs_info`, SCHEMA v4): chip di kartu dan detail untuk `ya` / `sebagian` (+ "perlu rujukan") / `tidak`; `belum_diketahui` hanya tampil di detail (abu-abu, tidak pernah ditulis "tidak"); `tidak_relevan` tanpa chip. Filter "Terima BPJS" = `ya` + `sebagian`.
+- **Gratis** (`biaya_gratis`, SCHEMA v5): tag hanya dari `biaya_gratis.status`: `ya` → "Gratis", `bersyarat` → "Gratis bersyarat" (syarat tampil di detail), `tidak` / `belum_diketahui` → tanpa tag. `perlu_cek_ulang: true` menampilkan "perlu dicek ulang" di detail. Teks bebas tidak pernah dibaca sebagai "gratis", dan terima BPJS tidak berarti gratis.
+- **Privasi**: `catatan_internal` (dan kunci apa pun yang memuat "internal") tidak pernah masuk repo publik ini maupun situs. `build-data.py` juga berhenti tanpa menulis apa pun jika teks itu muncul di keluaran. Tidak boleh ada nomor telepon di `bpjs_info` / `biaya_gratis`. `basis` disimpan di data repo sebagai asal-usul, tetapi tidak dikirim ke situs.
 
 Coba generator dengan contoh isi issue:
 

@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://teduh.example/schema/biaya_gratis.schema.json",
+  "title": "biaya_gratis (SCHEMA.md v5): is the service free?",
+  "description": "Structured replacement for reading 'gratis'/'free' out of free text. The site's Gratis tag comes only from status (ya -> 'Gratis', bersyarat -> 'Gratis bersyarat'); BPJS acceptance never implies gratis. Raw cost/price_* stay as evidence. No phone numbers or personal data in syarat_display (scripts/validate.py). basis is kept here as provenance but is not shipped to the site.",
+  "type": "object",
+  "required": ["status"],
+  "additionalProperties": false,
+  "properties": {
+    "status": {
+      "description": "ya = free for everyone it serves; bersyarat = free only under a condition or only part of the service is free; tidak = a source shows a price or says patients pay (BPJS coverage is not gratis); belum_diketahui = no source (never guess).",
+      "enum": ["ya", "bersyarat", "tidak", "belum_diketahui"]
+    },
+    "syarat_display": { "description": "Short Indonesian, user-facing: who qualifies, what to bring, what is still paid. No phone numbers.", "type": "string" },
+    "basis": { "description": "old_source = source more than a year old.", "enum": ["confirmed_online", "old_source", "inferred", "none"] },
+    "perlu_cek_ulang": { "description": "true when the source is stale or a quoted price is old; the site shows 'perlu dicek ulang'.", "type": "boolean" },
+    "sources": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          { "type": "string", "pattern": "^https?://" },
+          {
+            "type": "object",
+            "required": ["url"],
+            "additionalProperties": false,
+            "properties": {
+              "url": { "type": "string", "minLength": 4 },
+              "note": { "type": "string" },
+              "checked": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" }
+            }
+          }
+        ]
+      }
+    },
+    "checked": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" }
+  }
+}

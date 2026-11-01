@@ -1,4 +1,4 @@
-Frozen copy of `data/` as migrated on 2026-10-31 (33 places + hotlines).
+Frozen copy of `data/` as migrated on 2026-10-31 (33 places + hotlines), with `bpjs_info` and `biaya_gratis` synced on 2026-11-01 (SCHEMA v4/v5, `scripts/migrate-from-store.py --fields bpjs_info,biaya_gratis --data tests/fixtures/data`).
 
 `scripts/check.mjs` asserts things that depend on this exact data (Ego Psychology sorts first,
 the "Kesehatan mental + Terverifikasi + Buka hari ini" filter returns 3, TraitCare's hours…).

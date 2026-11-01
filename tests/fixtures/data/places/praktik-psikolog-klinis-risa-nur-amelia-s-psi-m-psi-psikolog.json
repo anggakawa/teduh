@@ -125,5 +125,27 @@
     "konsultasi psikologi",
     "konsultasi online"
   ],
-  "city_display": "Banjarbaru"
+  "city_display": "Banjarbaru",
+  "bpjs_info": {
+    "status": "belum_diketahui",
+    "rujukan": null,
+    "basis": "none",
+    "catatan_display": "Praktik swasta. Belum ada sumber soal BPJS. Konsultasi online via Halodoc berbayar (Rp59.000/sesi).",
+    "sources": [],
+    "checked": "2026-11-01"
+  },
+  "biaya_gratis": {
+    "status": "tidak",
+    "syarat_display": "Berbayar: chat online Halodoc Rp59.000/sesi. Tarif tatap muka belum diketahui.",
+    "basis": "confirmed_online",
+    "perlu_cek_ulang": false,
+    "sources": [
+      {
+        "url": "https://www.halodoc.com/tanya-dokter/risa-nur-amelia-m-psi-psikolog",
+        "note": "Halodoc: Rp59.000 chat",
+        "checked": "2026-10-31"
+      }
+    ],
+    "checked": "2026-11-01"
+  }
 }

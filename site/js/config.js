@@ -81,6 +81,35 @@ Peta.config = {
     unpinnedNote: 'Alamat atau titiknya belum pasti, jadi tidak ada pin. Telepon dulu sebelum datang.',
     regional: 'Luar kota',
     legendNote: 'Isi penuh + centang = terverifikasi · putih bergaris = belum dicek. Warna selalu berpasangan dengan ikon.',
+    // SCHEMA v4 bpjs_info. belum_diketahui is "unknown", never "tidak"; tidak_relevan shows no BPJS chip.
+    // Statuses without an entry here (tidak_relevan, or anything unexpected) get no chip.
+    // Cards skip statuses listed in cardHidden (Angga, 2026-11-01: the grey chip is detail-only).
+    bpjs: {
+      status: {
+        ya:              { chip: 'BPJS', aria: 'Terima BPJS' },
+        sebagian:        { chip: 'BPJS sebagian', aria: 'BPJS hanya untuk sebagian layanan' },
+        tidak:           { chip: 'Tidak terima BPJS', aria: 'Menurut sumber, tidak terima BPJS' },
+        belum_diketahui: { chip: 'BPJS belum diketahui', aria: 'Status BPJS belum diketahui' }
+      },
+      cardHidden: ['belum_diketahui'],
+      rujukan: 'perlu rujukan', rujukanAria: 'perlu surat rujukan dari faskes 1',
+      filter: 'Terima BPJS', filterPart: 'Terima BPJS', filterCond: 'tercatat terima BPJS',
+      row: 'BPJS',
+      // {n} = places whose BPJS status is unknown (they are left out of the filter, not marked "tidak").
+      filterNote: 'Tempat yang tercatat terima BPJS (semua atau sebagian layanan). Status BPJS {n} tempat lain belum diketahui, jadi tidak ikut tampil. Tanyakan langsung ke tempatnya.',
+      filterNoteAll: 'Tempat yang tercatat terima BPJS (semua atau sebagian layanan).',
+      emptyNote: 'Status BPJS {n} tempat lain belum diketahui.'
+    },
+    // SCHEMA v5 biaya_gratis. Only ya / bersyarat get a tag; tidak / belum_diketahui show nothing.
+    // BPJS acceptance never implies gratis.
+    gratis: {
+      status: {
+        ya:        { tag: 'Gratis', aria: 'Gratis' },
+        bersyarat: { tag: 'Gratis bersyarat', aria: 'Gratis dengan syarat' }
+      },
+      row: 'Biaya',
+      recheck: 'perlu dicek ulang'
+    },
     loadErrorFile: 'Data tidak bisa dimuat. Jalankan "python3 build-data.py" lalu buka lewat server lokal (lihat README).'
   },
 

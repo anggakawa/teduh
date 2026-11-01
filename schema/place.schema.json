@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://teduh.example/schema/place.schema.json",
-  "title": "Teduh place record (SCHEMA.md v3)",
+  "title": "Teduh place record (SCHEMA.md v3, v4 bpjs_info, v5 biaya_gratis)",
   "description": "Derived from data/SCHEMA.md v3 (2026-10-31). One file per place: data/places/<id>.json. Free-text evidence fields stay loosely typed on purpose (they are stored as found). Extra rules that JSON Schema cannot express (id == filename, approx_coords never a pin, no contributor flip to 'active') live in scripts/validate.py and scripts/guard_pr.py.",
   "type": "object",
   "required": [
@@ -440,6 +440,12 @@
           }
         }
       }
+    },
+    "bpjs_info": {
+      "$ref": "bpjs_info.schema.json"
+    },
+    "biaya_gratis": {
+      "$ref": "biaya_gratis.schema.json"
     }
   },
   "allOf": [

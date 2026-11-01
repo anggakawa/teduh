@@ -9,12 +9,17 @@ Hard rules (errors):
   - phone consent policy: every phone/WhatsApp number in a record (any field) is listed in
     contact_sources with a public http(s) URL where the owner publishes it, and every
     contact_sources entry matches a number in the record (also for hotlines.json)
+  - no phone number at all in bpjs_info / biaya_gratis (SCHEMA.md v5: display fields carry no
+    contacts), even a cited one
+  - no key whose name contains "internal" anywhere (private archive notes such as
+    bpjs_info.catatan_internal never enter this public repo)
 Prints GitHub annotations when run in Actions. Exit 1 on any error.
 
 Usage: python3 scripts/validate.py [--data data] [files...]   (files default to all places)
 """
 import argparse, glob, json, os, re, sys
 from jsonschema import Draft202012Validator
+from referencing import Registry, Resource
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import phones
@@ -67,7 +72,25 @@ def check_place(rec, fname, ids):
         if BAD_TEXT.search(s):
             errs.append(f"{path}: markup/script-like text is not allowed")
     errs += check_phones(rec)
+    for fld in ("bpjs_info", "biaya_gratis"):
+        found = phones.in_record({fld: rec.get(fld)}) if rec.get(fld) is not None else {}
+        for n, paths in sorted(found.items()):
+            errs.append(f"phone {n} in {', '.join(paths[:3])}: no phone numbers in {fld} (SCHEMA.md v5; contacts live in `contacts`)")
+    for path in internal_keys(rec):
+        errs.append(f"{path}: keys containing 'internal' are private archive notes and must not be in the public repo")
     return errs
+
+
+def internal_keys(v, path=""):
+    if isinstance(v, dict):
+        for k, x in v.items():
+            p = f"{path}.{k}" if path else k
+            if re.search(r"internal", k, re.I):
+                yield p
+            yield from internal_keys(x, p)
+    elif isinstance(v, list):
+        for i, x in enumerate(v):
+            yield from internal_keys(x, f"{path}[{i}]")
 
 
 def check_phones(rec):
@@ -89,9 +112,12 @@ def main():
     ap.add_argument("--data", default=os.path.join(ROOT, "data"))
     ap.add_argument("files", nargs="*")
     a = ap.parse_args()
-    place_schema = json.load(open(os.path.join(ROOT, "schema", "place.schema.json"), encoding="utf-8"))
-    hot_schema = json.load(open(os.path.join(ROOT, "schema", "hotlines.schema.json"), encoding="utf-8"))
-    pv, hv = Draft202012Validator(place_schema), Draft202012Validator(hot_schema)
+    schemas = {os.path.basename(f): json.load(open(f, encoding="utf-8"))
+               for f in glob.glob(os.path.join(ROOT, "schema", "*.schema.json"))}
+    # place.schema.json $refs bpjs_info.schema.json / biaya_gratis.schema.json by their $id
+    registry = Registry().with_resources((s["$id"], Resource.from_contents(s)) for s in schemas.values() if "$id" in s)
+    pv = Draft202012Validator(schemas["place.schema.json"], registry=registry)
+    hv = Draft202012Validator(schemas["hotlines.schema.json"], registry=registry)
 
     all_files = sorted(glob.glob(os.path.join(a.data, "places", "*.json")))
     ids = {os.path.splitext(os.path.basename(f))[0] for f in all_files}

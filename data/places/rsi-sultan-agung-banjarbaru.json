@@ -122,5 +122,48 @@
     "rumah sakit",
     "IGD"
   ],
-  "city_display": "Banjarbaru"
+  "city_display": "Banjarbaru",
+  "bpjs_info": {
+    "status": "ya",
+    "rujukan": true,
+    "basis": "confirmed_online",
+    "catatan_display": "Terima BPJS sejak Des 2021. Wajib bawa surat rujukan faskes 1; tanpa rujukan (bukan gawat darurat) biasanya dihitung pasien umum/bayar.",
+    "sources": [
+      {
+        "url": "https://www.lpmtransferin.com/2021/12/grand-launching-rsi-sultan-agung.html",
+        "note": "BPJS cooperation from 1 Dec 2021; JKN via FKTP referral, inter-hospital referral, IGD",
+        "checked": "2026-11-01"
+      },
+      {
+        "url": "https://bakabar.com/post/bpjs-kesehatan-buka-layanan-di-rsi-sultan-agung-banjarbaru-ln4g46ei",
+        "note": "Sep 2023: BPJS info desk opened; ~80% of patients BPJS, via faskes tingkat 1 referral",
+        "checked": "2026-11-01"
+      },
+      {
+        "url": "https://kbk.news/pasien-keluhkan-layanan-rujukan-ke-rs-ansal-dan-rsi-sultan-agung-bpjs-kelas-1-pun-terkesan-dipersulit/",
+        "note": "Sep 2025 complaint: without referral, non-emergency outpatient ends up paid (umum)",
+        "checked": "2026-11-01"
+      }
+    ],
+    "checked": "2026-11-01"
+  },
+  "biaya_gratis": {
+    "status": "tidak",
+    "syarat_display": "Tidak gratis: bayar sebagai pasien umum, atau ditanggung BPJS dengan rujukan (lihat info BPJS).",
+    "basis": "confirmed_online",
+    "perlu_cek_ulang": false,
+    "sources": [
+      {
+        "url": "https://www.lpmtransferin.com/2021/12/grand-launching-rsi-sultan-agung.html",
+        "note": "BPJS and non-BPJS patients",
+        "checked": "2026-11-01"
+      },
+      {
+        "url": "https://kbk.news/pasien-keluhkan-layanan-rujukan-ke-rs-ansal-dan-rsi-sultan-agung-bpjs-kelas-1-pun-terkesan-dipersulit/",
+        "note": "2025: without referral, outpatient is paid",
+        "checked": "2026-11-01"
+      }
+    ],
+    "checked": "2026-11-01"
+  }
 }

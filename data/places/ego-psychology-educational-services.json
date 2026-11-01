@@ -142,5 +142,21 @@
       "date": "2026-10-31",
       "what_changed": "Phone consent policy: removed 1 phone/WhatsApp number(s) that had no owner-published public source in this record (Google-Maps mirrors, directories, third-party pages or personal contacts). Re-add only with a contact_sources link where the owner publishes the number."
     }
-  ]
+  ],
+  "bpjs_info": {
+    "status": "belum_diketahui",
+    "rujukan": null,
+    "basis": "none",
+    "catatan_display": "Praktik/biro swasta. Belum ada sumber yang menyebut terima BPJS; kemungkinan besar bayar sendiri. Tanyakan saat booking.",
+    "sources": [],
+    "checked": "2026-11-01"
+  },
+  "biaya_gratis": {
+    "status": "belum_diketahui",
+    "syarat_display": "Biaya belum diketahui; belum ada sumber.",
+    "basis": "none",
+    "perlu_cek_ulang": false,
+    "sources": [],
+    "checked": "2026-11-01"
+  }
 }

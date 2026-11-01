@@ -31,7 +31,7 @@ jobs:
       - name: Install
         run: pip install -r requirements.txt
 
-      - name: JSON Schema + hard rules (approx_coords never a pin, ids, sources, no markup)
+      - name: JSON Schema + hard rules (approx_coords never a pin, ids, sources, no markup, phone consent, no internal notes)
         run: python scripts/validate.py
 
       - name: Guard (no contributor flip to verified; pin provenance; new sources are URLs)
@@ -49,7 +49,7 @@ jobs:
       - name: build-data.py
         run: python scripts/build-data.py --strict
 
-      - name: Pipeline tests (sample issues, generator, validator, guard)
+      - name: Pipeline tests (sample issues, generator, validator, guard, bpjs_info / biaya_gratis)
         run: python tests/test_pipeline.py
 
   ui:
@@ -77,6 +77,7 @@ jobs:
         env:
           PW_DIR: ${{ runner.temp }}/pw
           SITE_DIR: ${{ runner.temp }}/uisite
+          TEDUH_DATA: tests/fixtures/data
           CHROME: /usr/bin/google-chrome
         run: |
           cp -r site "$SITE_DIR"

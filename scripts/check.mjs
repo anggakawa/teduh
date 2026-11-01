@@ -1,8 +1,12 @@
 // Browser check for Teduh (design/ui SPEC §10). Usage: SITE_DIR=site node scripts/check.mjs [baseUrl]  (default http://localhost:8765/, serving SITE_DIR)
+// TEDUH_DATA (default data/) is the source the site was built from; the gratis counts are compared with it and the
+// build tests run scripts/build-data.py on temp copies of it. CI sets TEDUH_DATA=tests/fixtures/data.
 // Needs playwright-core (PW_DIR, default /tmp/pw) and Chrome (CHROME, default /usr/bin/google-chrome).
 // Time-aware copy is checked at a fixed moment via the read-only ?now= override (Saturday 31 Oct 2026, 13.56 WITA).
 import { createRequire } from 'module';
-import { readFileSync } from 'fs';
+import { readFileSync, readdirSync, writeFileSync, cpSync, mkdtempSync, rmSync, existsSync } from 'fs';
+import { spawnSync } from 'child_process';
+import os from 'os';
 import { fileURLToPath } from 'url';
 import path from 'path';
 import { stubTiles, isTileUrl, TILE_HOSTS, LIVE } from './tile-stub.mjs';
@@ -28,6 +32,106 @@ const wait = (p, ms = 350) => p.waitForTimeout(ms);
 ok(/--sheet-peek:\s*288px/.test(tokens) && /--chip-h:\s*36px/.test(tokens) && /--unverified-ring:\s*#8A948F/i.test(tokens) && /--z-qexit:\s*3000/.test(tokens), 'tokens.css is the design/ui drop-in (peek 288, chip 36, ring #8A948F, z-qexit 3000)');
 const stale = ['#B9B2A6', '250px', '34px', 'z-index: 1100', '.22s', 'orange'].filter(s => appCss.toLowerCase().includes(s.toLowerCase()));
 ok(stale.length === 0, `app.css hardcodes none of the old values (${stale.join(', ') || 'none'})`);
+
+// ---- static: BPJS data (SCHEMA v4 bpjs_info) ----
+const builtFiles = ['data/places.json', 'data/hotlines.json', 'data/data.js', 'data/build-report.json'].map(f => [f, readFileSync(path.join(root, f), 'utf8')]);
+const leaks = builtFiles.map(([f, t]) => [f, (t.match(/catatan_internal/g) || []).length]).filter(([, n]) => n);
+ok(leaks.length === 0, `built data never carries catatan_internal (${builtFiles.map(([f]) => f).join(', ')}: ${leaks.map(x => x.join(' ')).join(', ') || '0 hits'})`);
+const BPJS_KEYS = ['status', 'rujukan', 'basis', 'catatan_display', 'sources', 'checked'];
+const bpjsRecs = data.filter(p => p.bpjs_info);
+ok(bpjsRecs.length > 0 && bpjsRecs.every(p => Object.keys(p.bpjs_info).every(k => BPJS_KEYS.includes(k)) && (p.bpjs_info.sources || []).every(s => Object.keys(s).every(k => ['url', 'note', 'checked'].includes(k)))),
+  `bpjs_info ships only the public fields (${bpjsRecs.length} places)`);
+const bStat = st => data.filter(p => p._d.bpjs?.status === st);
+const accepts = data.filter(p => p._d.bpjs?.accepts);
+ok(accepts.length > 0 && accepts.every(p => ['ya', 'sebagian'].includes(p.bpjs_info.status)) && data.filter(p => ['ya', 'sebagian'].includes(p.bpjs_info?.status)).length === accepts.length, `_d.bpjs.accepts = ya + sebagian (${accepts.length})`);
+// ---- static: biaya_gratis (SCHEMA v5) ----
+const ARCHIVE = path.resolve(process.env.TEDUH_DATA || path.join(here, '../data'));
+const gStat = st => data.filter(p => p._d.gratis?.status === st);
+const GRATIS_KEYS = ['status', 'syarat_display', 'perlu_cek_ulang', 'sources', 'checked'];
+ok(data.filter(p => p.biaya_gratis).every(p => Object.keys(p.biaya_gratis).every(k => GRATIS_KEYS.includes(k)) && (p.biaya_gratis.sources || []).every(s => typeof s === 'object' && Object.keys(s).every(k => ['url', 'note', 'checked'].includes(k)))),
+  `biaya_gratis ships only status, syarat_display, perlu_cek_ulang, sources (url/note/checked), checked (${data.filter(p => p.biaya_gratis).length} places)`);
+if (!existsSync(path.join(ARCHIVE, 'places'))) ok(false, `gratis counts need the source data at ${ARCHIVE} (set TEDUH_DATA)`);
+else {
+  const arc = readdirSync(path.join(ARCHIVE, 'places')).filter(f => f.endsWith('.json')).map(f => JSON.parse(readFileSync(path.join(ARCHIVE, 'places', f), 'utf8')));
+  const want = {}, got = {};
+  for (const r of arc) if (r.biaya_gratis?.status) want[r.biaya_gratis.status] = (want[r.biaya_gratis.status] || 0) + 1;
+  for (const p of data) if (p._d.gratis) got[p._d.gratis.status] = (got[p._d.gratis.status] || 0) + 1;
+  const fmt = o => Object.keys(o).sort().map(k => `${k} ${o[k]}`).join(', ');
+  ok(fmt(want) === fmt(got) && arc.filter(r => ['ya', 'bersyarat'].includes(r.biaya_gratis?.status)).every(r => data.find(p => p.id === r.id)?._d.gratis?.status === r.biaya_gratis.status), `biaya_gratis statuses match the source files (${fmt(got)})`);
+}
+ok(data.every(p => !(p._d.tags || []).some(t => /gratis/i.test(t))), 'no "Gratis" in _d.tags: the tag is rendered from _d.gratis only');
+ok(gStat('ya').every(p => p._d.gratis.tag === 'Gratis') && gStat('bersyarat').every(p => p._d.gratis.tag === 'Gratis bersyarat') && [...gStat('tidak'), ...gStat('belum_diketahui')].every(p => p._d.gratis.tag === null),
+  `gratis tag: ya "Gratis" (${gStat('ya').length}), bersyarat "Gratis bersyarat" (${gStat('bersyarat').length}), none for tidak (${gStat('tidak').length}) / belum_diketahui (${gStat('belum_diketahui').length})`);
+ok(data.every(p => !(p._d.tags || []).includes('BPJS') || !p._d.bpjs), 'no legacy "BPJS" tag where bpjs_info drives the chip');
+
+// ---- build: leak guard + invalid status, on a temp copy of the source data (never data/ itself) ----
+{
+  const SRC = ARCHIVE;
+  if (!existsSync(path.join(SRC, 'places'))) ok(false, `build tests need the source data at ${SRC} (set TEDUH_DATA)`);
+  else {
+    const tmp = mkdtempSync(path.join(os.tmpdir(), 'teduh-build-'));
+    const fresh = name => { const d = path.join(tmp, name); cpSync(path.join(SRC, 'places'), path.join(d, 'places'), { recursive: true }); cpSync(path.join(SRC, 'hotlines.json'), path.join(d, 'hotlines.json')); return d; };
+    const build = (src, out) => spawnSync('python3', [path.join(here, 'build-data.py'), '--src', src, '--out', out], { encoding: 'utf8' });
+    const firstFile = d => path.join(d, 'places', readdirSync(path.join(d, 'places')).filter(f => f.endsWith('.json')).sort()[0]);
+    const patchJson = (f, fn) => { const o = JSON.parse(readFileSync(f, 'utf8')); fn(o); writeFileSync(f, JSON.stringify(o)); };
+    // 1. top-level key on a place
+    let src = fresh('a'), out = path.join(tmp, 'out-a');
+    patchJson(firstFile(src), o => { o.catatan_internal = 'INJECTED'; });
+    let r = build(src, out);
+    ok(r.status !== 0 && /catatan_internal would ship in places\.json/.test(r.stderr) && !existsSync(out), `build guard: catatan_internal on a place -> exit ${r.status}, nothing written`);
+    // 2. inside hotlines.json (QA M2)
+    src = fresh('b'); out = path.join(tmp, 'out-b');
+    patchJson(path.join(src, 'hotlines.json'), o => { (Array.isArray(o) ? o[0] : o).catatan_internal = 'INJECTED'; });
+    r = build(src, out);
+    ok(r.status !== 0 && /hotlines\.json/.test(r.stderr) && /data\.js/.test(r.stderr) && !existsSync(out), `build guard: catatan_internal in hotlines -> exit ${r.status}, names hotlines.json + data.js, nothing written`);
+    // 3. control + invalid status: bpjs_info.catatan_internal and sources[].catatan_internal are stripped (exit 0);
+    //    an unknown status drops only the status and keeps catatan_display (QA m9)
+    src = fresh('c'); out = path.join(tmp, 'out-c');
+    const f = firstFile(src); let id;
+    patchJson(f, o => { id = o.id; o.bpjs_info = { status: 'row', rujukan: true, catatan_display: 'Catatan uji.', catatan_internal: 'INJECTED', sources: [{ url: 'https://example.org', catatan_internal: 'INJECTED' }], checked: '2026-11-01' }; });
+    r = build(src, out);
+    const built = r.status === 0 ? JSON.parse(readFileSync(path.join(out, 'places.json'), 'utf8')).places.find(p => p.id === id) : null;
+    const outText = r.status === 0 ? ['places.json', 'hotlines.json', 'data.js', 'build-report.json'].map(n => readFileSync(path.join(out, n), 'utf8')).join('') : 'x';
+    ok(r.status === 0 && !outText.includes('catatan_internal'), `build: internal notes inside bpjs_info / sources are stripped, exit 0 (${r.status})`);
+    ok(built && built._d.bpjs === null && built.bpjs_info && built.bpjs_info.catatan_display === 'Catatan uji.' && !('status' in built.bpjs_info) && !('rujukan' in built.bpjs_info) && /status dropped, catatan_display kept/.test(r.stdout),
+      'build: invalid bpjs_info.status -> no chip/filter data, status dropped, catatan_display kept');
+    // 4. a camelCase internal key anywhere -> exit non-zero (QA M2 optional)
+    src = fresh('d'); out = path.join(tmp, 'out-d');
+    patchJson(firstFile(src), o => { o.services_meta = { catatanInternal: 'INJECTED' }; });
+    r = build(src, out);
+    ok(r.status !== 0 && /key named \*internal\*/.test(r.stderr) && !existsSync(out), `build guard: a key named *Internal* -> exit ${r.status}, nothing written`);
+    // 5. gratis negatives (QA m3): the tag comes only from biaya_gratis.status. Expected values are written out
+    //    here as literals, not recomputed with the build's rules.
+    src = fresh('e'); out = path.join(tmp, 'out-e');
+    const files = readdirSync(path.join(src, 'places')).filter(f => f.endsWith('.json')).sort().map(f => path.join(src, 'places', f));
+    const cases = {
+      textSaysGratis: o => { o.bpjs_info = { status: 'tidak_relevan', catatan_display: 'Layanan ini gratis untuk semua.' }; o.cost = 'Gratis'; o.biaya_gratis = { status: 'tidak', syarat_display: 'Bayar sesuai tarif.' }; },
+      costFreeNoField: o => { o.cost = 'Free (gratis)'; delete o.biaya_gratis; },
+      bpjsYaUnknownCost: o => { o.bpjs_info = { status: 'ya', rujukan: true, catatan_display: 'Terima BPJS.' }; o.biaya_gratis = { status: 'belum_diketahui', syarat_display: 'Biaya belum diketahui.' }; },
+      invalidStatus: o => { o.biaya_gratis = { status: 'gratis', syarat_display: 'Catatan uji gratis.', basis: 'none' }; },
+      notObject: o => { o.biaya_gratis = 'gratis'; },
+      bersyaratStale: o => { o.biaya_gratis = { status: 'bersyarat', syarat_display: 'Gratis untuk yang tidak mampu.', basis: 'old_source', perlu_cek_ulang: true,
+        sources: ['catatan tanpa URL', 'https://example.org/a', { url: 'https://example.org/b', note: 'n', checked: '2026-11-01', extra: 'x' }], checked: '2026-11-01' }; }
+    };
+    const caseIds = {};
+    Object.entries(cases).forEach(([name, fn], i) => patchJson(files[i], o => { caseIds[name] = o.id; fn(o); }));
+    r = build(src, out);
+    const eb = r.status === 0 ? JSON.parse(readFileSync(path.join(out, 'places.json'), 'utf8')).places : [];
+    const E = name => eb.find(p => p.id === caseIds[name]);
+    const noTag = p => p && !(p._d.tags || []).some(t => /gratis/i.test(t)) && !(p._d.gratis && p._d.gratis.tag);
+    ok(r.status === 0 && noTag(E('textSaysGratis')) && E('textSaysGratis')._d.gratis.status === 'tidak', 'build: "gratis" in catatan_display / cost but biaya_gratis tidak -> no tag');
+    ok(noTag(E('costFreeNoField')) && E('costFreeNoField')._d.gratis === null, 'build: cost "Free (gratis)" without biaya_gratis -> no tag (no text parsing)');
+    ok(noTag(E('bpjsYaUnknownCost')) && E('bpjsYaUnknownCost')._d.bpjs.accepts === true, 'build: BPJS ya never implies gratis');
+    ok(noTag(E('invalidStatus')) && E('invalidStatus')._d.gratis === null && E('invalidStatus').biaya_gratis.syarat_display === 'Catatan uji gratis.' && !('status' in E('invalidStatus').biaya_gratis) && !('basis' in E('invalidStatus').biaya_gratis),
+      'build: invalid biaya_gratis.status -> no tag, status dropped, syarat_display kept, basis not shipped');
+    ok(noTag(E('notObject')) && !('biaya_gratis' in E('notObject')), 'build: biaya_gratis that is not an object is dropped');
+    const bs = E('bersyaratStale');
+    ok(bs && bs._d.gratis.tag === 'Gratis bersyarat' && bs._d.gratis.recheck === true && bs._d.gratis.syarat === 'Gratis untuk yang tidak mampu.' && !('basis' in bs.biaya_gratis) &&
+      JSON.stringify(bs.biaya_gratis.sources) === JSON.stringify([{ url: 'https://example.org/a' }, { url: 'https://example.org/b', note: 'n', checked: '2026-11-01' }]),
+      'build: bersyarat + perlu_cek_ulang -> "Gratis bersyarat", recheck, sources whitelisted (non-URL strings dropped)');
+    rmSync(tmp, { recursive: true, force: true });
+  }
+}
 const hexes = (appCss.match(/#[0-9a-f]{3,8}\b/gi) || []).filter(h => h.toUpperCase() !== '#F3E3B5');
 ok(hexes.length === 0, `app.css has no raw colours besides the search <mark> (${hexes.join(', ') || 'none'})`);
 
@@ -209,7 +313,7 @@ ok(dt.zoom, 'desktop: zoom control bottom-right');
 ok(Math.round(dt.panel) === 380, 'desktop: 380px panel');
 ok(dt.sh1 === `${data.length} layanan` && dt.sh2 === `${shouldPin.length} di peta · ${approxOnly.length} tanpa titik lokasi` && dt.sort === 'Buka dulu', `desktop header "${dt.sh1}" / "${dt.sh2}" / "${dt.sort}"`);
 ok(/Leaflet/.test(dt.attr) && dt.attr.includes(ATTR_VEC), `desktop attribution "Leaflet | ${ATTR_VEC}"`);
-ok(dt.chips[0] === 'Terverifikasi saja' && dt.chips[1] === 'Buka hari ini' && dt.chips.length === 6, `chips: toggles first, then 4 categories (${dt.chips.join(' | ')})`);
+ok(dt.chips[0] === 'Terverifikasi saja' && dt.chips[1] === 'Buka hari ini' && dt.chips[2] === 'Terima BPJS' && dt.chips.length === 7, `chips: 3 toggles first (incl. "Terima BPJS"), then 4 categories (${dt.chips.join(' | ')})`);
 await page.hover('#quickExit'); await wait(page, 250);
 ok(await page.locator('#qexitTip').evaluate(e => getComputedStyle(e).opacity === '1' && /Esc/.test(e.textContent)), 'desktop: Keluar cepat tooltip "Tekan Esc 3× untuk keluar"');
 await page.mouse.move(700, 500);
@@ -226,6 +330,81 @@ ok(cards.filter(c => !byId[c.id]._d.needs_check).every(c => c.ok === `Terverifik
 const badAria = cards.filter(c => !(c.aria && c.aria.startsWith((byId[c.id].name_display || byId[c.id].name) + ', ') && c.aria.split(', ').length >= 3)).map(c => c.aria);
 ok(badAria.length === 0, 'cards have aria-label "name, status, hours"' + (badAria.length ? ': ' + badAria.join(' | ') : ''));
 ok(approxOnly.every(p => cards.find(c => c.id === p.id)?.unpinned) && await page.locator('#unpinnedTitle').textContent() === 'Tanpa titik di peta', 'unpinned places listed under "Tanpa titik di peta"');
+// BPJS chip on cards (SCHEMA v4): ya / sebagian (+ perlu rujukan) and tidak; the grey "belum diketahui" chip is
+// detail-only (Angga, 2026-11-01); none for tidak_relevan; unknown is never "tidak".
+const bc = await page.$$eval('.card', bs => bs.map(b => { const t = b.querySelector('.tag.bpjs');
+  return { id: b.dataset.id, st: t?.dataset.bpjs || null, text: t?.textContent || '', aria: t?.getAttribute('aria-label') || '', card: b.getAttribute('aria-label'),
+    gratis: b.querySelector('.tag-gratis')?.textContent || null, first: b.querySelector('.crow--tags .tag') === t && !!t }; }));
+const bcOf = id => bc.find(c => c.id === id);
+for (const st of ['ya', 'sebagian', 'tidak']) ok(bStat(st).every(p => bcOf(p.id)?.st === st) && bc.filter(c => c.st === st).length === bStat(st).length, `card BPJS chip "${st}" on exactly the ${bStat(st).length} places with that status`);
+ok(bStat('belum_diketahui').length > 0 && bStat('belum_diketahui').every(p => bcOf(p.id).st === null) && bc.every(c => c.st !== 'belum_diketahui'), `no "BPJS belum diketahui" chip on cards (detail only; ${bStat('belum_diketahui').length} places)`);
+ok(bStat('tidak_relevan').length > 0 && bStat('tidak_relevan').every(p => bcOf(p.id).st === null), `no BPJS chip where BPJS is tidak_relevan (${bStat('tidak_relevan').length})`);
+ok(bc.filter(c => c.st).every(c => c.first), 'BPJS chip leads the tag row');
+ok(bStat('ya').every(p => /^BPJS( · perlu rujukan)?$/.test(bcOf(p.id).text) && /^Terima BPJS/.test(bcOf(p.id).aria)) && bStat('sebagian').every(p => /^BPJS sebagian/.test(bcOf(p.id).text)), 'ya chip "BPJS", sebagian chip "BPJS sebagian"');
+ok(data.filter(p => p._d.bpjs?.rujukan).every(p => / · perlu rujukan$/.test(bcOf(p.id).text) && /rujukan/.test(bcOf(p.id).aria)), `rujukan:true reads "· perlu rujukan" (${data.filter(p => p._d.bpjs?.rujukan).length})`);
+const TIDAK = /tidak (terima|menerima) bpjs|tanpa bpjs|non.?bpjs|bukan bpjs/i;
+ok(bStat('belum_diketahui').every(p => !TIDAK.test(bcOf(p.id).card) && !/BPJS/.test(bcOf(p.id).card)), 'unknown BPJS: card aria says nothing about BPJS (never "tidak")');
+ok(bc.filter(c => c.st).every(c => c.card.includes(c.aria)), 'card aria-label carries the BPJS status when the chip shows');
+ok(gStat('ya').every(p => bcOf(p.id).gratis === 'Gratis') && gStat('bersyarat').every(p => bcOf(p.id).gratis === 'Gratis bersyarat') && bc.filter(c => c.gratis).length === gStat('ya').length + gStat('bersyarat').length,
+  `card gratis tag: "Gratis" on ${gStat('ya').length}, "Gratis bersyarat" on ${gStat('bersyarat').length}, nowhere else`);
+ok(gStat('bersyarat').every(p => /Gratis dengan syarat/.test(bcOf(p.id).card)) && gStat('ya').every(p => /, Gratis(,|$)/.test(bcOf(p.id).card)), 'card aria carries the gratis tag');
+ok(accepts.filter(p => !['ya', 'bersyarat'].includes(p._d.gratis?.status)).every(p => !bcOf(p.id).gratis), 'BPJS acceptance never shows a gratis tag on its own');
+const gStyle = await page.evaluate(() => { const g = document.querySelector('.card .tag-gratis'), t = document.querySelector('.card .tag:not(.bpjs):not(.tag-gratis)'); return g && t ? [getComputedStyle(g).color, getComputedStyle(t).color] : null; });
+ok(!gStyle || gStyle[0] !== gStyle[1], '.tag-gratis has its own style');
+
+// Synthetic places rendered through Peta.ui.fragments: paths the live data does not reach (QA m2).
+const fx = await page.evaluate(() => {
+  const F = Peta.ui.fragments, base = window.__PETA_STATE__.get().places[0];
+  const mk = (bpjs, info) => { const p = JSON.parse(JSON.stringify(base)); p.id = 'fixture'; p._d.tags = []; p._d.regional = false; p._d.bpjs = bpjs;
+    if (info === undefined) delete p.bpjs_info; else p.bpjs_info = info; return p; };
+  const html = h => { const d = document.createElement('div'); d.innerHTML = h; return d; };
+  const read = p => { const c = html(F.card(p, { words: [] })).querySelector('.card'), ct = c.querySelector('.tag.bpjs'), dh = html(F.tagsHtml(p, {})).querySelector('.tag.bpjs'), row = html(F.bpjsRow(p));
+    return { cardChip: ct ? ct.textContent : null, cardCls: ct ? ct.className : '', cardChipAria: ct ? ct.getAttribute('aria-label') : null, cardAria: c.getAttribute('aria-label'),
+      headChip: dh ? dh.textContent : null, headRole: dh ? dh.getAttribute('role') : null, row: row.textContent, rowHidden: row.querySelector('.tag.bpjs')?.getAttribute('aria-hidden') || null, rowLabel: row.querySelector('.ilab')?.textContent || null,
+      undef: /undefined|null/.test(c.outerHTML + row.innerHTML) }; };
+  const B = (status, rujukan) => ({ status, rujukan: rujukan === undefined ? null : rujukan, accepts: status === 'ya' || status === 'sebagian' });
+  return {
+    tidak: read(mk(B('tidak'), { status: 'tidak', catatan_display: 'Sumber menyebut tidak melayani BPJS.' })),
+    none: read(mk(null, undefined)),
+    noNote: read(mk(B('ya', true), { status: 'ya', rujukan: true })),
+    rjFalse: read(mk(B('ya', false), { status: 'ya', rujukan: false, catatan_display: 'Catatan uji.' })),
+    sebagianFalse: read(mk(B('sebagian', false), { status: 'sebagian', rujukan: false, catatan_display: 'Catatan uji.' })),
+    invalid: read(mk(null, { catatan_display: 'Catatan uji tanpa status.' })),
+    hostile: [read(mk(B('row'), { status: 'row' })), read(mk(B('filter'), { status: 'filter' })), read(mk(B('"><b>x</b>'), { status: '"><b>x</b>' })), read(mk(B('toString'), { status: 'toString' }))],
+    unknown: read(mk(B('belum_diketahui'), { status: 'belum_diketahui', catatan_display: 'Belum ada sumber.' })),
+    relevan: read(mk(B('tidak_relevan'), { status: 'tidak_relevan', catatan_display: 'Bukan layanan kesehatan.' })),
+    tok: [['bpjs jkn kis', 'kis'], ['kisaran biaya', 'kis'], ['kisah anak', 'kis'], ['rs jiwa', 'rs'], ['kursus', 'rs'], ['psikolog anak', 'psik'], ['tes iq', 'iq'], ['bpjs', 'bpjs']].map(([t, w]) => Peta.util.matchToken(t, w))
+  };
+});
+ok(fx.tidak.cardChip === 'Tidak terima BPJS' && /\bbpjs--tidak\b/.test(fx.tidak.cardCls) && fx.tidak.cardChipAria === 'Menurut sumber, tidak terima BPJS' && fx.tidak.cardAria.endsWith(', Menurut sumber, tidak terima BPJS'),
+  `fixture tidak: card chip "Tidak terima BPJS", .bpjs--tidak, aria (${fx.tidak.cardChip})`);
+ok(fx.tidak.headChip === 'Tidak terima BPJS' && fx.tidak.headRole === 'img' && fx.tidak.rowHidden === 'true' && fx.tidak.row.includes('Sumber menyebut tidak melayani BPJS.'), 'fixture tidak: detail header chip announced once, row copy aria-hidden, note shown');
+ok(fx.none.cardChip === null && fx.none.headChip === null && fx.none.row === '' && !/BPJS/.test(fx.none.cardAria) && !fx.none.undef, 'fixture bpjs null: no chip, no row, no BPJS words, no "undefined"');
+ok(fx.noNote.cardChip === 'BPJS · perlu rujukan' && fx.noNote.row === '', 'fixture no catatan_display: chip shows, no detail row');
+ok(fx.rjFalse.cardChip === 'BPJS' && fx.rjFalse.cardChipAria === 'Terima BPJS' && fx.sebagianFalse.cardChip === 'BPJS sebagian' && !/rujukan/.test(fx.rjFalse.cardAria + fx.sebagianFalse.cardAria), 'fixture rujukan:false: no "perlu rujukan" text or aria');
+ok(fx.invalid.cardChip === null && fx.invalid.headChip === null && fx.invalid.rowLabel === 'BPJS' && fx.invalid.row.includes('Catatan uji tanpa status.'), 'fixture status dropped: no chip, detail row "BPJS" + catatan_display');
+ok(fx.hostile.every(h => h.cardChip === null && h.headChip === null && !h.undef), 'fixture hostile statuses (row, filter, markup, toString): no chip, no "undefined" (hasOwnProperty lookup)');
+ok(fx.unknown.cardChip === null && !/BPJS/.test(fx.unknown.cardAria) && fx.unknown.headChip === 'BPJS belum diketahui' && fx.unknown.rowHidden === 'true', 'fixture belum_diketahui: nothing on the card, grey chip in the detail');
+ok(fx.relevan.cardChip === null && fx.relevan.headChip === null && fx.relevan.rowLabel === 'BPJS' && fx.relevan.row.includes('Bukan layanan kesehatan.'), 'fixture tidak_relevan: no chip anywhere, note in the detail row');
+const gx = await page.evaluate(() => {
+  const F = Peta.ui.fragments, base = window.__PETA_STATE__.get().places[0];
+  const mk = (gratis, bpjs) => { const p = JSON.parse(JSON.stringify(base)); p.id = 'fixture'; p._d.tags = []; p._d.regional = false; p._d.gratis = gratis; p._d.bpjs = bpjs || null; return p; };
+  const html = h => { const d = document.createElement('div'); d.innerHTML = h; return d; };
+  const read = p => { const c = html(F.card(p, { words: [] })).querySelector('.card'), row = html(F.gratisRow(p));
+    return { tag: c.querySelector('.tag-gratis')?.textContent || null, aria: c.getAttribute('aria-label'), row: row.textContent, rowHidden: row.querySelector('.tag-gratis')?.getAttribute('aria-hidden') || null,
+      recheck: row.querySelector('.recheck')?.textContent || null, undef: /undefined/.test(c.outerHTML + row.innerHTML) }; };
+  const G = (status, syarat, recheck) => ({ status, tag: null, syarat: syarat || null, recheck: !!recheck });
+  return {
+    ya: read(mk(G('ya', 'Gratis untuk semua warga.'))), bersyarat: read(mk(G('bersyarat', 'Bawa SKTM.', true))),
+    tidak: read(mk(G('tidak', 'Bayar sesuai tarif.'))), unknown: read(mk(G('belum_diketahui', 'Biaya belum diketahui.'))), none: read(mk(null)),
+    bpjsOnly: read(mk(null, { status: 'ya', rujukan: true, accepts: true })), hostile: [read(mk(G('status'))), read(mk(G('"><b>x</b>'))), read(mk(G('hasOwnProperty')))]
+  };
+});
+ok(gx.ya.tag === 'Gratis' && gx.ya.row.includes('Gratis untuk semua warga.') && gx.ya.recheck === null && gx.ya.rowHidden === 'true', 'fixture gratis ya: "Gratis" tag, syarat in the detail, no recheck note');
+ok(gx.bersyarat.tag === 'Gratis bersyarat' && /Gratis dengan syarat/.test(gx.bersyarat.aria) && gx.bersyarat.row.includes('Bawa SKTM.') && gx.bersyarat.recheck === 'perlu dicek ulang', 'fixture gratis bersyarat + perlu_cek_ulang: "Gratis bersyarat", syarat + "perlu dicek ulang" in the detail');
+ok([gx.tidak, gx.unknown, gx.none, gx.bpjsOnly].every(x => x.tag === null && x.row === '' && !/gratis/i.test(x.aria)), 'fixtures gratis tidak / belum_diketahui / null / BPJS-only: no tag, no row, nothing in aria');
+ok(gx.hostile.every(x => x.tag === null && x.row === '' && !x.undef), 'fixtures hostile gratis statuses: no tag, no "undefined"');
+ok(fx.tok.join() === 'true,false,false,true,false,true,true,true', `search tokens <=3 chars match whole words only ("kis" never hits "kisaran"/"kisah") (${fx.tok.join()})`);
 const nopin = await page.$$eval('#listUnpinned .card', bs => bs.map(b => !!b.querySelector('.hrs--nopin .ic')));
 ok(nopin.length > 0 && nopin.every(Boolean), `unpinned cards show the pin-off line instead of the hours line (SPEC §11.2, ${nopin.length})`);
 const H = id => cards.find(c => c.id === id).hrs;
@@ -273,6 +452,11 @@ const d2 = await page.evaluate(id => ({ name: document.querySelector('.dname').t
   t1: document.querySelector('.today .t1')?.textContent, t2: document.querySelector('.today .t2')?.textContent, t3: document.querySelector('.today .t3')?.textContent,
   ctrl: document.getElementById('controls').offsetHeight, mapBack: document.getElementById('mapBack').offsetHeight,
   info: Peta.map.markerInfo(id), tags: [...document.querySelectorAll('.drow .tag')].map(t => t.textContent) }), RSD);
+const d2b = await page.evaluate(() => { const r = document.querySelector('#detailBody .irow-bpjs'); return r && { chip: r.querySelector('.tag.bpjs')?.textContent, text: r.textContent, head: document.querySelector('.drow .tag.bpjs')?.textContent,
+  announced: [...document.querySelectorAll('#detailBody .tag.bpjs')].filter(t => t.getAttribute('role') === 'img' && !t.closest('[aria-hidden="true"]') && t.getAttribute('aria-hidden') !== 'true').length }; });
+ok(d2b && d2b.announced === 1, `detail: BPJS status announced once (header chip; the row copy is aria-hidden) (${d2b && d2b.announced})`);
+ok(d2b && d2b.chip === 'BPJS · perlu rujukan' && d2b.head === d2b.chip && d2b.text.includes(byId[RSD].bpjs_info.catatan_display), `detail: BPJS chip in the header + visible BPJS row with catatan_display (${d2b && d2b.chip})`);
+ok(d2b && !/catatan_internal/.test(d2b.text), 'detail BPJS row shows no internal note');
 ok(d2.name === byId[RSD].name && d2.back && /^\d+ dari \d+$/.test(d2.pos) && d2.mapBack === 0 && d2.ctrl === 0, `desktop detail: "‹ Daftar" + "${d2.pos}", no map-back, search hidden`);
 ok(d2.t1 === 'Hari ini, Sabtu · Poli sudah tutup' && d2.t2 === '07.45–11.00 WITA' && d2.t3 === 'IGD rumah sakit buka 24 jam', `today box "${d2.t1}" / "${d2.t2}" / "${d2.t3}"`);
 ok(d2.info.zIndexOffset === 5000 && !d2.info.inCluster && d2.info.onMap && Math.round(d2.info.size[0]) === 47, `selected pin: 1.3×, zIndexOffset 5000, outside the cluster (${JSON.stringify(d2.info)})`);
@@ -299,6 +483,10 @@ await page.click('#detailBack'); await wait(page);
 await page.click(`.card[data-id="${SG}"]`); await wait(page, 1000);
 const sg = await page.evaluate(() => ({ nc: document.querySelector('#detailBody .ncchip')?.textContent, ok: !!document.querySelector('#detailBody .st.ok'),
   notice: document.querySelector('.notice')?.textContent || '', acts: [...document.querySelectorAll('.acts .act')].map(a => a.textContent.trim()), t1: document.querySelector('.today .t1')?.textContent }));
+const sgb = await page.evaluate(() => { const h = document.querySelector('.drow .tag.bpjs'), nc = document.querySelector('#detailBody .ncchip'), r = document.querySelector('#detailBody .irow-bpjs');
+  return { text: h?.textContent, aria: h?.getAttribute('aria-label'), bg: h ? getComputedStyle(h).backgroundColor : '', ncbg: nc ? getComputedStyle(nc).backgroundColor : 'x', row: r?.textContent || '' }; });
+ok(sgb.text === 'BPJS belum diketahui' && sgb.aria === 'Status BPJS belum diketahui' && sgb.bg === sgb.ncbg && sgb.row.includes(byId[SG].bpjs_info.catatan_display), `detail (unknown BPJS): grey "BPJS belum diketahui" chip, same fill as "Belum dicek", note row (${sgb.text})`);
+ok(!/tidak (terima|menerima) bpjs|tanpa bpjs/i.test(sgb.text + sgb.aria), 'detail (unknown BPJS): never worded as "tidak"');
 ok(sg.nc === 'Belum dicek' && !sg.ok && /Info dari sumber publik, mohon konfirmasi via telepon\./.test(sg.notice), 'Sagraha: grey chip + notice "Info dari sumber publik, mohon konfirmasi via telepon."');
 ok(sg.acts.join('|') === 'Rute', `Sagraha actions ${sg.acts.join(' / ')} (numbers removed: no owner-published source)`);
 ok(sg.t1 === 'Hari ini, Sabtu · Sudah tutup', `Sagraha today "${sg.t1}"`);
@@ -307,9 +495,9 @@ await page.click('#detailBack'); await wait(page);
 // detail: Birru Care (phone + WhatsApp, both from the owner's site)
 const BC = 'birru-care-banjarbaru';
 await page.click(`.card[data-id="${BC}"]`); await wait(page, 1000);
-const bc = await page.evaluate(() => ({ acts: [...document.querySelectorAll('.acts .act')].map(a => a.textContent.trim()), pri: document.querySelectorAll('.acts .act.pri').length,
+const bcare = await page.evaluate(() => ({ acts: [...document.querySelectorAll('.acts .act')].map(a => a.textContent.trim()), pri: document.querySelectorAll('.acts .act.pri').length,
   tel: document.querySelector('.acts a[href^="tel:"]')?.getAttribute('href') }));
-ok(bc.acts.slice(0, 2).join('|') === 'Telepon|WhatsApp' && bc.pri === 1 && bc.tel === 'tel:+6285342881997', `Birru Care actions ${bc.acts.join(' / ')} (Telepon filled, ${bc.tel})`);
+ok(bcare.acts.slice(0, 2).join('|') === 'Telepon|WhatsApp' && bcare.pri === 1 && bcare.tel === 'tel:+6285342881997', `Birru Care actions ${bcare.acts.join(' / ')} (Telepon filled, ${bcare.tel})`);
 await page.click('#detailBack'); await wait(page);
 
 // phone chooser: no record has two conflicting owner-published numbers now, so inject example
@@ -360,6 +548,32 @@ await page.click('#empty [data-act="showun"]'); await wait(page);
 ok(await page.locator('.card').count() === 1 && !(await page.locator('.chip[data-t="ok"]').getAttribute('aria-pressed') === 'true'), '"Tampilkan 1 yang belum dicek" drops the verified filter');
 await page.click('#clearFilters'); await wait(page);
 
+// "Terima BPJS" filter = ya + sebagian; unknown places are left out but never called "tidak"
+await page.click('.chip[data-t="bpjs"]'); await wait(page, 500);
+const fb = await page.evaluate(() => ({ h1: document.getElementById('sh1').textContent, h2: document.getElementById('sh2').textContent, ids: [...document.querySelectorAll('.card')].map(c => c.dataset.id),
+  pressed: document.querySelector('.chip[data-t="bpjs"]').getAttribute('aria-pressed'), note: document.getElementById('bpjsNote').hidden ? '' : document.getElementById('bpjsNote').textContent, shown: Peta.map.shownCount() }));
+const nUnk = bStat('belum_diketahui').length;
+ok(fb.h1 === `${accepts.length} layanan cocok` && fb.h2 === 'Terima BPJS' && fb.pressed === 'true', `"Terima BPJS": header "${fb.h1}" / "${fb.h2}", aria-pressed`);
+ok(fb.ids.length === accepts.length && accepts.every(p => fb.ids.includes(p.id)) && fb.shown === accepts.filter(p => p._d.pin).length, `"Terima BPJS" list+map = ya + sebagian (${fb.ids.length} cards, ${fb.shown} pins)`);
+ok(fb.note.includes(`Status BPJS ${nUnk} tempat lain belum diketahui`) && !/tidak (terima|menerima) bpjs/i.test(fb.note), `filter note counts unknown places as unknown, not "tidak" ("${fb.note}")`);
+await page.click('.chip[data-group="psikologi"]'); await wait(page, 500);
+const eb = await page.evaluate(() => document.getElementById('empty').textContent);
+ok(/Belum ada biro tes psikologi yang tercatat terima BPJS\./.test(eb) && !/tidak (terima|menerima) bpjs/i.test(eb), 'empty (BPJS filter): "…yang tercatat terima BPJS", never "tidak terima"');
+await page.click('#clearFilters'); await wait(page, 400);
+ok(await page.locator('.chip[data-t="bpjs"]').getAttribute('aria-pressed') === 'false' && await page.locator('.card').count() === data.length && await page.locator('#bpjsNote').isHidden(), 'Hapus filter clears "Terima BPJS"');
+const tidakAll = await page.evaluate(() => [...document.querySelectorAll('[aria-label], .tag, #empty, #bpjsNote, #sh2')].map(e => (e.getAttribute('aria-label') || '') + ' ' + e.textContent).filter(t => /tidak (terima|menerima) bpjs/i.test(t)).length);
+ok(tidakAll === 0 || bStat('tidak').length > 0, `no "tidak terima BPJS" text anywhere in the list (${tidakAll}; source-confirmed "tidak": ${bStat('tidak').length})`);
+
+// detail gratis rows (SCHEMA v5): bersyarat shows syarat_display; perlu_cek_ulang shows a quiet note
+for (const g of [...gStat('bersyarat'), ...gStat('ya')].slice(0, 6)) {
+  await page.click(`.card[data-id="${g.id}"]`); await wait(page, 700);
+  const gr = await page.evaluate(() => { const r = document.querySelector('#detailBody .irow-gratis'); return { head: document.querySelector('.drow .tag-gratis')?.textContent || null, row: r?.textContent || '', recheck: r?.querySelector('.recheck')?.textContent || null,
+    recheckColor: r?.querySelector('.recheck') ? getComputedStyle(r.querySelector('.recheck')).color : '' }; });
+  ok(gr.head === g._d.gratis.tag && gr.row.includes(g.biaya_gratis.syarat_display) && (gr.recheck === 'perlu dicek ulang') === (g.biaya_gratis.perlu_cek_ulang === true),
+    `detail ${g.id}: "${gr.head}" + syarat_display${gr.recheck ? ' + "perlu dicek ulang"' : ''}`);
+  await page.click('#detailBack'); await wait(page, 400);
+}
+
 // search (d03 empty + results)
 await page.fill('#q', 'terapi wicara'); await wait(page, 500);
 const sr = await page.evaluate(() => ({ h1: document.getElementById('sh1').textContent, marks: document.querySelectorAll('.card mark').length }));
@@ -373,7 +587,11 @@ await page.click('#empty .bchip'); await wait(page, 500);
 ok(+/^(\d+)/.exec(await page.locator('#sh1').textContent())[1] > 0, 'broader chip runs that search');
 await page.fill('#q', 'bpjs'); await wait(page, 400);
 const nb = await page.locator('.card').count();
-ok(nb > 0 && nb < data.length, `search "bpjs" filters the list (${nb})`);
+ok(nb === accepts.length, `search "bpjs" finds the places that take BPJS (${nb})`);
+await page.fill('#q', 'jkn'); await wait(page, 400);
+ok(await page.locator('.card').count() === accepts.length, 'search "jkn" finds the same places (SCHEMA v4 search_terms)');
+await page.fill('#q', 'kis'); await wait(page, 400);
+ok(await page.locator('.card').count() === accepts.length, 'search "kis" finds the same places (whole word only)');
 await page.click('#qClear'); await wait(page, 400);
 
 // emergency modal (m08) + focus trap

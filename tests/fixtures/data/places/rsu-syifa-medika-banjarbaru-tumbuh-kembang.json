@@ -153,5 +153,43 @@
       "note": "checked 2026-10-31: number appears on this page",
       "checked": "2026-10-31"
     }
-  ]
+  ],
+  "bpjs_info": {
+    "status": "sebagian",
+    "rujukan": true,
+    "basis": "confirmed_online",
+    "catatan_display": "BPJS di Poli Reguler (dokter rehab medik: Jumat sore & Sabtu pagi); poli eksekutif bayar sendiri. Apakah terapi anak (wicara/okupasi) ditanggung BPJS belum dikonfirmasi.",
+    "sources": [
+      {
+        "url": "https://rsusyifamedika.co.id/dr-dianike-fitradewi-sp-kj/",
+        "note": "official: psychiatrist 'Poli Reguler (BPJS)' Mon & Thu vs paid Aurora Executive Clinic",
+        "checked": "2026-11-01"
+      },
+      {
+        "url": "https://rsusyifamedika.co.id/dr-teguh-purwanti-sp-kfr/",
+        "note": "official: Sp.KFR rehab medik 'poli reguler BPJS' schedule",
+        "checked": "2026-11-01"
+      },
+      {
+        "url": "https://bpjs-kesehatan.go.id/user-manual-mobile-jkn/mobilejkn/antreanfkrtl.html",
+        "note": "BPJS official: hospitals are FKRTL; queue via Mobile JKN (general rule, referral from FKTP)",
+        "checked": "2026-11-01"
+      }
+    ],
+    "checked": "2026-11-01"
+  },
+  "biaya_gratis": {
+    "status": "tidak",
+    "syarat_display": "Tidak gratis: Poli Reguler bisa pakai BPJS, poli eksekutif bayar sendiri.",
+    "basis": "confirmed_online",
+    "perlu_cek_ulang": false,
+    "sources": [
+      {
+        "url": "https://rsusyifamedika.co.id/dr-teguh-purwanti-sp-kfr/",
+        "note": "official: poli reguler BPJS vs eksekutif",
+        "checked": "2026-11-01"
+      }
+    ],
+    "checked": "2026-11-01"
+  }
 }

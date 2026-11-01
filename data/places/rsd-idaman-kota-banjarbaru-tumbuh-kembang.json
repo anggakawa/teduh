@@ -191,5 +191,43 @@
       "note": "checked 2026-10-31: number appears on this page (Wayback copy; live site unreachable)",
       "checked": "2026-10-31"
     }
-  ]
+  ],
+  "bpjs_info": {
+    "status": "ya",
+    "rujukan": true,
+    "basis": "confirmed_online",
+    "catatan_display": "Terima BPJS. Perlu surat rujukan dari puskesmas/klinik faskes 1, lalu daftar lewat Mobile JKN. Antrean terapi anak dengan BPJS bisa panjang.",
+    "sources": [
+      {
+        "url": "https://teras7.com/cek-sebelum-datang-jadwal-klinik-rawat-jalan-rsd-idaman-banjarbaru-jumat-27-februari-2026/",
+        "note": "Feb 2026 schedule: registration via Mobile JKN",
+        "checked": "2026-11-01"
+      },
+      {
+        "url": "https://bpjs-kesehatan.go.id/user-manual-mobile-jkn/mobilejkn/antreanfkrtl.html",
+        "note": "BPJS official: hospitals are FKRTL; queue via Mobile JKN (general rule, referral from FKTP)",
+        "checked": "2026-11-01"
+      },
+      {
+        "url": "https://rsidaman.banjarbarukota.go.id/rehabilitasi-medik/",
+        "note": "official rehab page (tumbuh kembang, wicara, okupasi)",
+        "checked": "2026-11-01"
+      }
+    ],
+    "checked": "2026-11-01"
+  },
+  "biaya_gratis": {
+    "status": "tidak",
+    "syarat_display": "Tidak gratis: bayar sebagai pasien umum, atau ditanggung BPJS dengan rujukan (lihat info BPJS).",
+    "basis": "inferred",
+    "perlu_cek_ulang": false,
+    "sources": [
+      {
+        "url": "https://linkalimantan.com/masyarakat-dihimbau-jangan-malu-berkonsultasi/",
+        "note": "2022: same hospital, BPJS or umum (stated for Poli Jiwa, not tumbuh kembang)",
+        "checked": "2026-11-01"
+      }
+    ],
+    "checked": "2026-11-01"
+  }
 }

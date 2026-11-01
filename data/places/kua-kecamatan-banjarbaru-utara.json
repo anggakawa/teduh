@@ -133,5 +133,27 @@
     "bimbingan perkawinan",
     "nikah"
   ],
-  "city_display": "Banjarbaru"
+  "city_display": "Banjarbaru",
+  "bpjs_info": {
+    "status": "tidak_relevan",
+    "rujukan": null,
+    "basis": "confirmed_online",
+    "catatan_display": "Bukan layanan kesehatan. Bimbingan perkawinan (bimwin) gratis; biaya konsultasi keluarga di KUA belum diketahui.",
+    "sources": [],
+    "checked": "2026-11-01"
+  },
+  "biaya_gratis": {
+    "status": "belum_diketahui",
+    "syarat_display": "Biaya konsultasi keluarga di KUA belum diketahui. Bimbingan perkawinan (bimwin) gratis menurut sumber nasional Kemenag, belum dikonfirmasi untuk KUA ini.",
+    "basis": "none",
+    "perlu_cek_ulang": false,
+    "sources": [
+      {
+        "url": "https://kua.or.id/kemenag-siapkan-3700-fasilitator-profesional-bimbingan-perkawinan",
+        "note": "national: bimwin free (search listing), not Banjarbaru-specific",
+        "checked": "2026-10-31"
+      }
+    ],
+    "checked": "2026-11-01"
+  }
 }

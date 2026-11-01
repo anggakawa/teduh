@@ -132,5 +132,21 @@
     "psikotes",
     "minat bakat"
   ],
-  "city_display": "Banjarbaru"
+  "city_display": "Banjarbaru",
+  "bpjs_info": {
+    "status": "belum_diketahui",
+    "rujukan": null,
+    "basis": "none",
+    "catatan_display": "Praktik/biro swasta. Belum ada sumber yang menyebut terima BPJS; kemungkinan besar bayar sendiri. Tanyakan saat booking.",
+    "sources": [],
+    "checked": "2026-11-01"
+  },
+  "biaya_gratis": {
+    "status": "belum_diketahui",
+    "syarat_display": "Biaya belum diketahui; belum ada sumber.",
+    "basis": "none",
+    "perlu_cek_ulang": false,
+    "sources": [],
+    "checked": "2026-11-01"
+  }
 }

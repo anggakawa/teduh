@@ -151,5 +151,27 @@
     "psikotes",
     "praktik malam"
   ],
-  "city_display": "Banjarbaru"
+  "city_display": "Banjarbaru",
+  "bpjs_info": {
+    "status": "belum_diketahui",
+    "rujukan": null,
+    "basis": "none",
+    "catatan_display": "Praktik mandiri (malam): belum ada sumber soal BPJS. Beliau juga praktik di RSJ Sambang Lihum, yang terima BPJS dengan rujukan.",
+    "sources": [
+      {
+        "url": "https://data.ipkindonesia.or.id/psikolog-klinis/banjar-baru/siti-saniah--MTI4Mw==",
+        "note": "IPK registry: also practices at RSJ Sambang Lihum",
+        "checked": "2026-11-01"
+      }
+    ],
+    "checked": "2026-11-01"
+  },
+  "biaya_gratis": {
+    "status": "belum_diketahui",
+    "syarat_display": "Biaya belum diketahui; belum ada sumber.",
+    "basis": "none",
+    "perlu_cek_ulang": false,
+    "sources": [],
+    "checked": "2026-11-01"
+  }
 }

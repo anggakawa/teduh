@@ -81,7 +81,8 @@ otomatis lewat "Closes #N".
 
 | Cek | Skrip |
 |---|---|
-| JSON Schema (SCHEMA v3), `id` = nama berkas, minimal satu sumber http(s), tanpa markup/script | `scripts/validate.py` |
+| JSON Schema (SCHEMA v5, termasuk `bpjs_info` dan `biaya_gratis`), `id` = nama berkas, minimal satu sumber http(s), tanpa markup/script | `scripts/validate.py` |
+| Tidak ada nomor telepon di `bpjs_info` / `biaya_gratis`; tidak ada kunci `*internal*` (catatan internal arsip) di data repo | `scripts/validate.py` |
 | `approx_coords` tidak pernah jadi pin; pin di area Banjarbaru & sekitar | `validate.py`, `guard_pr.py` |
 | Hanya CODEOWNERS yang boleh membuat `active` atau menghapus tempat | `guard_pr.py` |
 | Perubahan `lat`/`lng` wajib menyebut asal di `coord_method`; sumber baru harus URL | `guard_pr.py` |

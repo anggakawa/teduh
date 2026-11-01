@@ -147,5 +147,21 @@
       "note": "checked 2026-10-31: number appears on this page",
       "checked": "2026-10-31"
     }
-  ]
+  ],
+  "bpjs_info": {
+    "status": "tidak_relevan",
+    "rujukan": null,
+    "basis": "inferred",
+    "catatan_display": "Bukan layanan kesehatan (layanan pemerintah untuk korban kekerasan). Biaya belum disebut di sumber mana pun.",
+    "sources": [],
+    "checked": "2026-11-01"
+  },
+  "biaya_gratis": {
+    "status": "belum_diketahui",
+    "syarat_display": "Biaya belum disebut di sumber mana pun (layanan pemerintah, perlu dikonfirmasi).",
+    "basis": "none",
+    "perlu_cek_ulang": false,
+    "sources": [],
+    "checked": "2026-11-01"
+  }
 }

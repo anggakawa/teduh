@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://teduh.example/schema/bpjs_info.schema.json",
+  "title": "bpjs_info (SCHEMA.md v4): BPJS Kesehatan / JKN status of a place",
+  "description": "Structured, user-facing BPJS status. The raw `bpjs` text stays as evidence. Private archive notes (catatan_internal or any key containing 'internal') are never stored in this public repo; scripts/migrate-from-store.py --fields strips them and additionalProperties:false rejects them. No phone numbers in catatan_display (scripts/validate.py).",
+  "type": "object",
+  "required": ["status"],
+  "additionalProperties": false,
+  "properties": {
+    "status": {
+      "description": "ya = accepted; sebagian = only some polis/services; tidak = a source says not accepted; tidak_relevan = not a health facility; belum_diketahui = no source either way (never guess).",
+      "enum": ["ya", "sebagian", "tidak", "tidak_relevan", "belum_diketahui"]
+    },
+    "rujukan": {
+      "description": "true = needs a referral from faskes tingkat 1 (FKTP); null = unknown or not applicable.",
+      "type": ["boolean", "null"]
+    },
+    "basis": { "enum": ["confirmed_online", "inferred", "none"] },
+    "catatan_display": { "description": "Short Indonesian, user-facing note. No phone numbers.", "type": "string" },
+    "sources": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          { "type": "string", "pattern": "^https?://" },
+          {
+            "type": "object",
+            "required": ["url"],
+            "additionalProperties": false,
+            "properties": {
+              "url": { "type": "string", "minLength": 4 },
+              "note": { "type": "string" },
+              "checked": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" }
+            }
+          }
+        ]
+      }
+    },
+    "checked": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" }
+  }
+}

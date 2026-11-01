@@ -54,6 +54,15 @@
     }).join('') + '</dl>';
   }
 
+  // Search token match. Tokens of 3 letters or fewer match whole words only (so "kis" never hits
+  // "kisaran", "rs" never hits "kursus"); longer tokens match anywhere, as you type.
+  var SHORT_TOKEN = 3;
+  function reEscape(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+  function matchToken(text, w) {
+    if (w.length > SHORT_TOKEN) return text.indexOf(w) >= 0;
+    return new RegExp('(^|[^a-z0-9])' + reEscape(w) + '($|[^a-z0-9])').test(text);
+  }
+
   function fold(s) { return String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''); }
 
   function isMobile() { return window.matchMedia('(max-width: 899.98px)').matches; }
@@ -159,7 +168,7 @@
 
   function km(m) { return m < 1000 ? Math.round(m / 10) * 10 + ' m' : (m / 1000).toFixed(1).replace('.', ',') + ' km'; }
 
-  P.util = { esc: esc, linkify: linkify, humanizeKey: humanizeKey, isEmpty: isEmpty, renderValue: renderValue, fold: fold, isMobile: isMobile, reducedMotion: reducedMotion,
+  P.util = { esc: esc, linkify: linkify, humanizeKey: humanizeKey, isEmpty: isEmpty, renderValue: renderValue, fold: fold, matchToken: matchToken, isMobile: isMobile, reducedMotion: reducedMotion,
     icon: icon, monthYear: monthYear, checkedLabel: checkedLabel, todayIdx: todayIdx, now: now, wita: wita, span: span,
     hoursStatus: hoursStatus, opensToday: opensToday, highlight: highlight, km: km };
 })(window.Peta);

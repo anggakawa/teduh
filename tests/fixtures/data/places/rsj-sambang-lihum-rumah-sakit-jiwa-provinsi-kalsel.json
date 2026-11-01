@@ -201,5 +201,43 @@
       "note": "checked 2026-10-31: number appears on this page",
       "checked": "2026-10-31"
     }
-  ]
+  ],
+  "bpjs_info": {
+    "status": "ya",
+    "rujukan": true,
+    "basis": "confirmed_online",
+    "catatan_display": "Terima BPJS. Bawa surat rujukan asli + 2 fotokopi, kartu BPJS, KTP dan KK (fotokopi 2 lembar). Pemeriksaan untuk surat keterangan/MCU tetap bayar sesuai tarif.",
+    "sources": [
+      {
+        "url": "https://rsjsambanglihum.kalselprov.go.id/2021/03/alur-dan-persyaratan-pelayanan/",
+        "note": "official: requirements for BPJS/Askes patients incl. original Surat Rujukan, BPJS card, KK, KTP",
+        "checked": "2026-11-01"
+      },
+      {
+        "url": "https://www.reportase9.id/begini-alur-penerimaan-rujukan-pasien-di-rsj-sambang-lihum/",
+        "note": "Jan 2023 news: same BPJS requirements restated by RSJ official",
+        "checked": "2026-11-01"
+      }
+    ],
+    "checked": "2026-11-01"
+  },
+  "biaya_gratis": {
+    "status": "tidak",
+    "syarat_display": "Tidak gratis: bayar sebagai pasien umum, atau ditanggung BPJS dengan rujukan (lihat info BPJS). Surat keterangan/MCU bayar sesuai tarif (mis. surat sehat jiwa Rp350.000).",
+    "basis": "confirmed_online",
+    "perlu_cek_ulang": false,
+    "sources": [
+      {
+        "url": "https://mcu.sambanglihum.com/",
+        "note": "official MCU prices",
+        "checked": "2026-10-31"
+      },
+      {
+        "url": "https://rsjsambanglihum.kalselprov.go.id/2021/03/alur-dan-persyaratan-pelayanan/",
+        "note": "official: BPJS requirements",
+        "checked": "2026-11-01"
+      }
+    ],
+    "checked": "2026-11-01"
+  }
 }

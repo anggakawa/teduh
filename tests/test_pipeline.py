@@ -234,6 +234,123 @@ class Guard(unittest.TestCase):
         self.assertEqual(self.guard("random-contributor").returncode, 0)
 
 
+class BpjsGratis(unittest.TestCase):
+    """SCHEMA v4 bpjs_info + v5 biaya_gratis: schema, privacy rules, field sync, and the site tag."""
+    def setUp(self):
+        self.tmp = tempfile.mkdtemp()
+        self.data = os.path.join(self.tmp, "data")
+        shutil.copytree(os.path.join(ROOT, "data"), self.data)
+
+    def tearDown(self):
+        shutil.rmtree(self.tmp)
+
+    def path(self, pid, data=None):
+        return os.path.join(data or self.data, "places", pid + ".json")
+
+    def edit(self, pid, fn, data=None):
+        f = self.path(pid, data)
+        rec = json.load(open(f, encoding="utf-8")); fn(rec)
+        json.dump(rec, open(f, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
+
+    def validate(self):
+        return run("scripts/validate.py", "--data", self.data)
+
+    def build(self):
+        out = os.path.join(self.tmp, "site-data")
+        b = run("scripts/build-data.py", "--src", self.data, "--out", out, "--strict")
+        return b, out
+
+    def test_repo_data_has_both_fields_and_no_internal_notes(self):
+        counts = {}
+        for f in sorted(os.listdir(os.path.join(ROOT, "data", "places"))):
+            text = open(os.path.join(ROOT, "data", "places", f), encoding="utf-8").read()
+            self.assertNotIn("internal", text.lower(), f)
+            rec = json.loads(text)
+            self.assertIn("bpjs_info", rec, f); self.assertIn("biaya_gratis", rec, f)
+            counts[rec["biaya_gratis"]["status"]] = counts.get(rec["biaya_gratis"]["status"], 0) + 1
+        self.assertEqual(counts, {"ya": 2, "bersyarat": 4, "tidak": 9, "belum_diketahui": 18})
+
+    def test_internal_note_is_rejected(self):
+        self.edit("rsd-idaman-kota-banjarbaru", lambda r: r["bpjs_info"].update(catatan_internal="evidence"))
+        v = self.validate()
+        self.assertNotEqual(v.returncode, 0)
+        self.assertIn("bpjs_info.catatan_internal", v.stdout)
+        self.assertIn("must not be in the public repo", v.stdout)
+
+    def test_invalid_status_is_rejected_by_the_field_schema(self):
+        self.edit("bnn-kota-banjarbaru", lambda r: r["biaya_gratis"].update(status="gratis"))
+        self.edit("rsd-idaman-kota-banjarbaru", lambda r: r["bpjs_info"].update(status="maybe"))
+        v = self.validate()
+        self.assertNotEqual(v.returncode, 0)
+        self.assertIn("schema: biaya_gratis/status", v.stdout)
+        self.assertIn("schema: bpjs_info/status", v.stdout)
+
+    def test_no_phone_in_display_fields_even_when_cited(self):
+        def add(r):
+            r["biaya_gratis"]["syarat_display"] += " Info: 0812-0000-1111."
+            r["contact_sources"] = (r.get("contact_sources") or []) + [{"number": "0812-0000-1111", "url": "https://example.org/kontak"}]
+        self.edit("posbakum-pengadilan-agama-banjarbaru", add)
+        v = self.validate()
+        self.assertNotEqual(v.returncode, 0)
+        self.assertIn("no phone numbers in biaya_gratis", v.stdout)
+
+    def test_site_tag_comes_only_from_biaya_gratis_status(self):
+        def free_text(r):
+            r["cost"] = "Gratis"
+            r["bpjs_info"]["catatan_display"] = "Layanan ini gratis."
+            r["biaya_gratis"] = {"status": "tidak", "syarat_display": "Bayar sesuai tarif."}
+        self.edit("klinik-psikologi-fusfa", free_text)
+        b, out = self.build()
+        self.assertEqual(b.returncode, 0, b.stdout + b.stderr)
+        text = "".join(open(os.path.join(out, n), encoding="utf-8").read() for n in ("places.json", "hotlines.json", "data.js", "build-report.json"))
+        self.assertNotIn("catatan_internal", text)
+        places = {p["id"]: p for p in json.loads(open(os.path.join(out, "places.json"), encoding="utf-8").read())["places"]}
+        for p in places.values():
+            self.assertFalse(any("gratis" in t.lower() for t in p["_d"]["tags"]), p["id"])
+            self.assertNotIn("basis", p.get("biaya_gratis") or {}, p["id"])
+        self.assertEqual(places["klinik-psikologi-fusfa"]["_d"]["gratis"]["tag"], None)
+        self.assertEqual(places["posbankum-kelurahan-kota-banjarbaru"]["_d"]["gratis"]["tag"], "Gratis")
+        bnn = places["bnn-kota-banjarbaru"]["_d"]["gratis"]
+        self.assertEqual((bnn["tag"], bnn["recheck"]), ("Gratis bersyarat", True))
+        tagged = sorted(i for i, p in places.items() if p["_d"]["gratis"] and p["_d"]["gratis"]["tag"])
+        self.assertEqual(tagged, ["bnn-kota-banjarbaru", "posbakum-pengadilan-agama-banjarbaru", "posbakum-pengadilan-negeri-banjarbaru",
+                                  "posbakumadin-banjarbaru", "posbankum-kelurahan-kota-banjarbaru", "puspaga-provinsi-kalimantan-selatan"])
+        # BPJS acceptance never implies gratis
+        self.assertTrue(all(not (p["_d"]["gratis"] or {}).get("tag") for p in places.values()
+                            if (p["_d"]["bpjs"] or {}).get("accepts") and (p.get("biaya_gratis") or {}).get("status") not in ("ya", "bersyarat")))
+
+    def test_build_refuses_to_ship_internal_notes(self):
+        self.edit("talenta-aditama", lambda r: r.update(catatan_internal="x"))
+        b, out = self.build()
+        self.assertNotEqual(b.returncode, 0)
+        self.assertIn("catatan_internal would ship", b.stderr)
+        self.assertFalse(os.path.exists(out))
+
+    def test_field_sync_keeps_the_consent_scrub_and_strips_internal_keys(self):
+        arc = os.path.join(self.tmp, "archive")
+        shutil.copytree(os.path.join(ROOT, "data"), arc)
+        pid = "biro-sagraha-psikologi-banjarbaru"
+        before = json.load(open(self.path(pid), encoding="utf-8"))
+        def archive_side(r):
+            r["contacts"] = {"phone": "0812-0000-2222"}           # an unconsented archive number
+            r["bpjs_info"] = {"status": "ya", "catatan_display": "Terima BPJS.", "catatan_internal": "x", "sources": [{"url": "https://example.org", "note_internal": "y"}]}
+            r["biaya_gratis"] = {"status": "bersyarat", "syarat_display": "Gratis untuk warga.", "basis": "inferred", "perlu_cek_ulang": False}
+        self.edit(pid, archive_side, data=arc)
+        new = json.load(open(self.path(pid, arc), encoding="utf-8")); new.update(id="tempat-baru-arsip")
+        json.dump(new, open(self.path("tempat-baru-arsip", arc), "w", encoding="utf-8"))
+        r = run("scripts/migrate-from-store.py", "--src", arc, "--fields", "bpjs_info,biaya_gratis", "--data", self.data)
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+        self.assertIn("SKIPPED (new place", r.stdout)
+        self.assertFalse(os.path.exists(self.path("tempat-baru-arsip")))
+        after = json.load(open(self.path(pid), encoding="utf-8"))
+        self.assertEqual(after["contacts"], before["contacts"])
+        self.assertEqual(after["bpjs_info"], {"status": "ya", "catatan_display": "Terima BPJS.", "sources": [{"url": "https://example.org"}]})
+        self.assertEqual(after["biaya_gratis"]["status"], "bersyarat")
+        self.assertEqual({k: after[k] for k in after if k not in ("bpjs_info", "biaya_gratis")},
+                         {k: before[k] for k in before if k not in ("bpjs_info", "biaya_gratis")})
+        self.assertEqual(self.validate().returncode, 0)
+
+
 class Templates(unittest.TestCase):
     """Every form field must survive GitHub's markdown rendering and reach the generator."""
     def test_rendered_forms_parse_to_all_ids(self):
