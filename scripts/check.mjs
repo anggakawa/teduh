@@ -101,12 +101,23 @@ ok(data.every(p => !(p._d.tags || []).includes('BPJS') || !p._d.bpjs), 'no legac
     patchJson(firstFile(src), o => { o.services_meta = { catatanInternal: 'INJECTED' }; });
     r = build(src, out);
     ok(r.status !== 0 && /key named \*internal\*/.test(r.stderr) && !existsSync(out), `build guard: a key named *Internal* -> exit ${r.status}, nothing written`);
-    // 4b. QA R-M1: the guard folds keys (NFKC + casefold, dotless ı -> i) instead of a [A-Za-z0-9_] regex
+    // 4b. QA R-M1: the guard folds keys (NFKC + casefold, dotless ı -> i)
     for (const [label, key] of [['NOTE_INTERNAL', 'NOTE_INTERNAL'], ['catatan-internal', 'catatan-internal'], ['"catatan internal"', 'catatan internal'], ['dotless ı', 'catatan_\u0131nternal']]) {
       src = fresh('k' + label.length); out = path.join(tmp, 'out-k' + label.length);
       patchJson(firstFile(src), o => { o.services_meta = [{ [key]: 'INJECTED' }]; });
       r = build(src, out);
       ok(r.status !== 0 && /key named \*internal\*/.test(r.stderr) && !existsSync(out), `build guard: key ${label} -> exit ${r.status}, nothing written`);
+    }
+    // 4c. QA R2-M2: hidden / look-alike characters inside a key (folding alone missed these): any key that is not
+    //     ^[A-Za-z0-9_-]+$ fails, on a place (top level and nested) and in hotlines.json
+    for (const [label, key] of [['zero-width', 'catatan_inter\u200bnal'], ['soft hyphen', 'catatan_inter\u00adnal'], ['Cyrillic і', 'catatan_\u0456nternal']]) {
+      for (const where of ['place', 'nested', 'hotlines']) {
+        const tag = 'z' + label.length + where; src = fresh(tag); out = path.join(tmp, 'out-' + tag);
+        if (where === 'hotlines') patchJson(path.join(src, 'hotlines.json'), o => { (Array.isArray(o) ? o[0] : o.hotlines ? o.hotlines[0] : o)[key] = 'SECRET'; });
+        else patchJson(firstFile(src), o => { if (where === 'place') o[key] = 'SECRET'; else o.services_meta = [{ [key]: 'SECRET' }]; });
+        r = build(src, out);
+        ok(r.status !== 0 && /hidden\/non-ASCII/.test(r.stderr) && !existsSync(out), `build guard: key with ${label} (${where}) -> exit ${r.status}, nothing written`);
+      }
     }
     // 5. gratis negatives (QA m3): the tag comes only from biaya_gratis.status. Expected values are written out
     //    here as literals, not recomputed with the build's rules.

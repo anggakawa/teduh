@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://teduh.example/schema/store-sync.schema.json",
+  "title": "data/.store-sync.json: what scripts/migrate-from-store.py --fields last wrote",
+  "description": "Place id -> {field: sha256 hex of the canonical JSON of the public value the last field sync wrote}. Written only by migrate-from-store.py. A repo value whose hash differs from this is treated as a hand edit and KEPT. Code owners only (CODEOWNERS, guard_pr.py).",
+  "type": "object",
+  "propertyNames": { "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$", "maxLength": 80 },
+  "additionalProperties": {
+    "type": "object",
+    "minProperties": 1,
+    "additionalProperties": false,
+    "properties": {
+      "bpjs_info": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+      "biaya_gratis": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+    }
+  }
+}

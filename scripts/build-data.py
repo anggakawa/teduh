@@ -14,10 +14,14 @@ Usage:  python3 scripts/build-data.py [--src data] [--out site/data] [--strict]
 
 Leak guard: every output payload is built first and the build exits non-zero, before writing
 anything, if the text "catatan_internal" appears in any of them, or if any key in the parsed
-payloads contains "internal" after Unicode folding (NFKC + casefold, combining marks removed,
-dotless ı -> i): NOTE_INTERNAL, catatan-internal, "catatan internal", catatan_ınternal … all fail.
+payloads is refused by leaks.leaked_key_paths (leaks.py next to this file, the same module
+validate.py and migrate-from-store.py use): "internal" after Unicode folding (NOTE_INTERNAL,
+catatan-internal, catatan_ınternal …) or a key that is not a plain ASCII identifier
+^[A-Za-z0-9_-]+$ (zero-width / soft-hyphen / BOM characters, look-alike letters, spaces).
 """
-import argparse, glob, json, os, re, sys, unicodedata
+import argparse, glob, json, os, re, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import leaks   # one rule for every guard: leaks.is_internal_key / leaks.is_plain_key
 from datetime import datetime, timezone
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -192,27 +196,6 @@ BPJS_ACCEPTS = ("ya", "sebagian")    # the statuses the "Terima BPJS" filter kee
 BPJS_SEARCH_WORDS = " bpjs jkn kis"   # SCHEMA v4 search_terms for places that take BPJS
 LEAK_MARKER = "catatan_internal"
 
-
-def is_internal_key(k):
-    """Same rule as the repo's scripts/leaks.py: "internal" in the folded key (NFKC, casefold,
-    combining marks removed, dotless ı -> i). catatan_internal, NOTE_INTERNAL, catatan-internal,
-    "catatan internal", catatanInternal, catatan_ınternal all count."""
-    s = unicodedata.normalize("NFKC", str(k)).casefold()
-    s = "".join(c for c in unicodedata.normalize("NFKD", s) if not unicodedata.combining(c))
-    return "internal" in s.replace("\u0131", "i")
-
-
-def internal_key_paths(v, path=""):
-    """JSON paths of every key in a parsed payload that is_internal_key, at any depth."""
-    if isinstance(v, dict):
-        for k, x in v.items():
-            p = f"{path}.{k}" if path else str(k)
-            if is_internal_key(k):
-                yield p
-            yield from internal_key_paths(x, p)
-    elif isinstance(v, list):
-        for i, x in enumerate(v):
-            yield from internal_key_paths(x, f"{path}[{i}]")
 
 # SCHEMA.md v5 biaya_gratis. The "Gratis" tag comes only from this status (never from free text,
 # never from BPJS acceptance). basis is evidence bookkeeping and is not shipped.
@@ -746,9 +729,10 @@ def main():
         sys.exit(f"BUG: {LEAK_MARKER} would ship in {', '.join(leaked)}; nothing written")
     payloads = {"places.json": {"meta": meta, "places": places}, "hotlines.json": {"meta": meta, "hotlines": hotlines},
                 "build-report.json": report}
-    leaked = [f"{name}: {p}" for name, obj in payloads.items() for p in list(internal_key_paths(obj))[:3]]
+    leaked = [f"{name}: {p}" for name, obj in payloads.items() for p in leaks.leaked_key_paths(obj)[:3]]
     if leaked:
-        sys.exit(f"BUG: a key named *internal* would ship ({'; '.join(leaked)}; data.js too); nothing written")
+        sys.exit(f"BUG: a key named *internal* would ship, or a key with hidden/non-ASCII characters "
+                 f"({'; '.join(leaked)}; data.js too); nothing written")
     if a.strict and report["skipped"]:
         for sk in report["skipped"]:
             print(f"SKIPPED {sk['file']}: {sk['reason']}")

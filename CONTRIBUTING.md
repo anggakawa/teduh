@@ -82,7 +82,7 @@ otomatis lewat "Closes #N".
 | Cek | Skrip |
 |---|---|
 | JSON Schema (SCHEMA v5, termasuk `bpjs_info` dan `biaya_gratis`), `id` = nama berkas, minimal satu sumber http(s), tanpa markup/script | `scripts/validate.py` |
-| Tidak ada nomor telepon atau email di `bpjs_info` / `biaya_gratis` (pemindai ketat, termasuk URL `wa.me` / `tel:`); URL sumbernya `http(s)://`; tidak ada kunci `*internal*` (catatan internal arsip, juga bentuk lain seperti `NOTE_INTERNAL` / `catatan-internal`) di data repo maupun `hotlines.json` | `scripts/validate.py` |
+| Tidak ada nomor telepon atau email di `bpjs_info` / `biaya_gratis` (pemindai ketat, termasuk URL `wa.me` / `tel:`); URL sumbernya `http(s)://`; tidak ada kunci `*internal*` (catatan internal arsip, juga bentuk lain seperti `NOTE_INTERNAL` / `catatan-internal`) di data repo maupun `hotlines.json`; setiap kunci hanya memakai `A-Z a-z 0-9 _ -` | `scripts/validate.py` |
 | `approx_coords` tidak pernah jadi pin; pin di area Banjarbaru & sekitar | `validate.py`, `guard_pr.py` |
 | Hanya CODEOWNERS yang boleh membuat `active` atau menghapus tempat | `guard_pr.py` |
 | Perubahan `lat`/`lng` wajib menyebut asal di `coord_method`; sumber baru harus URL | `guard_pr.py` |
@@ -90,6 +90,8 @@ otomatis lewat "Closes #N".
 | `build-data.py --strict` berjalan tanpa data terlewat | `scripts/build-data.py` |
 | Tes pipeline (contoh issue baru, koreksi, berbahaya/tidak valid) | `tests/test_pipeline.py` |
 | Uji tampilan situs di data beku | `scripts/check.mjs` |
+
+Batas pemindai yang diketahui (disengaja): nomor rekening yang mirip nomor HP ("No. rek 0812345678") ikut dianggap nomor telepon, jadi jangan menaruh nomor rekening di `bpjs_info` / `biaya_gratis` (memang tidak boleh). Email yang ditulis samar `nama [at] gmail [dot] com`, `nama (at) gmail.com`, `nama @ gmail . com` tertangkap; ejaan lain ("nama at gmail titik com") tidak, dan peninjau tetap membaca isinya. Slug URL yang panjang angkanya (mis. profil LinkedIn `…-041892191`) bisa terbaca sebagai nomor bila ditaruh di dua kolom itu.
 
 ## Audit nomor telepon (31 Oktober 2026)
 

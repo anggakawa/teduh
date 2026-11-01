@@ -191,6 +191,15 @@ class Guard(unittest.TestCase):
     def guard(self, author):
         return run("scripts/guard_pr.py", "--base", self.base, "--head", self.head, "--author", author, "--codeowners", self.owners)
 
+    def test_sync_state_is_code_owner_only(self):
+        sp = os.path.join(self.head, ".store-sync.json")
+        st = json.load(open(sp, encoding="utf-8")); st["bnn-kota-banjarbaru"]["bpjs_info"] = "0" * 64
+        json.dump(st, open(sp, "w", encoding="utf-8"))
+        g = self.guard("random-contributor")
+        self.assertNotEqual(g.returncode, 0)
+        self.assertIn(".store-sync.json changed by @random-contributor", g.stdout)
+        self.assertEqual(self.guard("maintainer-a").returncode, 0)
+
     def test_contributor_cannot_flip_to_active(self):
         self.edit("biro-sagraha-psikologi-banjarbaru", status="active")
         r = self.guard("random-contributor")
@@ -474,11 +483,18 @@ class PrivacyGuards(TmpData):
         import phones
         hits = ["62 812 3456 7890", "62-812-3456-7890", "WA0812-3456-7890", "SKTM,08123456789", "0 8 1 2 3 4 5 6 7 8 9 0",
                 "08 12 34 56 78 90", "0812\u20133456\u20137890", "\uff10\uff18\uff11\uff12\uff13\uff14\uff15\uff16\uff17\uff18\uff19\uff10",
-                "+\uff16\uff12 812 3456 7890", "https://wa.me/6281234567890", "tel:+62-812-3456-7890", "Telp 0812 3456 7890"]
+                "+\uff16\uff12 812 3456 7890", "https://wa.me/6281234567890", "tel:+62-812-3456-7890", "Telp 0812 3456 7890",
+                # QA R2-M1: dotted / coloned groups that only look like clock times
+                "08.12.3456.7890", "0 8.12 34.56 78.90", "08.12.34.56.78.90", "08:12 3456 7890", "+62 8.12 34.56 78.90",
+                # QA R2-m1: landlines with a bare 62 prefix or spaced-out digits
+                "62-511-4772123", "0 5 1 1 4 7 7 2 1 2 3", "(0511) 123456", "0511.4772123", "021-5551234"]
         for t in hits:
             self.assertTrue(phones.find_strict(t), t)
         for t in ("Rp290.000", "Rp 1.500.000", "tahun 2019-2024", "UU No. 35 Tahun 2014", "NIK 6372041234567890", "2026-11-01",
                   "Senin\u2013Jumat 08.00\u201316.00, Sabtu 08.00 - 12.00", "NIP 198012312005011001",
+                  # real clock times stay masked (R2-M1): ranges, zone suffix, jam/pukul
+                  "08.00 - 12.00", "jam 08.00 WITA", "08.00 - 12.00 08.00", "8:30-15:30", "08.00\u201316.00 WITA",
+                  "pukul 07.30 s.d. 14.00 WIB", "jam 08.00-12.00 dan 13.00-15.00", "Rp 08.000", "Rp 50.000 - Rp 100.000",
                   "https://bnn.go.id/konten/unggahan/2024/05/Rehabilitasi_Standar-Pelayanan.pdf"):
             self.assertEqual(phones.find_strict(t), [], t)
         self.assertEqual(phones.find("https://wa.me/6281234567890"), ["6281234567890"])   # consent check sees wa.me links too
@@ -546,6 +562,205 @@ class PrivacyGuards(TmpData):
         for rel in [os.path.join("places", n) for n in names(fx)] + ["hotlines.json", ".store-sync.json"]:
             self.assertEqual(open(os.path.join(fx, rel), "rb").read(), open(os.path.join(ROOT, "data", rel), "rb").read(),
                              f"tests/fixtures/data/{rel} differs from data/{rel}: re-sync the fixture (see tests/fixtures/README.md)")
+
+
+class QaRecheck2(TmpData):
+    """QA re-check 2 (c935c9d): R2-M1 clock masking, R2-M2 key shape, R2-M3 --initial-import, R2-m1..m6."""
+    def archive(self):
+        arc = os.path.join(self.tmp, "archive")
+        if not os.path.exists(arc):
+            shutil.copytree(os.path.join(ROOT, "data"), arc)
+        return arc
+
+    def tree(self):
+        out = {}
+        for dp, _, fs in os.walk(self.data):
+            for f in fs:
+                out[os.path.relpath(os.path.join(dp, f), self.data)] = open(os.path.join(dp, f), "rb").read()
+        return out
+
+    def migrate(self, *args):
+        return run("scripts/migrate-from-store.py", "--src", self.archive(), "--data", self.data, *args)
+
+    # ---- R2-M1 end to end: a clock-shaped phone no longer reaches the repo ----
+    def test_clock_shaped_phone_is_refused_by_sync_and_validate(self):
+        self.edit("bnn-kota-banjarbaru", lambda r: r["bpjs_info"].update(catatan_display="Hubungi 08.12.3456.7890"), data=self.archive())
+        self.edit("talenta-aditama", lambda r: r["biaya_gratis"].update(syarat_display="WA 0 8.12 34.56 78.90"), data=self.archive())
+        before = self.tree()
+        r = self.migrate("--fields", "bpjs_info,biaya_gratis")
+        self.assertNotEqual(r.returncode, 0)
+        self.assertIn("phone 6281234567890 in bpjs_info.catatan_display", r.stderr)
+        self.assertIn("phone 6281234567890 in biaya_gratis.syarat_display", r.stderr)
+        self.assertEqual(self.tree(), before)
+        self.edit("bnn-kota-banjarbaru", lambda r: r["bpjs_info"].update(catatan_display="Buka jam 08.00 WITA, Senin 08.00 - 12.00 08.00."))
+        self.assertEqual(self.validate().returncode, 0)   # real opening hours are not a phone
+
+    # ---- R2-m3: nothing about a refused run is echoed ----
+    def test_refused_sync_prints_no_update_or_diff(self):
+        self.edit("talenta-aditama", lambda r: r["bpjs_info"].update(catatan_display="Perubahan yang sah."), data=self.archive())
+        self.edit("bnn-kota-banjarbaru", lambda r: r["bpjs_info"].update(catatan_display="Telp 0812 9999 8888"), data=self.archive())
+        r = self.migrate("--fields", "bpjs_info,biaya_gratis")
+        self.assertNotEqual(r.returncode, 0)
+        self.assertNotIn("UPDATE", r.stdout)
+        self.assertNotIn("Perubahan yang sah", r.stdout)
+        self.assertNotIn("0812 9999 8888", r.stdout + r.stderr)   # only the normalised number is named, never the text
+        ok = self.migrate("--fields", "bpjs_info,biaya_gratis", "--only", "talenta-aditama")
+        self.assertEqual(ok.returncode, 0, ok.stderr)
+        self.assertIn("UPDATE talenta-aditama.bpjs_info", ok.stdout)
+        self.assertIn("bpjs_info.catatan_display:", ok.stdout)
+
+    # ---- R2-m2 ----
+    def test_obfuscated_email_is_caught_and_bank_numbers_are_a_documented_false_positive(self):
+        sys.path.insert(0, os.path.join(ROOT, "scripts"))
+        import leaks, phones
+        for t in ("nama [at] gmail [dot] com", "nama (at) gmail.com", "nama @ gmail . com", "x.y [at] kemkes [dot] go [dot] id"):
+            self.assertTrue(leaks.emails(t), t)
+        for t in ("IG @dp3akb.kalsel", "bertemu di (at) kantor", "Datang jam 8. Bawa KTP."):
+            self.assertEqual(leaks.emails(t), [], t)
+        self.assertEqual(phones.find_strict("No. rek 0812345678"), ["62812345678"])   # CONTRIBUTING.md: known, accepted
+        self.edit("posbakum-pengadilan-agama-banjarbaru", lambda r: r["biaya_gratis"].update(syarat_display="Tanya nama [at] gmail [dot] com."))
+        v = self.validate()
+        self.assertNotEqual(v.returncode, 0)
+        self.assertIn("email nama [at] gmail [dot] com in biaya_gratis.syarat_display", v.stdout)
+
+    # ---- R2-M2 ----
+    def test_existing_keys_are_all_plain_identifiers(self):
+        sys.path.insert(0, os.path.join(ROOT, "scripts"))
+        import leaks
+        for d in (os.path.join(ROOT, "data"), os.path.join(ROOT, "tests", "fixtures", "data")):
+            for f in sorted(os.listdir(os.path.join(d, "places"))) + ["../hotlines.json"]:
+                obj = json.load(open(os.path.join(d, "places", f), encoding="utf-8"))
+                self.assertEqual(list(leaks.bad_keys(obj)), [], f)
+
+    def test_hidden_character_keys_fail_validate_build_and_sync(self):
+        keys = {"zero-width": "catatan_inter\u200bnal", "soft hyphen": "catatan_inter\u00adnal", "word joiner": "catatan_inter\u2060nal",
+                "BOM": "\ufeffcatatan_internal", "Cyrillic i": "catatan_\u0456nternal", "small caps": "\u026a\u0274\u1d1b\u1d07\u0280\u0274\u1d00\u029f"}
+        hp = os.path.join(self.data, "hotlines.json")
+        pristine = open(hp, "rb").read()
+        for name, key in keys.items():
+            for where in ("place", "hotlines"):
+                with self.subTest(f"{name} in {where}"):
+                    if where == "place":
+                        self.edit("talenta-aditama", lambda r: r.update(services_meta=[{key: "SECRET"}]))
+                    else:
+                        h = json.loads(pristine); L = h if isinstance(h, list) else h["hotlines"]; L[0][key] = "SECRET"
+                        json.dump(h, open(hp, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
+                    try:
+                        v = self.validate()
+                        self.assertNotEqual(v.returncode, 0)
+                        self.assertIn("keys must be plain ASCII identifiers", v.stdout)
+                        b, out = self.build()
+                        self.assertNotEqual(b.returncode, 0)
+                        # the BOM key still spells catatan_internal, so the text guard fires first
+                        self.assertRegex(b.stderr, r"hidden/non-ASCII characters \(|catatan_internal would ship")
+                        self.assertIn("nothing written", b.stderr)
+                        self.assertFalse(os.path.exists(out))
+                    finally:
+                        if where == "place":
+                            self.edit("talenta-aditama", lambda r: r.pop("services_meta", None))
+                        else:
+                            open(hp, "wb").write(pristine)
+        self.edit("bnn-kota-banjarbaru", lambda r: r["bpjs_info"].update({"catatan_inter\u200bnal": "SECRET"}), data=self.archive())
+        before = self.tree()
+        r = self.migrate("--fields", "bpjs_info,biaya_gratis")
+        self.assertNotEqual(r.returncode, 0)
+        self.assertIn("not a plain ASCII identifier", r.stderr)
+        self.assertEqual(self.tree(), before)
+
+    def test_build_and_validate_share_one_key_rule(self):
+        """Parity (QA R2-M2): build-data.py has no copy of the rule; it calls scripts/leaks.py (v2 ships a
+        byte-identical leaks.py next to its build-data.py)."""
+        import importlib.util
+        spec = importlib.util.spec_from_file_location("build_data", os.path.join(ROOT, "scripts", "build-data.py"))
+        bd = importlib.util.module_from_spec(spec); spec.loader.exec_module(bd)
+        sys.path.insert(0, os.path.join(ROOT, "scripts"))
+        import leaks
+        self.assertFalse(hasattr(bd, "is_internal_key") or hasattr(bd, "internal_key_paths"))
+        self.assertEqual(os.path.realpath(bd.leaks.__file__), os.path.realpath(leaks.__file__))
+        sample = {k: 1 for k in ("status", "catatan_internal", "NOTE_INTERNAL", "catatan-internal", "catatan internal", "catatan_\u0131nternal",
+                                 "catatan_inter\u200bnal", "catatan_\u0456nternal", "brand_link_Al-Birru", "kesehatan-mental")}
+        self.assertEqual(bd.leaks.leaked_key_paths(sample), leaks.leaked_key_paths(sample))
+        self.assertEqual(sorted(leaks.leaked_key_paths(sample)), sorted([
+            "catatan_internal", "NOTE_INTERNAL", "catatan-internal",
+            ascii("catatan internal"), ascii("catatan_\u0131nternal"), ascii("catatan_inter\u200bnal"), ascii("catatan_\u0456nternal")]))
+
+    # ---- R2-M3 ----
+    def test_a_mode_is_required(self):
+        before = self.tree()
+        r = run("scripts/migrate-from-store.py", "--src", self.archive(), "--data", self.data)
+        self.assertNotEqual(r.returncode, 0)
+        self.assertIn("one of the arguments --fields --initial-import is required", r.stderr)
+        self.assertEqual(self.tree(), before)
+
+    def test_initial_import_checks_everything_before_writing(self):
+        arc = self.archive()
+        new = json.load(open(self.path("talenta-aditama", arc), encoding="utf-8"))
+        new.update(id="tempat-baru-arsip", catatan_internal="private", contacts={"phone": "0812-0000-7777"})
+        new.pop("contact_sources", None)
+        json.dump(new, open(self.path("tempat-baru-arsip", arc), "w", encoding="utf-8"), ensure_ascii=False)
+        before = self.tree()
+        r = self.migrate("--initial-import")
+        self.assertNotEqual(r.returncode, 0)
+        self.assertIn("places/tempat-baru-arsip.json: phone 6281200007777", r.stderr)
+        self.assertIn("nothing written", r.stderr)
+        self.assertEqual(self.tree(), before)
+        # cited by a public source -> imported, with the internal note stripped
+        new["contact_sources"] = [{"number": "0812-0000-7777", "url": "https://example.org/kontak"}]
+        json.dump(new, open(self.path("tempat-baru-arsip", arc), "w", encoding="utf-8"), ensure_ascii=False)
+        r = self.migrate("--initial-import")
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+        text = open(self.path("tempat-baru-arsip"), encoding="utf-8").read()
+        self.assertNotIn("internal", text)
+        self.assertEqual({k: v for k, v in before.items()}, {k: v for k, v in self.tree().items() if k != os.path.join("places", "tempat-baru-arsip.json")})
+        self.assertEqual(self.validate().returncode, 0)
+
+    def test_initial_import_never_overwrites_scrubbed_contacts_without_force(self):
+        arc = self.archive()
+        self.edit("biro-sagraha-psikologi-banjarbaru", lambda r: r.update(contacts={"phone": "0812-0000-2222"}), data=arc)
+        open(os.path.join(arc, "SCHEMA.md"), "a", encoding="utf-8").write("\narchive-only line\n")
+        before = self.tree()
+        r = self.migrate("--initial-import")
+        self.assertEqual(r.returncode, 0, r.stderr)
+        self.assertIn("KEPT (would overwrite scrubbed contacts (contacts) and other reviewed edits; use --force): places/biro-sagraha-psikologi-banjarbaru.json", r.stdout)
+        self.assertIn("KEPT (differs; use --force): SCHEMA.md", r.stdout)
+        self.assertEqual(self.tree(), before)
+        r = self.migrate("--initial-import", "--force")      # forced, but the uncited archive phone still blocks it
+        self.assertNotEqual(r.returncode, 0)
+        self.assertIn("phone 6281200002222", r.stderr)
+        self.assertEqual(self.tree(), before)
+
+    # ---- R2-m4 / R2-m5 / R2-m6 ----
+    def test_missing_state_warns_and_corrupt_state_stops_cleanly(self):
+        sp = os.path.join(self.data, ".store-sync.json")
+        os.remove(sp)
+        r = self.migrate("--fields", "bpjs_info,biaya_gratis")
+        self.assertEqual(r.returncode, 0, r.stderr)
+        self.assertIn("WARNING: no sync state", r.stderr)
+        for bad, msg in (("{", "corrupt sync state"), ("[]", "invalid sync state"), ('{"bnn-kota-banjarbaru": {"bpjs_info": "x"}}', "invalid sync state")):
+            with self.subTest(bad):
+                open(sp, "w").write(bad)
+                before = self.tree()
+                r = self.migrate("--fields", "bpjs_info,biaya_gratis")
+                self.assertNotEqual(r.returncode, 0)
+                self.assertIn(msg, r.stderr)
+                self.assertNotIn("Traceback", r.stderr)
+                self.assertEqual(self.tree(), before)
+
+    def test_unknown_only_id_is_an_error(self):
+        r = self.migrate("--fields", "bpjs_info", "--only", "bnn-kota-banjarbaru,tidak-ada")
+        self.assertNotEqual(r.returncode, 0)
+        self.assertIn("--only: unknown place id(s) tidak-ada", r.stderr)
+
+    def test_sync_state_is_validated(self):
+        sp = os.path.join(self.data, ".store-sync.json")
+        st = json.load(open(sp, encoding="utf-8"))
+        st["bnn-kota-banjarbaru"]["bpjs_info"] = "not-a-hash"
+        st["tidak-ada"] = {"bpjs_info": "0" * 64}
+        json.dump(st, open(sp, "w", encoding="utf-8"))
+        v = self.validate()
+        self.assertNotEqual(v.returncode, 0)
+        self.assertIn("schema: bnn-kota-banjarbaru/bpjs_info", v.stdout)
+        self.assertIn("tidak-ada: no such place", v.stdout)
 
 
 class Templates(unittest.TestCase):

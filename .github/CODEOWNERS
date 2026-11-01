@@ -6,6 +6,10 @@
 *                 @anggakawa
 /data/places/     @anggakawa
 /data/hotlines.json @anggakawa
+# Field-sync state of scripts/migrate-from-store.py: a forged hash would let the next sync overwrite a
+# hand edit, so only maintainers may change it (guard_pr.py enforces this too).
+/data/.store-sync.json @anggakawa
+/tests/fixtures/data/.store-sync.json @anggakawa
 /schema/          @anggakawa
 /scripts/         @anggakawa
 /.github/         @anggakawa
