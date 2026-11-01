@@ -129,20 +129,20 @@
     "checked": "2026-11-01"
   },
   "biaya_gratis": {
-    "status": "ya",
-    "syarat_display": "Konseling disebut gratis, tapi sumbernya tahun 2019 dan tidak disebut lagi di halaman resmi sekarang. Perlu dicek ulang.",
-    "basis": "old_source",
+    "status": "belum_diketahui",
+    "syarat_display": "Biaya belum diketahui. Sumber resmi tidak menyebut gratis atau tarif; tanyakan langsung.",
+    "basis": "none",
     "perlu_cek_ulang": true,
     "sources": [
       {
-        "url": "MC Kalsel 2019 article (URL not retained; found in batch-3 search)",
-        "note": "2019: service described as free",
-        "checked": "2026-10-31"
+        "url": "https://diskominfomc.kalselprov.go.id/2019/07/27/puspaga-layanan-pembelajaran-dan-konseling-keluarga/",
+        "note": "MC Kalsel 27 Jul 2019 (re-found 2026-11-01): describes services (walk-in, phone, outreach, psikolog counsellors) but does NOT say gratis; earlier 'free' reading was wrong",
+        "checked": "2026-11-01"
       },
       {
         "url": "https://dpppakb.kalselprov.go.id/puspaga/527",
-        "note": "current official page: does not restate cost",
-        "checked": "2026-10-31"
+        "note": "current official page: does not state cost",
+        "checked": "2026-11-01"
       }
     ],
     "checked": "2026-11-01"

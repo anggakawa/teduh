@@ -268,7 +268,7 @@ class BpjsGratis(unittest.TestCase):
             rec = json.loads(text)
             self.assertIn("bpjs_info", rec, f); self.assertIn("biaya_gratis", rec, f)
             counts[rec["biaya_gratis"]["status"]] = counts.get(rec["biaya_gratis"]["status"], 0) + 1
-        self.assertEqual(counts, {"ya": 2, "bersyarat": 4, "tidak": 9, "belum_diketahui": 18})
+        self.assertEqual(counts, {"ya": 1, "bersyarat": 4, "tidak": 9, "belum_diketahui": 19})
 
     def test_internal_note_is_rejected(self):
         self.edit("rsd-idaman-kota-banjarbaru", lambda r: r["bpjs_info"].update(catatan_internal="evidence"))
@@ -314,7 +314,10 @@ class BpjsGratis(unittest.TestCase):
         self.assertEqual((bnn["tag"], bnn["recheck"]), ("Gratis bersyarat", True))
         tagged = sorted(i for i, p in places.items() if p["_d"]["gratis"] and p["_d"]["gratis"]["tag"])
         self.assertEqual(tagged, ["bnn-kota-banjarbaru", "posbakum-pengadilan-agama-banjarbaru", "posbakum-pengadilan-negeri-banjarbaru",
-                                  "posbakumadin-banjarbaru", "posbankum-kelurahan-kota-banjarbaru", "puspaga-provinsi-kalimantan-selatan"])
+                                  "posbakumadin-banjarbaru", "posbankum-kelurahan-kota-banjarbaru"])
+        # Puspaga Provinsi: the 2019 source never says gratis -> belum_diketahui, no tag, recheck kept (2026-11-01)
+        pp = places["puspaga-provinsi-kalimantan-selatan"]["_d"]["gratis"]
+        self.assertEqual((pp["status"], pp["tag"], pp["recheck"]), ("belum_diketahui", None, True))
         # BPJS acceptance never implies gratis
         self.assertTrue(all(not (p["_d"]["gratis"] or {}).get("tag") for p in places.values()
                             if (p["_d"]["bpjs"] or {}).get("accepts") and (p.get("biaya_gratis") or {}).get("status") not in ("ya", "bersyarat")))
