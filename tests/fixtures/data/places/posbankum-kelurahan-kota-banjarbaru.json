@@ -99,5 +99,32 @@
     "paralegal"
   ],
   "city_display": "Banjarbaru",
-  "name_display": "Posbankum Kelurahan Kota Banjarbaru (20 Pos Bantuan Hukum di kantor kelurahan)"
+  "name_display": "Posbankum Kelurahan Kota Banjarbaru (20 Pos Bantuan Hukum di kantor kelurahan)",
+  "bpjs_info": {
+    "status": "tidak_relevan",
+    "rujukan": null,
+    "basis": "confirmed_online",
+    "catatan_display": "Bukan layanan kesehatan. Layanan Posbankum kelurahan gratis.",
+    "sources": [],
+    "checked": "2026-11-01"
+  },
+  "biaya_gratis": {
+    "status": "ya",
+    "syarat_display": "Konsultasi gratis untuk semua warga. Pendampingan perkara ke pengadilan (rujukan litigasi) khusus warga tidak mampu.",
+    "basis": "confirmed_online",
+    "perlu_cek_ulang": false,
+    "sources": [
+      {
+        "url": "https://kalimantanpost.com/2026/01/ribuan-pos-bantuan-hukum-di-seluruh-desa-dan-kelurahan-se-kalsel-diresmikan/",
+        "note": "Jan 2026 launch: free service",
+        "checked": "2026-10-31"
+      },
+      {
+        "url": "https://kel-mentaos.banjarbarukota.go.id/organisasi/posbankum",
+        "note": "Kelurahan Mentaos page: funded by APBD",
+        "checked": "2026-10-31"
+      }
+    ],
+    "checked": "2026-11-01"
+  }
 }

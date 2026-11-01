@@ -11,7 +11,9 @@ Fails (exit 1) when:
   - lat/lng equal approx_coords (base or head): approx_coords never become a pin;
   - a source added in this PR is not an http(s) URL;
   - a phone/WhatsApp number that is new or changed in this PR has no contact_sources entry with a
-    public http(s) URL where the institution/owner publishes it (phone consent policy).
+    public http(s) URL where the institution/owner publishes it (phone consent policy);
+  - data/.store-sync.json (the field-sync state of migrate-from-store.py) is changed by someone who is
+    not its code owner: editing it could make a hand edit look "synced" so the next sync overwrites it.
 
 Usage: python3 scripts/guard_pr.py --base <base data dir> --head <head data dir> --author <login> --codeowners <file>
 """
@@ -110,6 +112,14 @@ def main():
             if n not in old_nums and n not in cited:
                 err(fname, f"new/changed phone {n} ({', '.join(paths[:2])}) must cite a public http(s) source "
                            "where the institution/owner publishes it: add it to contact_sources")
+
+    def text(d):
+        f = os.path.join(d, ".store-sync.json")
+        return open(f, encoding="utf-8").read() if os.path.exists(f) else None
+    if text(a.base) != text(a.head) and author not in owners_for("data/.store-sync.json", a.codeowners):
+        errors.append("sync state")
+        msg = f".store-sync.json changed by @{a.author}, who is not its code owner (only scripts/migrate-from-store.py run by a maintainer writes it)"
+        print(f"::error file=data/.store-sync.json::{msg}" if IN_ACTIONS else f"ERROR data/.store-sync.json: {msg}")
 
     changed = sorted(f for f in set(base) | set(head) if base.get(f) != head.get(f))
     print(f"guard: {len(changed)} place file(s) changed, author @{a.author}: {len(errors)} error(s)")

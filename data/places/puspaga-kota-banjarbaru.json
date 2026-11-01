@@ -86,5 +86,21 @@
     "cerai"
   ],
   "city_display": "Banjarbaru",
-  "name_display": "Puspaga Kota Banjarbaru (Pusat Pembelajaran Keluarga) – program PAISAN PATIN bersama Pengadilan Agama"
+  "name_display": "Puspaga Kota Banjarbaru (Pusat Pembelajaran Keluarga) – program PAISAN PATIN bersama Pengadilan Agama",
+  "bpjs_info": {
+    "status": "tidak_relevan",
+    "rujukan": null,
+    "basis": "inferred",
+    "catatan_display": "Bukan layanan kesehatan (konseling keluarga pemerintah). Biaya belum diketahui.",
+    "sources": [],
+    "checked": "2026-11-01"
+  },
+  "biaya_gratis": {
+    "status": "belum_diketahui",
+    "syarat_display": "Biaya belum diketahui; belum ada sumber.",
+    "basis": "none",
+    "perlu_cek_ulang": false,
+    "sources": [],
+    "checked": "2026-11-01"
+  }
 }

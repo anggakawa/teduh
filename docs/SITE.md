@@ -34,7 +34,7 @@ It writes these files:
 
 Use `--src /other/archive` to point at a different copy of the archive. The script logs skipped files (invalid JSON or a missing `id`/`name`/`category`/`status`) and prints warnings.
 
-Validation follows the archive's `SCHEMA.md` (v2) field contract:
+Validation follows the `SCHEMA.md` field contract (v2 rules, plus v4 `bpjs_info` and v5 `biaya_gratis`):
 
 - `status` must be `active` or `needs-check`.
 - The top-level category must be one of the 4 slugs.
@@ -42,6 +42,8 @@ Validation follows the archive's `SCHEMA.md` (v2) field contract:
 - `checked` must equal `verified_at`, and dates must be YYYY-MM-DD.
 - List fields must be lists.
 - A `needs-check` place should have `open_issues`.
+- `bpjs_info.status` must be one of `ya`, `sebagian`, `tidak`, `tidak_relevan`, `belum_diketahui`. An invalid value is warned; the status (and `rujukan`) is dropped and `catatan_display` is kept. (In the repo, `scripts/validate.py` already rejects it.)
+- `biaya_gratis.status` must be one of `ya`, `bersyarat`, `tidak`, `belum_diketahui`. An invalid value is warned; the status is dropped (no tag) and `syarat_display` is kept. A `biaya_gratis` or `bpjs_info` that is not an object is dropped.
 - Any field that is not in SCHEMA.md is reported as information only.
 
 The derived `_d` block contains:
@@ -49,14 +51,47 @@ The derived `_d` block contains:
 - `group`: the top-level category slug (`kesehatan-mental` | `tumbuh-kembang-anak` | `layanan-pendampingan` | `psikologi`). It is also the marker file prefix and the `--cat-*` token.
 - `short`, `checked`: the display name and the check date. The UI shows the date as "dicek Okt 2026".
 - `hours`: a best-effort `{label, week[7], igd24}` parsed from the free-text hours. When parsing fails the UI shows the hours as written.
-- `tags`: `Gratis` / `BPJS` / `Berbayar`, set only when the data says so.
+- `tags`: `Berbayar` (and `BPJS` for a record without `bpjs_info`), set only when the data says so. `Gratis` is never a text tag; see `gratis`.
+- `bpjs`: `{status, rujukan, accepts}` from `bpjs_info` (SCHEMA v4). `accepts` is true for `ya` and `sebagian` and drives the "Terima BPJS" filter. It never implies gratis.
+- `gratis`: `{status, tag, syarat, recheck}` from `biaya_gratis` (SCHEMA v5), or `null`. `tag` is `Gratis` (`ya`), `Gratis bersyarat` (`bersyarat`) or `null`.
 - `pin`: `{lat,lng}` or `null`
 - `needs_check`
 - `regional`: a tag containing "regional" (SCHEMA v2), or a city other than Banjarbaru
 - `phones[]`: each with `tel`, `wa_url`, and the flags `wa` (the source confirms WhatsApp) and `conflict`
 - `links[]`: websites, Instagram, and `mailto:` links
 - `maps_url`, `dir_url`
-- `q`: the search text
+- `q`: the search text. Places that take BPJS also match `bpjs`, `jkn` and `kis` (SCHEMA v4 search terms); these three match whole words only (`kis` never finds "kisaran"). Other tokens of 3 letters or fewer match at the start of a word (`psi` finds "psikolog", `rs` finds "rsud" but not "kursus"); longer tokens match anywhere.
+
+## BPJS (SCHEMA v4 `bpjs_info`)
+
+| `status` | Card and detail chip | Notes |
+|---|---|---|
+| `ya` | `✓ BPJS` (primary tint) | |
+| `sebagian` | `BPJS sebagian` (outlined) | |
+| `rujukan: true` | adds ` · perlu rujukan` | aria: "perlu surat rujukan dari faskes 1" |
+| `tidak` | `Tidak terima BPJS` (outlined, neutral) | only when a source says so; 0 places today |
+| `belum_diketahui` | detail only: `BPJS belum diketahui` (grey, same fill as "Belum dicek"); no chip on cards | never worded or filtered as "tidak" |
+| `tidak_relevan` | no chip | |
+
+- The detail shows a visible BPJS row (wallet icon, chip, `catatan_display`) under the address.
+- The **Terima BPJS** filter chip keeps `ya` + `sebagian`. While it is on, a note says how many other places have an unknown status, and the empty state says "…yang tercatat terima BPJS".
+- The chip copy inside the detail row is `aria-hidden`, so the status is announced once.
+
+## Gratis (SCHEMA v5 `biaya_gratis`)
+
+The tag comes only from `biaya_gratis.status`. No free text (cost, notes, `bpjs_info`) is parsed for "gratis", and BPJS acceptance never implies gratis.
+
+| `status` | Card | Detail |
+|---|---|---|
+| `ya` | `Gratis` tag | `Gratis` row with `syarat_display` |
+| `bersyarat` | `Gratis bersyarat` tag | `Gratis bersyarat` row with `syarat_display` |
+| `tidak`, `belum_diketahui`, missing | no tag | no row |
+
+`perlu_cek_ulang: true` adds a short muted "· cek ulang" to the card tag (card aria: "…, perlu dicek ulang") and a quiet italic "perlu dicek ulang" under the detail row. Only `status, syarat_display, perlu_cek_ulang, sources (url/note/checked; non-URL strings dropped), checked` ship; `basis` stays in the source data (provenance) and is not shipped.
+
+## Leak guard
+
+`catatan_internal` and anything internal are never shipped. `bpjs_info` and `biaya_gratis` are whitelisted field by field. `build-data.py` serialises every output (`places.json`, `hotlines.json`, `data.js`, `build-report.json`) first and exits without writing anything if one contains the string `catatan_internal` or if any key in the parsed payloads is refused by `leaks.leaked_key_paths` (`leaks.py`, the one module validate, migrate and both builds share): a key that contains `internal` after Unicode folding (NFKC, casefold, combining marks removed, dotless ı → i), and with `_` / `-` dropped, so `NOTE_INTERNAL`, `catatan-internal`, `catatan_ınternal`, `catatan_inter_nal` and `inter-nal` are caught as well as `catatan_internal`, or a key that is not a plain ASCII identifier `^[A-Za-z0-9_-]+$` (zero-width, soft-hyphen, BOM characters, Cyrillic look-alikes, spaces). With `--strict` it also exits without writing if `bpjs_info` / `biaya_gratis` (or their `_d` copies) would ship a phone number or an email (`phones.find_strict` and `leaks.emails`; a second gate after `validate.py`). `check.mjs` greps all four files again and runs the build against injected fixtures to prove it fails. `bpjs_info` ships `status, rujukan, catatan_display, sources, checked`; `basis` (for both fields) stays in the source data (provenance) and is not shipped.
 
 ## Hard rules (enforced in two places, checked by a test)
 
@@ -107,7 +142,7 @@ Edit or replace `css/tokens.css` only. `app.css` reads every colour, font, radiu
 ```bash
 python3 -m http.server 8765 &      # from this folder
 node scripts/check.mjs             # needs playwright-core (PW_DIR, default /tmp/pw) + Chrome (CHROME)
-node scripts/screens.mjs           # review screenshots → screenshots/ (390×844 and 1440×900)
+node scripts/screens.mjs           # review screenshots → screenshots/ (390×844 and 1440×900; m-07/m-08, d-06/d-07 show BPJS; m-09, d-08 show gratis)
 ```
 
 Add `?now=2026-10-31T13:56` to the URL to freeze "now" for the hours copy, as in the mockups. It is read-only; nothing is stored.
@@ -122,6 +157,9 @@ Add `?now=2026-10-31T13:56` to the URL to freeze "now" for the hours copy, as in
 - No orange, dashed or "!" styling. Clusters show hollow grey counts. List and marker hover are linked.
 - Details: verified (RSD, TraitCare) and unverified (Sagraha: notice, phone chooser). The selected pin is 1.3× and drawn above the clusters.
 - Filters and search: m04 filter results, the m07 empty state with "tampilkan yang belum dicek", search highlights, and the d03 empty state with broader-term chips.
+- Leak guard: no `catatan_internal` in any of the four outputs; build tests on a temp copy (`--out`) with `catatan_internal` injected at top level, in hotlines, and as keys `catatanInternal`, `NOTE_INTERNAL`, `catatan-internal`, `catatan internal` and `catatan_ınternal` must exit non-zero and write nothing.
+- BPJS: only public `bpjs_info` fields; invalid status dropped with the note kept; one chip per status on exactly the matching cards; no unknown chip on cards; no chip for `tidak_relevan`; the unknown chip is grey and never says "tidak" (chip, aria, card aria, filter note, empty state); fixtures for every status, hostile statuses and escaping; the detail BPJS row announced once; "Terima BPJS" = ya + sebagian (list and map), aria-pressed, header sub, Hapus filter; search `bpjs` / `jkn` / `kis` (short tokens match whole words).
+- Gratis: only public `biaya_gratis` fields; statuses match the archive files; no `Gratis` in `_d.tags`; tags per status on cards and in aria; BPJS alone never shows a tag; negative build fixtures (gratis in free text, cost "Free" without the field, BPJS ya with unknown cost, invalid status, non-object, bersyarat + perlu_cek_ulang with source whitelisting); detail rows with `syarat_display` and "perlu dicek ulang" for every gratis place.
 - Darurat modal: order, focus trap, Esc returning focus, and Keluar cepat drawn above the modal.
 - Nothing is written to storage or history. Keluar cepat (one tap, or Esc ×3) replaces the history entry.
 - Mobile: peek/half/full positions; grab cycle; drag; search mode; recent searches kept in memory only; detail at half with the pin visible; ≥44px hit areas.

@@ -9,15 +9,28 @@ Hard rules (errors):
   - phone consent policy: every phone/WhatsApp number in a record (any field) is listed in
     contact_sources with a public http(s) URL where the owner publishes it, and every
     contact_sources entry matches a number in the record (also for hotlines.json)
+  - no phone number and no email address at all in bpjs_info / biaya_gratis (SCHEMA.md v4/v5: these
+    fields carry no contacts), even a cited one. Phones use the strict, separator-blind detector
+    (phones.find_strict) over every string, URLs included (wa.me/…, tel:…)
+  - no key whose name contains "internal" anywhere, after Unicode folding and with "_" / "-" dropped
+    (leaks.is_internal_key: NOTE_INTERNAL, catatan-internal, "catatan internal", catatan_ınternal,
+    catatan_inter_nal, inter-nal …), in places and in
+    hotlines.json: private archive notes such as bpjs_info.catatan_internal never enter this repo
+  - every key, at any depth, in places and hotlines.json is a plain ASCII identifier
+    (leaks.KEY_RE ^[A-Za-z0-9_-]+$): no zero-width / soft-hyphen / BOM characters, no look-alike
+    letters, no spaces, so a disguised "internal" key cannot slip past the check above
+  - data/.store-sync.json (field-sync state) matches schema/store-sync.schema.json and only names
+    existing places
 Prints GitHub annotations when run in Actions. Exit 1 on any error.
 
 Usage: python3 scripts/validate.py [--data data] [files...]   (files default to all places)
 """
 import argparse, glob, json, os, re, sys
 from jsonschema import Draft202012Validator
+from referencing import Registry, Resource
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import phones
+import leaks, phones
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BOUNDS = {"lat": (-3.8, -3.1), "lng": (114.4, 115.2)}   # keep in sync with scripts/build-data.py
@@ -67,6 +80,32 @@ def check_place(rec, fname, ids):
         if BAD_TEXT.search(s):
             errs.append(f"{path}: markup/script-like text is not allowed")
     errs += check_phones(rec)
+    errs += contact_free_errors(rec)
+    errs += internal_key_errors(rec)
+    return errs
+
+
+CONTACT_FREE = ("bpjs_info", "biaya_gratis")
+
+
+def contact_free_errors(rec):
+    """SCHEMA v4/v5: bpjs_info / biaya_gratis hold no phone and no email, cited or not."""
+    errs = []
+    for fld in CONTACT_FREE:
+        if rec.get(fld) is None:
+            continue
+        for n, paths in sorted(phones.in_record({fld: rec[fld]}, strict=True).items()):
+            errs.append(f"phone {n} in {', '.join(paths[:3])}: no phone numbers in {fld} (SCHEMA.md v5; contacts live in `contacts`)")
+        for path, e in leaks.emails(rec[fld], fld):
+            errs.append(f"email {e} in {path}: no email addresses in {fld} (SCHEMA.md v5; contacts live in `contacts`)")
+    return errs
+
+
+def internal_key_errors(v, path=""):
+    errs = [f"{p}: keys containing 'internal' are private archive notes and must not be in the public repo"
+            for p in leaks.internal_keys(v, path)]
+    errs += [f"{p}: keys must be plain ASCII identifiers (letters, digits, _ or -); "
+             "hidden or look-alike characters are not allowed" for p in leaks.bad_keys(v, path)]
     return errs
 
 
@@ -89,9 +128,13 @@ def main():
     ap.add_argument("--data", default=os.path.join(ROOT, "data"))
     ap.add_argument("files", nargs="*")
     a = ap.parse_args()
-    place_schema = json.load(open(os.path.join(ROOT, "schema", "place.schema.json"), encoding="utf-8"))
-    hot_schema = json.load(open(os.path.join(ROOT, "schema", "hotlines.schema.json"), encoding="utf-8"))
-    pv, hv = Draft202012Validator(place_schema), Draft202012Validator(hot_schema)
+    schemas = {os.path.basename(f): json.load(open(f, encoding="utf-8"))
+               for f in glob.glob(os.path.join(ROOT, "schema", "*.schema.json"))}
+    # place.schema.json $refs bpjs_info.schema.json / biaya_gratis.schema.json by their $id
+    registry = Registry().with_resources((s["$id"], Resource.from_contents(s)) for s in schemas.values() if "$id" in s)
+    pv = Draft202012Validator(schemas["place.schema.json"], registry=registry)
+    hv = Draft202012Validator(schemas["hotlines.schema.json"], registry=registry)
+    sv = Draft202012Validator(schemas["store-sync.schema.json"], registry=registry)
 
     all_files = sorted(glob.glob(os.path.join(a.data, "places", "*.json")))
     ids = {os.path.splitext(os.path.basename(f))[0] for f in all_files}
@@ -132,6 +175,21 @@ def main():
             if isinstance(h, dict):
                 for m in check_phones(h):
                     report(hp, f"[{i}] {m}")
+        for m in internal_key_errors(hot):
+            report(hp, m)
+
+    sp = os.path.join(a.data, ".store-sync.json")
+    if os.path.exists(sp):
+        try:
+            state = json.load(open(sp, encoding="utf-8"))
+        except Exception as e:
+            report(sp, f"invalid JSON: {e}"); state = None
+        if state is not None:
+            for e in sv.iter_errors(state):
+                report(sp, f"schema: {'/'.join(map(str, e.path)) or '(root)'}: {e.message[:200]}")
+            for pid in sorted(state if isinstance(state, dict) else []):
+                if pid not in ids:
+                    report(sp, f"{pid}: no such place (remove the entry)")
 
     n = len([f for f in files if f.endswith(".json")])
     print(f"validated {n} place file(s) + hotlines: {problems} error(s)")

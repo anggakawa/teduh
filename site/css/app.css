@@ -71,7 +71,7 @@ body[data-search="1"] .search { padding-left: 10px; }
 .chip:hover { background: var(--surface-hover); }
 .chip.on { background: var(--primary); border-color: var(--primary); color: var(--surface); font-weight: 600; }
 .chip.on .ic { color: var(--surface) !important; }
-.vchip .ic, .tchip .ic { color: var(--primary); }
+.vchip .ic, .tchip .ic, .bpjschip .ic { color: var(--primary); }
 .chip.cat--kesehatan-mental .ic { color: var(--cat-kesehatan-mental); }
 .chip.cat--tumbuh-kembang-anak .ic { color: var(--cat-tumbuh-kembang-anak); }
 .chip.cat--layanan-pendampingan .ic { color: var(--cat-layanan-pendampingan); }
@@ -216,6 +216,20 @@ body[data-search="1"] .mapnote, body[data-mode="detail"] .mapnote { display: non
   font-size: var(--fs-tag); font-weight: var(--fw-tag); white-space: nowrap; }
 .cchip .ic { width: 14px; height: 14px; }
 .tag { border: 1px solid var(--line); color: var(--ink); background: var(--surface); }
+/* BPJS status chip (SCHEMA v4). Status is carried by the words, never by colour alone; no warm/alarm colours.
+   ya = primary tint + check · sebagian / tidak = outlined tag · belum_diketahui = neutral grey like "Belum dicek". */
+.tag .ic { width: 14px; height: 14px; stroke-width: 2.4; }
+.bpjs--ya { background: var(--primary-tint); border-color: var(--primary-tint-2); color: var(--primary); }
+.bpjs--sebagian { color: var(--primary); }
+.bpjs--tidak { color: var(--neutral-ink); }   /* outlined like .tag, quieter ink: a source-confirmed "no", not an alarm */
+.tag-gratis { color: var(--primary); border-color: var(--primary-tint-2); }
+.tag-gratis .tag-recheck { color: var(--muted); font-weight: 400; }
+.irow-gratis .im { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); }
+.irow-gratis .recheck { color: var(--muted); font-style: italic; }
+.bpjs--belum_diketahui { background: var(--neutral-chip); border-color: var(--neutral-chip); color: var(--neutral-ink); }
+.irow-bpjs .im { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); }
+.irow-bpjs .ilab { font-weight: 600; }
+.bpjs-note { padding-top: var(--space-2); }
 .cat--kesehatan-mental.cchip { background: var(--cat-kesehatan-mental-tint); color: var(--cat-kesehatan-mental-deep); }
 .cat--tumbuh-kembang-anak.cchip { background: var(--cat-tumbuh-kembang-anak-tint); color: var(--cat-tumbuh-kembang-anak-deep); }
 .cat--layanan-pendampingan.cchip { background: var(--cat-layanan-pendampingan-tint); color: var(--cat-layanan-pendampingan-deep); }

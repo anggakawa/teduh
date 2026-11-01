@@ -10,9 +10,19 @@ data/SCHEMA.md, adds a small `_d` (derived) block the page needs, and writes int
 The source is read-only. site/data/ is generated (git-ignored); CI and the Pages deploy run this.
 
 Usage:  python3 scripts/build-data.py [--src data] [--out site/data] [--strict]
-        --strict: exit 1 if any record is skipped (used by CI)
+        --strict: exit 1, before writing anything, if any record is skipped (used by CI)
+
+Leak guard: every output payload is built first and the build exits non-zero, before writing
+anything, if the text "catatan_internal" appears in any of them, or if any key in the parsed
+payloads is refused by leaks.leaked_key_paths (leaks.py next to this file, the same module
+validate.py and migrate-from-store.py use): "internal" after Unicode folding (NOTE_INTERNAL,
+catatan-internal, catatan_ınternal …) or a key that is not a plain ASCII identifier
+^[A-Za-z0-9_-]+$ (zero-width / soft-hyphen / BOM characters, look-alike letters, spaces).
 """
 import argparse, glob, json, os, re, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import leaks   # one rule for every guard: leaks.is_internal_key / leaks.is_plain_key
+import phones as phonelib  # strict phone scan for bpjs_info / biaya_gratis (second gate after validate)
 from datetime import datetime, timezone
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -40,6 +50,10 @@ SCHEMA_FIELDS = {
     # User-facing Indonesian display fields (SCHEMA.md v3, 2026-10-31)
     "address_display", "kelurahan_display", "kecamatan_display", "city_display", "address_note_id", "note_id",
     "hours_normalized", "hours_note_id", "name_display", "services_display", "booking_display", "search_terms",
+    # BPJS status (SCHEMA.md v4, 2026-11-01)
+    "bpjs_info",
+    # Is the service free? (SCHEMA.md v5, 2026-11-01)
+    "biaya_gratis",
 }
 DAY_IDX = {d: i for i, d in enumerate(["senin", "selasa", "rabu", "kamis", "jumat", "sabtu", "minggu"])}
 CORE_FIELDS = ["id", "name", "short", "category", "subcategories", "tags", "address", "city", "lat", "lng",
@@ -176,6 +190,78 @@ def hours_of(rec):
     return {"label": label, "week": week, "igd24": bool((parsed or {}).get("igd24"))}
 
 
+BPJS_STATUS = {"ya", "sebagian", "tidak", "tidak_relevan", "belum_diketahui"}   # SCHEMA.md v4
+BPJS_PUBLIC = ("status", "rujukan", "catatan_display", "sources", "checked")   # never catatan_internal; basis is not shipped
+BPJS_SOURCE_PUBLIC = ("url", "note", "checked")
+BPJS_ACCEPTS = ("ya", "sebagian")    # the statuses the "Terima BPJS" filter keeps
+BPJS_SEARCH_WORDS = " bpjs jkn kis"   # SCHEMA v4 search_terms for places that take BPJS
+LEAK_MARKER = "catatan_internal"
+
+
+# SCHEMA.md v5 biaya_gratis. The "Gratis" tag comes only from this status (never from free text,
+# never from BPJS acceptance). basis is evidence bookkeeping and is not shipped.
+GRATIS_STATUS = {"ya", "bersyarat", "tidak", "belum_diketahui"}
+GRATIS_TAG = {"ya": "Gratis", "bersyarat": "Gratis bersyarat"}   # tidak / belum_diketahui: no tag
+GRATIS_PUBLIC = ("status", "syarat_display", "perlu_cek_ulang", "sources", "checked")
+
+
+def bpjs_info_of(rec):
+    bi = rec.get("bpjs_info")
+    return bi if isinstance(bi, dict) and bi.get("status") in BPJS_STATUS else None
+
+
+def public_sources(srcs):
+    """Sources as shipped: {url, note, checked} from objects; bare strings only when they are an http(s) URL."""
+    out = []
+    for s in srcs if isinstance(srcs, list) else []:
+        if isinstance(s, dict):
+            kept = {k: s[k] for k in BPJS_SOURCE_PUBLIC if k in s}
+            if kept:                  # a source with nothing public left ({} husk) is dropped
+                out.append(kept)
+        elif isinstance(s, str) and re.match(r"https?://", s.strip()):
+            out.append({"url": s.strip()})
+    return out
+
+
+def gratis_info_of(rec):
+    g = rec.get("biaya_gratis")
+    return g if isinstance(g, dict) and g.get("status") in GRATIS_STATUS else None
+
+
+def public_biaya_gratis(g, keep_status=True):
+    keys = GRATIS_PUBLIC if keep_status else tuple(k for k in GRATIS_PUBLIC if k != "status")
+    out = {k: g[k] for k in keys if k in g}
+    if "perlu_cek_ulang" in out:
+        out["perlu_cek_ulang"] = out["perlu_cek_ulang"] is True
+    if "sources" in out:
+        out["sources"] = public_sources(out["sources"])
+    return out
+
+
+def gratis_d(rec):
+    """SCHEMA v5 -> what the UI needs: {status, tag, syarat, recheck} or None when there is no usable status."""
+    g = gratis_info_of(rec)
+    if not g:
+        return None
+    syarat = g.get("syarat_display") if isinstance(g.get("syarat_display"), str) else ""
+    return {"status": g["status"], "tag": GRATIS_TAG.get(g["status"]), "syarat": syarat.strip() or None,
+            "recheck": g.get("perlu_cek_ulang") is True}
+
+
+def bpjs_accepts(status):
+    return status in BPJS_ACCEPTS
+
+
+def public_bpjs_info(bi, keep_status=True):
+    """The site copy of bpjs_info: whitelisted keys only (catatan_internal stays in the archive).
+    keep_status=False (invalid status): the status is dropped, the user-facing note is kept."""
+    keys = BPJS_PUBLIC if keep_status else tuple(k for k in BPJS_PUBLIC if k not in ("status", "rujukan"))
+    out = {k: bi[k] for k in keys if k in bi}
+    if "sources" in out:
+        out["sources"] = public_sources(out["sources"])
+    return out
+
+
 def cost_tags(rec):
     tags = []
     def txt(v):
@@ -184,13 +270,13 @@ def cost_tags(rec):
         if isinstance(v, list):
             return " ".join(txt(x) for x in v)
         return "" if not isinstance(v, str) or UNKNOWN_RE.match(v) and "Rp" not in v.split(".")[0] else v
-    cost = rec.get("cost") if isinstance(rec.get("cost"), str) else ""
-    if re.match(r"\s*(free|gratis)\b", cost, re.I):
-        tags.append("Gratis")
-    bpjs = rec.get("bpjs") if isinstance(rec.get("bpjs"), str) else ""
-    pr = rec.get("price_range") if isinstance(rec.get("price_range"), str) else ""
-    if re.match(r"\s*(yes|ya)\b", bpjs, re.I) or re.search(r"BPJS (diterima|&|untuk)", pr):
-        tags.append("BPJS")
+    # "Gratis" / "Gratis bersyarat" come only from biaya_gratis (SCHEMA v5), rendered from _d.gratis.
+    # SCHEMA v4: the BPJS chip is rendered from _d.bpjs; the legacy "BPJS" tag only without bpjs_info.
+    if not bpjs_info_of(rec):
+        bpjs = rec.get("bpjs") if isinstance(rec.get("bpjs"), str) else ""
+        pr = rec.get("price_range") if isinstance(rec.get("price_range"), str) else ""
+        if re.match(r"\s*(yes|ya)\b", bpjs, re.I) or re.search(r"BPJS (diterima|&|untuk)", pr):
+            tags.append("BPJS")
     if re.search(r"Rp\s?\d", txt(rec.get("price_range")) + " " + txt(rec.get("price_per_session"))):
         tags.append("Berbayar")
     return tags
@@ -444,6 +530,29 @@ def validate(rec, fname, warn):
     return []
 
 
+def bpjs_d(rec):
+    """SCHEMA v4 -> what the UI needs. `accepts` drives the "Terima BPJS" filter (ya + sebagian only);
+    belum_diketahui is never folded into tidak."""
+    bi = bpjs_info_of(rec)
+    if not bi:
+        return None
+    st = bi["status"]
+    rj = bi.get("rujukan") if isinstance(bi.get("rujukan"), bool) else None
+    return {"status": st, "rujukan": rj if bpjs_accepts(st) else None, "accepts": bpjs_accepts(st)}
+
+
+def bpjs_words(rec):
+    bi = bpjs_info_of(rec)
+    if bi:   # SCHEMA v4: places that take BPJS get the search words BPJS, JKN, KIS
+        return BPJS_SEARCH_WORDS if bpjs_accepts(bi["status"]) else ""
+    return " bpjs" if re.match(r"\s*(yes|ya)\b", str(rec.get("bpjs") or ""), re.I) else ""
+
+
+def gratis_words(rec):
+    g = gratis_d(rec)
+    return " " + g["tag"].lower() if g and g["tag"] else ""
+
+
 def derive(rec, fname, warn):
     lat, lng = rec.get("lat"), rec.get("lng")
     pin = None
@@ -492,7 +601,9 @@ def derive(rec, fname, warn):
         "maps_url": maps,
         "dir_url": f"https://www.google.com/maps/dir/?api=1&destination={dest}",
         "maps_query": q,
-        "q": search_text(rec) + " " + " ".join(cost_tags(rec)).lower() + (" bpjs" if re.match(r"\s*(yes|ya)\b", str(rec.get("bpjs") or ""), re.I) else ""),
+        "q": search_text(rec) + " " + " ".join(cost_tags(rec)).lower() + bpjs_words(rec) + gratis_words(rec),
+        "bpjs": bpjs_d(rec),
+        "gratis": gratis_d(rec),
         "addr": clean_address(rec),
         "place": regional_place(rec) if regional else None,
         "note_id": rec.get("note_id") if isinstance(rec.get("note_id"), str) else None,
@@ -506,8 +617,7 @@ def main():
     ap.add_argument("--out", default=DEFAULT_OUT)
     ap.add_argument("--strict", action="store_true")
     a = ap.parse_args()
-    OUT = a.out
-    os.makedirs(OUT, exist_ok=True)
+    out_dir = a.out
     report = {"built_at": datetime.now(timezone.utc).isoformat(timespec="seconds"), "src": os.path.relpath(a.src, ROOT) if a.src.startswith(ROOT) else a.src,
               "skipped": [], "warnings": [], "schema_drift": []}
     warn = lambda f, m: report["warnings"].append({"file": os.path.basename(f), "msg": m})
@@ -529,6 +639,27 @@ def main():
             report["skipped"].append({"file": os.path.basename(f), "reason": f"duplicate id {rec['id']}"}); continue
         ids.add(rec["id"]); seen_keys.update(rec.keys())
         rec["_d"] = derive(rec, f, warn)
+        if "biaya_gratis" in rec:
+            g = rec["biaya_gratis"]
+            if gratis_info_of(rec):
+                rec["biaya_gratis"] = public_biaya_gratis(g)
+            elif isinstance(g, dict):
+                warn(f, f"biaya_gratis.status {g.get('status')!r} not in SCHEMA -> status dropped (no tag), syarat_display kept")
+                rec["biaya_gratis"] = public_biaya_gratis(g, keep_status=False)
+            else:
+                warn(f, f"biaya_gratis is not an object ({type(g).__name__}) -> dropped")
+                del rec["biaya_gratis"]
+        if "bpjs_info" in rec:
+            bi = rec["bpjs_info"]
+            if bpjs_info_of(rec):
+                rec["bpjs_info"] = public_bpjs_info(bi)
+            elif isinstance(bi, dict):
+                # Unknown status: drop only the status (no chip, not in the filter); keep the Indonesian note.
+                warn(f, f"bpjs_info.status {bi.get('status')!r} not in SCHEMA -> status dropped, catatan_display kept")
+                rec["bpjs_info"] = public_bpjs_info(bi, keep_status=False)
+            else:
+                warn(f, f"bpjs_info is not an object ({type(bi).__name__}) -> dropped")
+                del rec["bpjs_info"]
         places.append(rec)
 
     # Duplicate pins (same building listed twice) -> fine with clustering, but report.
@@ -573,6 +704,8 @@ def main():
         "hours_parsed": sum(bool(p["_d"]["hours"] and p["_d"]["hours"]["week"]) for p in places),
         "missing_short": sum(not p.get("short") for p in places),
         "missing_checked": sum(not p.get("checked") for p in places),
+        "bpjs": {s: sum(bool(p["_d"]["bpjs"]) and p["_d"]["bpjs"]["status"] == s for p in places) for s in sorted(BPJS_STATUS)},
+        "gratis": {s: sum(bool(p["_d"]["gratis"]) and p["_d"]["gratis"]["status"] == s for p in places) for s in sorted(GRATIS_STATUS)},
     }
     report["unpinned_ids"] = [p["id"] for p in unpinned]
 
@@ -582,17 +715,46 @@ def main():
             sys.exit(f"BUG: {p['id']} pinned without real lat/lng")
 
     meta = {"built_at": report["built_at"], "counts": report["counts"]}
-    def dump(name, obj):
-        with open(os.path.join(OUT, name), "w", encoding="utf-8") as fh:
-            json.dump(obj, fh, ensure_ascii=False, indent=1)
-    dump("places.json", {"meta": meta, "places": places})
-    dump("hotlines.json", {"meta": meta, "hotlines": hotlines})
-    dump("build-report.json", report)
-    with open(os.path.join(OUT, "data.js"), "w", encoding="utf-8") as fh:
-        fh.write("/* generated by build-data.py — file:// fallback, do not edit */\nwindow.PETA_DATA = ")
-        json.dump({"places": {"meta": meta, "places": places}, "hotlines": {"meta": meta, "hotlines": hotlines}},
-                  fh, ensure_ascii=False)
-        fh.write(";\n")
+    js = lambda o: json.dumps(o, ensure_ascii=False, indent=1)
+    outputs = {
+        "places.json": js({"meta": meta, "places": places}),
+        "hotlines.json": js({"meta": meta, "hotlines": hotlines}),
+        "build-report.json": js(report),
+        "data.js": "/* generated by build-data.py — file:// fallback, do not edit */\nwindow.PETA_DATA = " +
+                   json.dumps({"places": {"meta": meta, "places": places}, "hotlines": {"meta": meta, "hotlines": hotlines}},
+                              ensure_ascii=False) + ";\n",
+    }
+    # Leak guard on the exact text that would be written (all files), before anything is written.
+    leaked = [name for name, text in outputs.items() if LEAK_MARKER in text]
+    if leaked:
+        sys.exit(f"BUG: {LEAK_MARKER} would ship in {', '.join(leaked)}; nothing written")
+    payloads = {"places.json": {"meta": meta, "places": places}, "hotlines.json": {"meta": meta, "hotlines": hotlines},
+                "build-report.json": report}
+    leaked = [f"{name}: {p}" for name, obj in payloads.items() for p in leaks.leaked_key_paths(obj)[:3]]
+    if leaked:
+        sys.exit(f"BUG: a key named *internal* would ship, or a key with hidden/non-ASCII characters "
+                 f"({'; '.join(leaked)}; data.js too); nothing written")
+    # Second gate (QA R4), after validate: bpjs_info / biaya_gratis (and the _d copies built from them) carry
+    # no phone and no email in the output. Uses the same detectors as validate (phones.py, leaks.py).
+    contact = []
+    for p in places:
+        d = p.get("_d") or {}
+        for fld, val in (("bpjs_info", p.get("bpjs_info")), ("biaya_gratis", p.get("biaya_gratis")),
+                         ("_d.bpjs", d.get("bpjs")), ("_d.gratis", d.get("gratis"))):
+            if val is None:
+                continue
+            contact += [f"{p.get('id')}: phone {n} in {', '.join(ps[:2])}" for n, ps in sorted(phonelib.in_record({fld: val}, strict=True).items())]
+            contact += [f"{p.get('id')}: email in {path}" for path, _ in leaks.emails({fld: val})]
+    if contact and a.strict:
+        sys.exit(f"--strict: a phone or email in bpjs_info / biaya_gratis would ship ({'; '.join(contact[:5])}); nothing written")
+    if a.strict and report["skipped"]:
+        for sk in report["skipped"]:
+            print(f"SKIPPED {sk['file']}: {sk['reason']}")
+        sys.exit(f"--strict: {len(report['skipped'])} record(s) skipped; nothing written")
+    os.makedirs(out_dir, exist_ok=True)
+    for name, text in outputs.items():
+        with open(os.path.join(out_dir, name), "w", encoding="utf-8") as fh:
+            fh.write(text)
 
     c = report["counts"]
     print(f"places {c['places']}/{c['files']} files | pinned {c['pinned']} | unpinned {c['unpinned']} "
@@ -603,8 +765,6 @@ def main():
         print(f"WARN {w['file']}: {w['msg']}")
     print(f"hours parsed into a week for {c['hours_parsed']}/{c['places']} places (rest shown as written)")
     print("schema drift:", json.dumps(report["schema_drift"], ensure_ascii=False))
-    if a.strict and report["skipped"]:
-        sys.exit(f"--strict: {len(report['skipped'])} record(s) skipped")
 
 
 if __name__ == "__main__":

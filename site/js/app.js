@@ -5,20 +5,21 @@
   var C = P.config, U = P.util;
   var $ = function (id) { return document.getElementById(id); };
   var state = {
-    places: [], byId: {}, active: new Set(), onlyOk: false, openToday: false, q: '', words: [], sort: 'buka', dist: null,
+    places: [], byId: {}, active: new Set(), onlyOk: false, openToday: false, bpjs: false, q: '', words: [], sort: 'buka', dist: null,
     selected: null, listScroll: 0, recent: [], searchMode: false, order: [], loaded: false
   };
   var mobile = function () { return U.isMobile(); };
 
   // ---------- filtering & sorting ----------
   function words(q) { return U.fold(q).split(/\s+/).filter(Boolean); }
-  function matchesQuery(p, ws) { return ws.every(function (w) { return p._d.qf.indexOf(w) >= 0; }); }
+  function matchesQuery(p, ws) { return ws.every(function (w) { return U.matchToken(p._d.qf, w); }); }
   function filtered(o) {
-    o = Object.assign({ active: state.active, onlyOk: state.onlyOk, openToday: state.openToday, words: state.words }, o || {});
+    o = Object.assign({ active: state.active, onlyOk: state.onlyOk, openToday: state.openToday, bpjs: state.bpjs, words: state.words }, o || {});
     return state.places.filter(function (p) {
       if (o.active.size && !o.active.has(p._d.group)) return false;
       if (o.onlyOk && p._d.needs_check) return false;
       if (o.openToday && !U.opensToday(p)) return false;
+      if (o.bpjs && !(p._d.bpjs && p._d.bpjs.accepts)) return false;   // ya + sebagian only
       return matchesQuery(p, o.words);
     });
   }
@@ -36,14 +37,21 @@
     }
     return vis;
   }
-  function isFiltered() { return state.active.size > 0 || state.onlyOk || state.openToday; }
+  function isFiltered() { return state.active.size > 0 || state.onlyOk || state.openToday || state.bpjs; }
   function filterParts() {
     var parts = [];
     if (state.onlyOk) parts.push('Terverifikasi');
     if (state.openToday) parts.push('Buka hari ini');
+    if (state.bpjs) parts.push(C.text.bpjs.filterPart);
     C.groups.forEach(function (g) { if (state.active.has(g.id)) parts.push(g.short); });
     return parts;
   }
+  // Places the "Terima BPJS" filter hides only because their status is unknown (same other filters, BPJS off).
+  // Counts places with no BPJS data at all (or an unusable status) as unknown too.
+  function bpjsUnknown() {
+    return filtered({ bpjs: false }).filter(function (p) { return !p._d.bpjs || p._d.bpjs.status === 'belum_diketahui'; }).length;
+  }
+  function bpjsNoteText(n) { return n ? C.text.bpjs.filterNote.replace('{n}', n) : C.text.bpjs.filterNoteAll; }
   function sortDef() { return C.sorts.filter(function (s) { return s.id === state.sort; })[0]; }
 
   // ---------- header + empty states ----------
@@ -69,7 +77,7 @@
     if (vis.length) return null;
     if (state.words.length) {
       var broader = C.broaderTerms.filter(function (t) { return U.fold(t) !== U.fold(state.q.trim()); }).map(function (t) {
-        return { term: t, n: filtered({ active: new Set(), onlyOk: false, openToday: false, words: words(t) }).length };
+        return { term: t, n: filtered({ active: new Set(), onlyOk: false, openToday: false, bpjs: false, words: words(t) }).length };
       }).filter(function (b) { return b.n > 0; }).slice(0, 3);
       return { kind: 'search', q: state.q.trim(), broader: broader };
     }
@@ -78,12 +86,14 @@
     var cond = [];
     if (state.onlyOk) cond.push('terverifikasi');
     if (state.openToday) cond.push('buka hari ini');
+    if (state.bpjs) cond.push(C.text.bpjs.filterCond);
     var un = state.onlyOk ? filtered({ onlyOk: false }).length : 0;
+    var bu = state.bpjs ? bpjsUnknown() : 0;
     var sentence = 'Belum ada ' + noun + (cond.length ? ' yang ' + cond.join(' dan ') : ' dengan filter ini') + '.' +
-      (un ? ' Ada ' + un + ' tempat yang belum dicek.' : '');
+      (un ? ' Ada ' + un + ' tempat yang belum dicek.' : '') + (bu ? ' ' + C.text.bpjs.emptyNote.replace('{n}', bu) : '');
     var cross = null, cs = cats.length === 1 && C.crossSuggest[cats[0].id];
     if (cs) {
-      var cn = filtered({ active: new Set(), onlyOk: false, openToday: false, words: words(cs.q) }).length;
+      var cn = filtered({ active: new Set(), onlyOk: false, openToday: false, bpjs: false, words: words(cs.q) }).length;
       if (cn) cross = { label: cs.label, q: cs.q, n: cn };
     }
     return { kind: 'filter', sentence: sentence, unchecked: un, cross: cross };
@@ -114,6 +124,9 @@
       hover: function (id) { if (!mobile()) { P.map.hover(id); P.ui.markListHover(id); } }
     });
     P.ui.renderHeader(header(vis));
+    var showBn = state.bpjs && vis.length > 0, bu = showBn ? bpjsUnknown() : 0;
+    $('bpjsNote').hidden = !showBn;
+    $('bpjsNote').textContent = showBn ? bpjsNoteText(bu) : '';
     P.ui.renderSort(state.sort, !!state.dist);
     P.ui.renderEmpty(emptyState(vis), {
       clear: clearFilters,
@@ -132,6 +145,7 @@
     P.ui.renderChips(state, {
       ok: function () { state.onlyOk = !state.onlyOk; afterFilter(); },
       today: function () { state.openToday = !state.openToday; afterFilter(); },
+      bpjs: function () { state.bpjs = !state.bpjs; afterFilter(); },
       cat: function (gid) { if (state.active.has(gid)) state.active.delete(gid); else state.active.add(gid); afterFilter(); }
     });
   }
@@ -141,7 +155,7 @@
     refresh({ fit: true, sheet: 'half' });
   }
   function clearFilters() {
-    state.active.clear(); state.onlyOk = false; state.openToday = false;
+    state.active.clear(); state.onlyOk = false; state.openToday = false; state.bpjs = false;
     rechips(); refresh({ fit: true, sheet: 'half' });
   }
 

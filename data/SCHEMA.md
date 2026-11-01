@@ -1,4 +1,4 @@
-# Local Maps Archive — Banjarbaru (schema v3, 2026-10-31; documents fields as actually stored)
+# Local Maps Archive — Banjarbaru (schema v5, 2026-11-01; documents fields as actually stored)
 places/<id>.json = one place. inbox/ = raw Explorer batches. hotlines.json = no-location services. Build for map: /workspace/peta/v2/build-data.py
 
 Core (all places): id, name, short (display name), category ("<top>/<sub>", top = kesehatan-mental | tumbuh-kembang-anak | layanan-pendampingan | psikologi), subcategories[], tags[] (tag containing "regional" = outside Banjarbaru), also_in_categories[]
@@ -29,3 +29,36 @@ One new optional field, in places/<id>.json and in each hotlines.json entry. Not
 - contact_sources: [{number, url, note?, checked?}]. One entry per phone/WhatsApp number in the record. `number` is written as in `contacts` (any format; matched on digits, 0… = 62…). `url` (http(s), required) is a public page where the institution or owner publishes that number itself: official website, official social account, government page, or an owner-managed business profile. `note` says what was checked, `checked` = YYYY-MM-DD.
 - Rule (scripts/validate.py): every phone-like number anywhere in the record (contacts, booking, notes, source notes) must have a contact_sources entry, and every entry must still match a number in the record. Google-Maps mirrors, directories, news, theses and personal pages do not count as the owner publishing a number.
 - Numbers without such a source were removed from the repo data on 2026-10-31 (history batch "privacy-audit"; contacts value starts with "unknown (removed …)"). The private archive still holds them for re-verification.
+
+## v4 (2026-11-01): bpjs_info (BPJS Kesehatan / JKN status)
+The raw `bpjs` field (free text, Explorer evidence) stays untouched. `bpjs_info` is the structured, user-facing version; the map prefers it.
+bpjs_info = {
+  status: "ya" | "sebagian" | "tidak" | "tidak_relevan" | "belum_diketahui",
+    ya = BPJS accepted for the services in this record; sebagian = only some polis/services (e.g. poli reguler yes, poli eksekutif no);
+    tidak = a source says BPJS is not accepted; tidak_relevan = not a health facility (legal aid, KUA, school, Puspaga, UPTD PPA, biro tes, BNN rehab which is free anyway);
+    belum_diketahui = no source either way (never guess).
+  rujukan: true | false | null   (true = needs a referral from faskes tingkat 1 / FKTP; null = unknown or not applicable),
+  basis: "confirmed_online" | "inferred" | "none"   (inferred = follows from the facility type or a general BPJS rule, not stated by the place),
+  catatan_display: short Indonesian, user-facing (shown in the detail's BPJS row; may mention "gratis" only when a source says so),
+  catatan_internal: archive only. Never stored in this public repo (stripped by scripts/migrate-from-store.py --fields; rejected by schema/bpjs_info.schema.json and scripts/validate.py) and never shipped to the site,
+  sources: [{url, note, checked}] (may be [] when the evidence is the record's existing cost/sources),
+  checked: "YYYY-MM-DD"
+}
+Build (repo): status ya/sebagian sets `_d.bpjs.accepts` (the "Terima BPJS" filter and the BPJS chip) and the search words bpjs, jkn, kis. Re-check every 3 months together with the rest.
+
+
+## v5 (2026-11-01): biaya_gratis (is the service free?)
+Structured replacement for reading "gratis"/"free" out of free text (cost, bpjs_info.catatan_display). Raw `cost`/`price_*` stay untouched as evidence.
+biaya_gratis = {
+  status: "ya" | "bersyarat" | "tidak" | "belum_diketahui",
+    ya = a source says the main service is free for everyone it serves; bersyarat = free only under a condition (e.g. tidak mampu + SKTM) or only part of the service is free (BNN: rehab free, SKHPN urine test paid);
+    tidak = a source shows a price or says patients pay (umum/eksekutif; BPJS coverage is NOT "gratis" here, see bpjs_info); belum_diketahui = no source (never guess).
+  syarat_display: short Indonesian, user-facing (who qualifies, what to bring, what is still paid). No phone numbers or personal data in display fields.
+  basis: "confirmed_online" | "old_source" (source > 1 year old) | "inferred" | "none",
+  perlu_cek_ulang: true when the source is stale or a quoted price is old,
+  sources: [{url, note, checked}], checked: "YYYY-MM-DD"
+}
+Rule: no phone numbers in bpjs_info.catatan_display or biaya_gratis.syarat_display (contacts live in `contacts`; booking_display may still name the booking line). A phone kept for provenance goes only in the archive's bpjs_info.catatan_internal, which never enters this repo. scripts/validate.py fails on any phone number inside bpjs_info or biaya_gratis.
+Build (repo): the site tag comes only from biaya_gratis.status (ya -> "Gratis", bersyarat -> "Gratis bersyarat"; tidak / belum_diketahui -> no tag); free text is never parsed for "gratis". The detail shows syarat_display for ya/bersyarat and "perlu dicek ulang" when perlu_cek_ulang is true. basis stays in the repo data as provenance and is not shipped to the site.
+JSON Schema: schema/bpjs_info.schema.json, schema/biaya_gratis.schema.json (referenced from schema/place.schema.json).
+Sync: python3 scripts/migrate-from-store.py --src <archive> --fields bpjs_info,biaya_gratis (copies only these fields into existing places; the phone-consent scrub of contacts/booking stays).

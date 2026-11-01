@@ -179,5 +179,43 @@
       "date": "2026-10-31",
       "what_changed": "Phone consent policy: removed 2 phone/WhatsApp number(s) that had no owner-published public source in this record (Google-Maps mirrors, directories, third-party pages or personal contacts). Re-add only with a contact_sources link where the owner publishes the number."
     }
-  ]
+  ],
+  "bpjs_info": {
+    "status": "tidak_relevan",
+    "rujukan": false,
+    "basis": "confirmed_online",
+    "catatan_display": "Tidak perlu BPJS: rehabilitasi rawat jalan di BNN gratis, cukup bawa KTP. Tes urine untuk surat SKHPN tetap bayar (PNBP).",
+    "sources": [
+      {
+        "url": "https://www.kanalkalimantan.com/bnn-banjarbaru-tren-pasien-rehabilitasi-meningkat/",
+        "note": "2024 news: rehab free with KTP",
+        "checked": "2026-11-01"
+      },
+      {
+        "url": "https://bnn.go.id/konten/unggahan/2024/05/Rehabilitasi_Standar-Pelayanan.pdf",
+        "note": "BNN national service standard (rehab funded by state)",
+        "checked": "2026-11-01"
+      }
+    ],
+    "checked": "2026-11-01"
+  },
+  "biaya_gratis": {
+    "status": "bersyarat",
+    "syarat_display": "Rehabilitasi rawat jalan gratis, cukup bawa KTP. Tes urine untuk surat SKHPN tetap bayar (Rp290.000 menurut sumber 2021).",
+    "basis": "confirmed_online",
+    "perlu_cek_ulang": true,
+    "sources": [
+      {
+        "url": "https://www.kanalkalimantan.com/bnn-banjarbaru-tren-pasien-rehabilitasi-meningkat/",
+        "note": "2024 news: rehab free with KTP",
+        "checked": "2026-11-01"
+      },
+      {
+        "url": "https://iklan-demo.kanalkalimantan.com/bnn-banjarbaru-buka-gerai-di-mal-pelayanan-publik-ini-layanan-yang-diberikan/",
+        "note": "Feb 2021 news: SKHPN Rp290.000 (old price)",
+        "checked": "2026-11-01"
+      }
+    ],
+    "checked": "2026-11-01"
+  }
 }

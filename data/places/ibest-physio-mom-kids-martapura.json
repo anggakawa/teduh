@@ -143,5 +143,27 @@
       "note": "checked 2026-10-31: number appears on this page",
       "checked": "2026-10-31"
     }
-  ]
+  ],
+  "bpjs_info": {
+    "status": "belum_diketahui",
+    "rujukan": null,
+    "basis": "none",
+    "catatan_display": "Klinik/praktik terapi swasta. Belum ada sumber yang menyebut terima BPJS; kemungkinan besar bayar sendiri. Untuk terapi anak dengan BPJS, jalurnya lewat RSD Idaman (pakai rujukan).",
+    "sources": [],
+    "checked": "2026-11-01"
+  },
+  "biaya_gratis": {
+    "status": "tidak",
+    "syarat_display": "Berbayar: pendaftaran Rp25.000, terapi Rp224.000/sesi (ada paket).",
+    "basis": "confirmed_online",
+    "perlu_cek_ulang": false,
+    "sources": [
+      {
+        "url": "https://ibestphysio.com/martapura",
+        "note": "official price list",
+        "checked": "2026-10-31"
+      }
+    ],
+    "checked": "2026-11-01"
+  }
 }
