@@ -127,6 +127,14 @@ ok(data.every(p => !(p._d.tags || []).includes('BPJS') || !p._d.bpjs), 'no legac
       r = build(src, out);
       ok(r.status !== 0 && /key named \*internal\*/.test(r.stderr) && !existsSync(out), `build guard: key "${key}" (${where}) -> exit ${r.status}, nothing written`);
     }
+    // 4e. QA R4: second gate - a phone (even split by a time and a comma) or an email in bpjs_info / biaya_gratis stops the build --strict
+    for (const [label, fn] of [['phone after "jam 08.12,"', o => { o.bpjs_info = { status: 'ya', catatan_display: 'Hubungi jam 08.12, 3456 7890' }; }],
+                               ['email', o => { o.biaya_gratis = { status: 'ya', syarat_display: 'Tanya admin@example.org' }; }]]) {
+      const tag = 'p' + label.length; src = fresh(tag); out = path.join(tmp, 'out-' + tag);
+      patchJson(firstFile(src), fn);
+      r = spawnSync('python3', [path.join(here, 'build-data.py'), '--src', src, '--out', out, '--strict'], { encoding: 'utf8' });
+      ok(r.status !== 0 && /phone or email in bpjs_info \/ biaya_gratis would ship/.test(r.stderr) && !existsSync(out), `build --strict gate: ${label} in bpjs/gratis -> exit ${r.status}, nothing written`);
+    }
     // 5. gratis negatives (QA m3): the tag comes only from biaya_gratis.status. Expected values are written out
     //    here as literals, not recomputed with the build's rules.
     src = fresh('e'); out = path.join(tmp, 'out-e');

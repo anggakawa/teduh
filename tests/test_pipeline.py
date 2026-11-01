@@ -412,7 +412,7 @@ class PrivacyGuards(TmpData):
             "note": lambda r: r["biaya_gratis"].update(sources=[{"url": "https://example.org/a", "note": "SKTM,08123456789"}]),
             "wa_url": lambda r: r["bpjs_info"].update(sources=[{"url": "https://wa.me/6281234567890"}]),
             "tel_url": lambda r: r["bpjs_info"].update(sources=[{"url": "tel:+62-812-3456-7890"}]),
-            "email": lambda r: r["biaya_gratis"].update(syarat_display="Tanya ke admin.posbakum@gmail.com."),
+            "email": lambda r: r["biaya_gratis"].update(syarat_display="Tanya ke layanan@example.org."),
         }
         for name, fn in cases.items():
             with self.subTest(name):
@@ -504,18 +504,189 @@ class PrivacyGuards(TmpData):
                   "jam 08.00 - 12.00 WITA, 13.00 - 15.00 WITA", "Senin 08.00-12.00, 2024", "08.00-14.00 (Senin-Kamis), 08.00-11.00 (Jumat)",
                   # comma lists that must not become a number (R3-M1)
                   "Rp 50.000, 75.000, 100.000", "Rp 25.000, 50.000 dan 100.000", "tahun 2019, 2020, 2021", "2019, 2020, 2021, 2022, 2023",
-                  "NIK 6372012345678901, 6271012345678902", "01-11-2026, 02-11-2026", "01, 02, 03, 04, 05, 06", "0, 5, 10, 15 km",
+                  "NIK 6372012345678901, 6271012345678902", "01-11-2026, 02-11-2026", "0, 5, 10, 15 km",
                   "https://bnn.go.id/konten/unggahan/2024/05/Rehabilitasi_Standar-Pelayanan.pdf"):
             self.assertEqual(phones.find_strict(t), [], t)
         self.assertEqual(phones.find("https://wa.me/6281234567890"), ["6281234567890"])   # consent check sees wa.me links too
 
+    R4_HITS = [   # every QA string from R2-M1, R3-M1 and R4-M1, plus the R4 extras
+        'jam 08.12 3456 7890',
+        'Hubungi jam 08.12 3456 7890',
+        'pukul 08.12-34.56 78.90 WITA',
+        '08.00\u201308.12 3456 7890',
+        '08.12 WITA 3456 7890',
+        '08.12 - 13.45 67 89 0',
+        '08.12 s.d. 13.45 6789',
+        '08.00-08.12-34.56-78.90',
+        'jam 08.12/3456/7890',
+        'jam 08.12 (3456) 7890',
+        'jam 08.12 34.56 78.90',
+        'jam 08.12, 3456 7890',
+        'jam 08.12, 3456, 7890',
+        'pukul 08.12, 34.56 78.90',
+        'jam 08.12-13.45, 6789',
+        '08.00-08.12, 3456 7890',
+        'jam 08.12, 34.56, 78.90',
+        'Hubungi jam 08.12, 3456 7890',
+        'jam 08.12 WIB 3456 7890',
+        'pukul 08.12 WIB, 3456 7890',
+        'jam 08.12 12.34 15.58',
+        'jam 0.51 1.47 7.21',
+        '+62 08.12 3456 7890',
+        '62 08.12.3456.7890',
+        '+62 0812 3456 7890',
+        '0812, 3456 7890',
+        '08.12,3456,7890',
+        '08.12.3456.7890',
+        '0 8.12 34.56 78.90',
+        '08.12.34.56.78.90',
+        '08:12 3456 7890',
+        '+62 8.12 34.56 78.90',
+        '62-511-4772123',
+        '0 5 1 1 4 7 7 2 1 2 3',
+        '(0511) 4772123',
+        '0511.4772123',
+        '021-5551234',
+        'jam 08.00, 0812 3456 7890',
+        '0812 3456 7890',
+        'Telp 0812 3456 7890',
+        '+\uff16\uff12 812 3456 7890',
+        'https://wa.me/6281234567890',
+        'tel:+62-812-3456-7890',
+        '0812; 3456; 7890',
+        '0812_3456_7890',
+        '0812-2019-3344',
+        '0812 2024 7890',
+        'jam 08.12 WITA s.d. 34.56 78.90',
+        '0812\n3456\n7890',
+        '0 812 3456 7890',
+        'jam 08.12 \u2013 13.45 \u2013 6789',
+        'jam 08.12 hingga 3456 7890',
+        'Senin 08.00-12.00, 0812 3456 7890',
+        'Rp 50.000, 0812 3456 7890',
+        '05/11/2026 0812 3456 7890',
+        'No. rek 0812345678',
+        '\uff10\uff18\uff11\uff12\uff13\uff14\uff15\uff16\uff17\uff18\uff19\uff10',
+    ]
+    R4_CLEAN = [  # allowlisted shapes: time ranges, Rp/IDR, years, dates; and lists of them
+        '08.00 - 12.00',
+        'jam 08.00 WITA',
+        'pukul 07.30 s.d. 14.00 WIB',
+        '08.00 - 12.00 08.00',
+        'Senin 08.00-12.00, 2024',
+        '8:30-15:30',
+        '08.00\u201316.00 WITA',
+        'jam 08.00-12.00 dan 13.00-15.00',
+        'jam 08.00 - 12.00 WITA, 13.00 - 15.00 WITA',
+        'Senin\u2013Jumat 08.00\u201316.00, Sabtu 08.00 - 12.00',
+        '08.00-14.00 (Senin-Kamis), 08.00-11.00 (Jumat)',
+        'Rp 08.000',
+        'Rp 50.000 - Rp 100.000',
+        'Rp 50.000, 75.000, 100.000',
+        'Rp 25.000, 50.000 dan 100.000',
+        'Rp 1.250.000,-',
+        'IDR 350,000',
+        'tahun 2019, 2020, 2021',
+        '2019, 2020, 2021, 2022, 2023',
+        'NIK 6372012345678901',
+        'NIK 6372012345678901, 6271012345678902',
+        'NIK 6208123456789012',
+        'NIP 198012312005011001',
+        '01-11-2026',
+        '01-11-2026, 02-11-2026',
+        '05/11/26, 06/11/26',
+        '2026-11-01',
+        'checked 2026-11-01, 2026-10-31',
+        '1 November 2026, 08.00 WITA',
+        '12 Okt 2025 - 1 Nov 2026',
+        '0, 5, 10, 15 km',
+        'buka 24 jam, 7 hari',
+        'UU No. 16 Tahun 2011',
+        'PP 42/2013',
+        'Perma No. 1 Tahun 2014',
+        'Pasal 56 ayat (1)',
+        'SK 188.44/0123/2024',
+        'Rp 0, Rp 50.000',
+    ]
+
+    def test_structural_strict_scan(self):
+        """QA re-check 4: allowlist ranges / Rp / years / dates, split on letters, join the rest."""
+        sys.path.insert(0, os.path.join(ROOT, "scripts"))
+        import phones
+        for t in self.R4_HITS:
+            self.assertTrue(phones.find_strict(t), t)
+        for t in self.R4_CLEAN:
+            self.assertEqual(phones.find_strict(t), [], t)
+        self.assertEqual(phones.find_strict("jam 08.12 12.34 15.58"), ["6281212341558"])   # was the documented residual
+        self.assertEqual(phones.find_strict("+62 08.12 3456 7890"), ["6281234567890"])     # 620 trunk prefix
+        self.assertEqual(phones.find_strict("0882-0200-00000"), ["62882020000000"])        # no inner sub-number
+        # known, documented false positives (CONTRIBUTING.md): single times and short numbers in a comma list
+        self.assertTrue(phones.find_strict("jam 07.00, 08.00, 09.00"))
+        self.assertTrue(phones.find_strict("01, 02, 03, 04, 05, 06"))
+        # a NIK written in groups can no longer be told apart from a phone inside it (reported, accepted)
+        self.assertEqual(phones.find_strict("NIK 6372 0812 3456 7890"), ["6281234567890"])
+
+    def test_rp_amount_never_starts_with_zero(self):
+        """QA re-check 5 (R5-m1): an Rp/IDR amount starts with 1-9 or is exactly 0."""
+        sys.path.insert(0, os.path.join(ROOT, "scripts"))
+        import phones
+        self.assertEqual(phones.find_strict("Biaya Rp 08.123.456.789"), ["628123456789"])
+        self.assertEqual(phones.find_strict("IDR 0812.3456.7890"), ["6281234567890"])
+        self.assertEqual(phones.find_strict("Rp. 0812 3456 7890"), ["6281234567890"])
+        for t in ("Biaya Rp 0", "Rp 0,-", "Rp 0, Rp 50.000", "Rp 150.000,00", "IDR 1.500.000", "Rp 08.000"):
+            self.assertEqual(phones.find_strict(t), [], t)
+
+    def test_long_text_is_capped_and_linear(self):
+        """QA re-check 5: past MAX_ALLOW_LEN nothing is exempt (fail closed) and the scan stays fast."""
+        import time
+        sys.path.insert(0, os.path.join(ROOT, "scripts"))
+        import phones
+        filler = "Buka 08.00 - 12.00 WITA. " * 1000                      # 25k chars of allowlisted shapes
+        self.assertGreater(len(filler), phones.MAX_ALLOW_LEN)
+        self.assertEqual(phones.allowlisted_spans(filler), [])
+        self.assertIn("6281234567890", phones.find_strict(filler + "Hubungi 0812 3456 7890"))
+        short = "Buka 08.00 - 12.00 WITA. " * 700                       # just under the cap: still exempt, still quick
+        self.assertLess(len(short), phones.MAX_ALLOW_LEN)
+        self.assertEqual(phones.find_strict(short), [])
+        for t in (short, filler, "08.00 - 12.00 " * 20000, "1, " * 100000):
+            t0 = time.monotonic(); phones.find_strict(t)
+            self.assertLess(time.monotonic() - t0, 5.0, len(t))
+
+    def test_comma_after_time_is_refused_by_validate_migrate_and_build(self):
+        bad = "Hubungi jam 08.12, 3456 7890"
+        self.edit("bnn-kota-banjarbaru", lambda r: r["bpjs_info"].update(catatan_display=bad))
+        v = self.validate()
+        self.assertNotEqual(v.returncode, 0)
+        self.assertIn("phone 6281234567890 in bpjs_info.catatan_display", v.stdout)
+        b, out = self.build()
+        self.assertNotEqual(b.returncode, 0)
+        self.assertIn("--strict: a phone or email in bpjs_info / biaya_gratis would ship (bnn-kota-banjarbaru: phone 6281234567890", b.stderr)
+        self.assertFalse(os.path.exists(out))
+        self.edit("talenta-aditama", lambda r: r["biaya_gratis"].update(syarat_display="Tanya admin@example.org"))
+        self.edit("bnn-kota-banjarbaru", lambda r: r["bpjs_info"].update(catatan_display="Buka 08.00 - 12.00 WITA."))
+        b, out = self.build()
+        self.assertNotEqual(b.returncode, 0)
+        self.assertIn("talenta-aditama: email in biaya_gratis.syarat_display", b.stderr)
+        self.assertNotIn("admin@example.org", b.stderr)
+        self.edit("talenta-aditama", lambda r: r["biaya_gratis"].update(syarat_display="Gratis."))
+        # migrate (from a copy of the archive), with and without --force
+        arc = os.path.join(self.tmp, "archive"); shutil.copytree(self.data, arc)
+        self.edit("bnn-kota-banjarbaru", lambda r: r["bpjs_info"].update(catatan_display=bad), data=arc)
+        before = open(self.path("bnn-kota-banjarbaru"), "rb").read()
+        for extra in ([], ["--force"]):
+            r = run("scripts/migrate-from-store.py", "--src", arc, "--data", self.data, "--fields", "bpjs_info",
+                    "--only", "bnn-kota-banjarbaru", *extra)
+            self.assertNotEqual(r.returncode, 0, extra)
+            self.assertIn("phone 6281234567890 in bpjs_info.catatan_display", r.stderr)
+            self.assertEqual(open(self.path("bnn-kota-banjarbaru"), "rb").read(), before)
+
     def test_validate_rejects_phone_email_and_non_http_urls_in_display_fields(self):
-        self.edit("posbakum-pengadilan-agama-banjarbaru", lambda r: r["biaya_gratis"].update(syarat_display="Tanya 62 812 3456 7890 atau admin@posbakum.id."))
+        self.edit("posbakum-pengadilan-agama-banjarbaru", lambda r: r["biaya_gratis"].update(syarat_display="Tanya 62 812 3456 7890 atau admin@example.org."))
         self.edit("rsd-idaman-kota-banjarbaru", lambda r: r["bpjs_info"].update(sources=[{"url": "tel:0812"}, {"url": "https://wa.me/6281234567890"}, {"url": "MC Kalsel 2019"}]))
         v = self.validate()
         self.assertNotEqual(v.returncode, 0)
         self.assertIn("phone 6281234567890 in biaya_gratis.syarat_display", v.stdout)
-        self.assertIn("email admin@posbakum.id in biaya_gratis.syarat_display", v.stdout)
+        self.assertIn("email admin@example.org in biaya_gratis.syarat_display", v.stdout)
         for i in range(3):
             self.assertIn(f"schema: bpjs_info/sources/{i}", v.stdout)
         self.assertIn("phone 6281234567890 in bpjs_info.sources[1].url", v.stdout)

@@ -87,11 +87,17 @@ otomatis lewat "Closes #N".
 | Hanya CODEOWNERS yang boleh membuat `active` atau menghapus tempat | `guard_pr.py` |
 | Perubahan `lat`/`lng` wajib menyebut asal di `coord_method`; sumber baru harus URL | `guard_pr.py` |
 | Setiap nomor telepon/WA punya `contact_sources` dengan tautan http(s); nomor baru/berubah di PR wajib bersumber | `validate.py`, `guard_pr.py` |
-| `build-data.py --strict` berjalan tanpa data terlewat | `scripts/build-data.py` |
+| `build-data.py --strict` berjalan tanpa data terlewat, dan tanpa nomor telepon/email di `bpjs_info` / `biaya_gratis` (gerbang kedua setelah validate) | `scripts/build-data.py` |
 | Tes pipeline (contoh issue baru, koreksi, berbahaya/tidak valid) | `tests/test_pipeline.py` |
 | Uji tampilan situs di data beku | `scripts/check.mjs` |
 
-Batas pemindai yang diketahui (disengaja): nomor rekening yang mirip nomor HP ("No. rek 0812345678") ikut dianggap nomor telepon, jadi jangan menaruh nomor rekening di `bpjs_info` / `biaya_gratis` (memang tidak boleh). Email yang ditulis samar `nama [at] gmail [dot] com`, `nama (at) gmail.com`, `nama @ gmail . com` tertangkap; ejaan lain ("nama at gmail titik com") tidak, dan peninjau tetap membaca isinya. Slug URL yang panjang angkanya (mis. profil LinkedIn `…-041892191`) bisa terbaca sebagai nomor bila ditaruh di dua kolom itu. Jam buka (`08.00 - 12.00`, `jam 08.00 WITA`, `pukul 07.30 s.d. 14.00 WIB`) tidak dianggap nomor, tetapi jam yang bersebelahan dengan kelompok angka lain ikut dibaca sebagai bagian nomor (`jam 08.12 3456 7890` tertangkap). Koma di antara kelompok angka dianggap pemisah (`0812, 3456 7890` tertangkap; daftar tahun dan harga tidak). Nomor yang setiap kelompoknya kebetulan berupa jam yang sah dalam konteks jam (mis. `jam 08.12 12.34 15.58`) tidak tertangkap.
+Batas pemindai yang diketahui (disengaja): nomor rekening yang mirip nomor HP ("No. rek 0812345678") ikut dianggap nomor telepon, jadi jangan menaruh nomor rekening di `bpjs_info` / `biaya_gratis` (memang tidak boleh). Email yang ditulis samar `nama [at] gmail [dot] com`, `nama (at) gmail.com`, `nama @ gmail . com` tertangkap; ejaan lain ("nama at gmail titik com") tidak, dan peninjau tetap membaca isinya. Slug URL yang panjang angkanya (mis. profil LinkedIn `…-041892191`) bisa terbaca sebagai nomor bila ditaruh di dua kolom itu. Di `bpjs_info` / `biaya_gratis` hanya bentuk angka berikut yang dikecualikan: rentang jam (`08.00 - 12.00`, `pukul 07.30 s.d. 14.00 WIB`), nominal `Rp`/`IDR`, tahun 19xx/20xx, dan tanggal (`05/11/2026`, `2026-11-01`, `1 November 2026`), selama tidak menempel pada angka lain. Sisanya dipotong hanya pada huruf; semua angka di antara dua kata digabung, apa pun pemisahnya (spasi, titik, koma, titik koma, garis bawah). Nominal `Rp`/`IDR` harus diawali angka 1-9 atau tepat `0` (`Biaya Rp 08.123.456.789` dibaca sebagai nomor). Teks lebih dari 20.000 karakter tidak mendapat pengecualian sama sekali (semua angka dihitung).
+
+Positif palsu yang diketahui (disengaja, karena jam tunggal tidak dikecualikan):
+
+- **Daftar jam tunggal**: `jam 07.00, 08.00, 09.00` digabung menjadi `070008000900` dan ditolak sebagai nomor. Tulis sebagai rentang (`07.00 - 09.00`) atau satu jam saja (`jam 08.00 WITA`, terlalu pendek untuk nomor).
+- **Daftar nomor urut pendek**: `01, 02, 03, 04, 05, 06` ditolak. Tulis dengan kata (`ruang 1, ruang 2`) atau sebagai daftar biasa tanpa angka nol di depan.
+- **NIK berkelompok**: `6372 0812 3456 7890` tidak bisa dibedakan dari nomor HP di dalamnya. NIK memang tidak boleh ada di kolom ini.
 
 ## Audit nomor telepon (31 Oktober 2026)
 

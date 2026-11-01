@@ -22,6 +22,7 @@ catatan-internal, catatan_ınternal …) or a key that is not a plain ASCII iden
 import argparse, glob, json, os, re, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import leaks   # one rule for every guard: leaks.is_internal_key / leaks.is_plain_key
+import phones as phonelib  # strict phone scan for bpjs_info / biaya_gratis (second gate after validate)
 from datetime import datetime, timezone
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -733,6 +734,19 @@ def main():
     if leaked:
         sys.exit(f"BUG: a key named *internal* would ship, or a key with hidden/non-ASCII characters "
                  f"({'; '.join(leaked)}; data.js too); nothing written")
+    # Second gate (QA R4), after validate: bpjs_info / biaya_gratis (and the _d copies built from them) carry
+    # no phone and no email in the output. Uses the same detectors as validate (phones.py, leaks.py).
+    contact = []
+    for p in places:
+        d = p.get("_d") or {}
+        for fld, val in (("bpjs_info", p.get("bpjs_info")), ("biaya_gratis", p.get("biaya_gratis")),
+                         ("_d.bpjs", d.get("bpjs")), ("_d.gratis", d.get("gratis"))):
+            if val is None:
+                continue
+            contact += [f"{p.get('id')}: phone {n} in {', '.join(ps[:2])}" for n, ps in sorted(phonelib.in_record({fld: val}, strict=True).items())]
+            contact += [f"{p.get('id')}: email in {path}" for path, _ in leaks.emails({fld: val})]
+    if contact and a.strict:
+        sys.exit(f"--strict: a phone or email in bpjs_info / biaya_gratis would ship ({'; '.join(contact[:5])}); nothing written")
     if a.strict and report["skipped"]:
         for sk in report["skipped"]:
             print(f"SKIPPED {sk['file']}: {sk['reason']}")
